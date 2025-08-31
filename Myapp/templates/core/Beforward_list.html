@@ -1,0 +1,388 @@
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="sw"> <head> <meta charset="UTF-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+ <title>NyumbaChap - makazi Tanzania</title> 
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" /> <!-- Bootstrap CSS --> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style> 
+          .blurred-card {
+      filter: blur(3px);
+      pointer-events: none;
+    }
+
+    .blurred-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .locked-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1rem;
+      font-weight: bold;
+    }
+
+    .lock-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7f1, #dee6e3);
+      color: #222;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    header {
+      background: linear-gradient(90deg, #ff416c, #ff4b2b);
+      color: #fff;
+      padding: 1.5rem 0;
+      font-weight: 700;
+      font-size: 2.5rem;
+      text-align: center;
+      letter-spacing: 3px;
+      box-shadow: 0 6px 15px rgba(255, 75, 43, 0.6);
+      user-select: none;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+    }
+    .listing-card {
+      background: linear-gradient(145deg, #ffffff, #e0f7f1);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .listing-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px rgba(0, 121, 107, 0.4);
+      z-index: 10;
+    }
+    .listing-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 5px solid #00796b;
+      transition: transform 0.3s ease;
+    }
+    .listing-card:hover .listing-image {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
+    .listing-content {
+      padding: 1rem 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .listing-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #004d40;
+      margin-bottom: 0.5rem;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+    }
+    .listing-location {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    .listing-price {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #00796b;
+      letter-spacing: 1.2px;
+    }
+    /* Search */
+    .search-container {
+      max-width: 600px;
+      margin: 2rem auto 3rem;
+    }
+    /* Pagination */
+    .pagination {
+      justify-content: center;
+      margin-top: 3rem;
+    }
+    .page-link {
+      background: linear-gradient(135deg, #00796b, #004d40);
+      color: white;
+      border-radius: 50px;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 6px 15px rgba(0, 121, 107, 0.7);
+    }
+    .page-link:hover:not(.active) {
+      background: linear-gradient(135deg, #004d40, #002d22);
+      transform: scale(1.15);
+      box-shadow: 0 10px 25px rgba(0, 77, 64, 0.9);
+      color: white;
+    }
+    .page-item.active .page-link {
+      background: linear-gradient(135deg, #004d40, #002d22);
+      box-shadow: 0 0 20px #004d40;
+      cursor: default;
+      transform: scale(1.3);
+      pointer-events: none;
+    }
+    .page-link:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    header {
+      width: 100%;
+      background: linear-gradient(90deg, #e63946, #f1faee);
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+      padding: 1rem 2rem;
+      user-select: none;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .btn-back {
+      background: #1d3557;
+      color: #f1faee;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(29, 53, 87, 0.6);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-back:hover {
+      background: #a4161a;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(164, 22, 26, 0.8);
+    }
+
+    .site-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: #1d3557;
+      text-align: center;
+      flex-grow: 1;
+      user-select: text;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-btn {
+      background: #f1faee;
+      color: #1d3557;
+      padding: 0.6rem 1.4rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(29, 53, 87, 0.2);
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover,
+    .nav-btn:focus {
+      background: #e63946;
+      color: #f1faee;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(230, 57, 70, 0.8);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .site-title {
+        flex-basis: 100%;
+        order: 2;
+        font-size: 1.6rem;
+        margin: 0.5rem 0;
+      }
+
+      .btn-back {
+        order: 1;
+      }
+
+      .header-nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 0.8rem;
+      }
+
+      .nav-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+</style> 
+</head>
+ <body> 
+  <header> 
+    <div class="header-container"> 
+      <button class="btn-back" aria-label="Rudi nyuma" onclick="window.history.back()"> ← Rudi </button>
+
+
+  <h1 class="site-title">Nyumba Zote Kiganjani Kwako</h1>
+
+  <nav class="header-nav">
+    <a href="/" class="nav-btn">Home</a>
+    <a href="{% url 'makazi_list' %}" class="nav-btn">Latest</a>
+    <a href="{% url 'property_list' %}" class="nav-btn">mixed</a>
+  </nav>
+</div>
+</header> <main class="container"> <form method="get" action="{% url 'Beforward_list' %}" class="search-container" role="search" aria-label="Tafuta makazi"> <div class="input-group shadow-sm rounded-pill overflow-hidden"> <input type="search" name="search" id="searchInput" class="form-control border-0" placeholder="Tafuta nyumba kwa eneo, au bei..." value="{{ search_query }}" autocomplete="off" aria-label="Tafuta makazi" /> <button type="submit" class="btn btn-success px-4" aria-label="Tafuta"> 🔍 </button> </div> </form>
+<div class="row row-cols-1 row-cols-md-3 g-4" aria-live="polite" aria-relevant="additions removals">
+  {% if page_obj.object_list %}
+    {% for listing in page_obj %}
+      <div class="col d-flex">
+        <a href="{% url 'Beforward_detail' slug_id=listing.get_slug_id %}" class="listing-card" tabindex="0" aria-label="Maelezo ya makazi: {{ listing.title }} katika {{ listing.city }} kwa bei ya shilingi {{ listing.price|intcomma }}">
+          <img src="{{ listing.image_urls.0|default:'https://via.placeholder.com/400x200?text=Makazi' }}" alt="Picha ya {{ listing.title }}" class="listing-image" loading="lazy" />
+          <div class="listing-content">
+            <h3 class="listing-title">{{ listing.title }}</h3>
+            <p class="listing-location">{{ listing.city }}</p>
+            <div class="listing-price">{{ listing.price|intcomma }}</div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  {% else %}
+    {% if default_listings %}
+      {% for listing in default_listings %}
+        <div class="col d-flex position-relative">
+          <!-- Blurred content -->
+          <div class="listing-card blurred-card w-100">
+            <img src="{{ listing.image_urls.0|default:'https://via.placeholder.com/400x200?text=Makazi' }}" alt="Makazi yaliyofichwa" class="listing-image blurred-image" loading="lazy" />
+            <div class="listing-content">
+              <h3 class="listing-title">{{ listing.title }}</h3>
+              <p class="listing-location">{{ listing.city }}</p>
+              <div class="listing-price">{{ listing.price|intcomma }}</div>
+            </div>
+          </div>
+
+          <!-- Overlay (outside blur so it stays sharp) -->
+          <div class="locked-overlay rounded-3">
+                <span class="lock-icon">🔒</span>
+                <p class="locked-message">Lipia kifurushi cha Tsh.2500/= kwa mwezi Au Tsh.5999/= kwa mwaka ili kuona maelezo ya nyumba hii Na zingine nyingi Tanzania Nzima.</p>
+                <a style="color: #a4161a;" href="{% url 'final' %}" class="nav-btn">Lipa Hapa</a>
+
+              </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-muted fs-5">Hakuna makazi yaliyopatikana.</p>
+    {% endif %}
+  {% endif %}
+</div>
+
+
+{% if page_obj.has_other_pages %}
+  {% with search_query|urlencode as encoded_search %}
+  <nav aria-label="Pagination navigation">
+    <ul class="pagination mt-5">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1&search={{ encoded_search }}" aria-label="Ukurasa wa kwanza">&laquo;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ encoded_search }}" aria-label="Ukurasa uliopita">&lsaquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link" aria-disabled="true">&laquo;</span>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link" aria-disabled="true">&lsaquo;</span>
+        </li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ num }}</span>
+          </li>
+        {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ num }}&search={{ encoded_search }}">{{ num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ encoded_search }}" aria-label="Ukurasa unaofuata">&rsaquo;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.paginator.num_pages }}&search={{ encoded_search }}" aria-label="Ukurasa wa mwisho">&raquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link" aria-disabled="true">&rsaquo;</span>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link" aria-disabled="true">&raquo;</span>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endwith %}
+{% endif %}
+</main> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+
+</script> 
+</body>
+ </html>

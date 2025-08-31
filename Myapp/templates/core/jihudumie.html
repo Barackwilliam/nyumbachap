@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyumba Za Kupanga - Bei Nafuu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #FF9800;
+            --secondary-dark: #F57C00;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .pricing-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .pricing-card.popular {
+            border: 2px solid var(--secondary);
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Silver Package */
+        .silver-card .card-header {
+            background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+            color: #212529;
+        }
+
+        /* Gold Package */
+        .gold-card .card-header {
+            background: linear-gradient(135deg, #FFD700, #D4AF37);
+            color: #212529;
+        }
+
+        /* Platinum Package */
+        .platinum-card .card-header {
+            background: linear-gradient(135deg, #E5E4E2, #C0C0C0);
+            color: #212529;
+        }
+
+        .card-header {
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .popular .card-header {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .card-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .card-price small {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .card-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-features li i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .popular .card-features li i {
+            color: var(--secondary);
+        }
+
+        .card-button {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .card-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .popular .card-button {
+            background: var(--secondary);
+        }
+
+        .popular .card-button:hover {
+            background: var(--secondary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-card {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>JIHUDUMIE KWA UFANISI</h1>
+            <p>Chagua kifurushi kinachokufaa zaidi kwa mahitaji yako ya nyumba</p>
+        </div>
+
+        <div class="pricing-cards">
+            <!-- Silver Card -->
+            <div class="pricing-card silver-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h2 class="card-title">Silver</h2>
+                    <div class="card-price">
+                        <small>Tsh</small> 0 <small>/mwezi</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="card-features">
+                        <li><i class="fas fa-check"></i> Kifurushi Cha Ofa</li>
+                        <li><i class="fas fa-check"></i> Uwezekano wa 35% wa kupata nyumba</li>
+                        <li><i class="fas fa-check"></i> Utafutaji wa nyumba bila mapendekezo</li>
+                        <li><i class="fas fa-check"></i> Huduma ya mazungumzo yenye kikomo</li>
+                    </ul>
+                    <a href="{% url 'property_list' %}" class="card-button">Anza Sasa <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Gold Card (Popular) -->
+            <div class="pricing-card gold-card popular">
+                <div class="popular-tag">POPULAR</div>
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h2 class="card-title">Gold</h2>
+                    <div class="card-price">
+                        <small>Tsh</small> 2,500 <small>/mwezi</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="card-features">
+                        <li><i class="fas fa-check"></i> Utafutaji wa hali ya juu (50% matokeo)</li>
+                        <li><i class="fas fa-check"></i> Uwezekano wa 75% wa kupata nyumba</li>
+                        <li><i class="fas fa-check"></i> Taarifa za nyumba kwa wilaya unayotaka</li>
+                        <li><i class="fas fa-check"></i> Mazungumzo moja kwa moja bila kikomo</li>
+                    </ul>
+                    <a href="{% url 'final' %}" class="card-button">Lipia Hapa<i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Platinum Card -->
+            <div class="pricing-card platinum-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h2 class="card-title">Platinum</h2>
+                    <div class="card-price">
+                        <small>Tsh</small> 5,999 <small>/mwezi</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="card-features">
+                        <li><i class="fas fa-check"></i> Uhakika wa 100% wa kupata nyumba</li>
+                        <li><i class="fas fa-check"></i> Taarifa za kila nyumba mpya kwenye mtaa wako</li>
+                        <li><i class="fas fa-check"></i> Utafutaji wa kiwango cha juu kwa nyumba zote</li>
+                        <li><i class="fas fa-check"></i> Msaada kwa wateja masaa 24</li>
+                    </ul>
+                    <a href="{% url 'final' %}" class="card-button">Lipia Hapa <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation on scroll
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.pricing-card');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+
+</html>
