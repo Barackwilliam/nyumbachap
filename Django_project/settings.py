@@ -171,6 +171,8 @@ STATICFILES_DIRS = [
 # ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"  
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -194,12 +196,13 @@ cloudinary.config(
 
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'drc3xiipg',  # Jina lako la Cloudinary
+    'CLOUD_NAME': 'drc3xiipg',  
     'API_KEY': '321181265585861',  # API key yako
     'API_SECRET': 'KA2L_qJUCyBBZFcyeQDGzH1kfUo'  # API secret yako
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 MEDIA_URL = 'https://res.cloudinary.com/drc3xiipg/'
 
 
@@ -233,7 +236,8 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), staticfiles=False)
+
 
 
 
