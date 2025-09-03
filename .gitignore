@@ -25,7 +25,7 @@ ENV/
 *.pot
 *.py,cover
 db.sqlite3
-media/
+# media/
 
 
 
