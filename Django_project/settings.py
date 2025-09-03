@@ -161,7 +161,9 @@ USE_I18N = True
 STATIC_URL = '/static/'
 
 # directory ya files zako za development (lazima iwepo)
-STATICFILES_DIRS = [ BASE_DIR / "static" ]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # directory ya production (collectstatic itahifadhi hapa)
 STATIC_ROOT = BASE_DIR / "staticfiles"
