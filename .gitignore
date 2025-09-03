@@ -26,10 +26,8 @@ ENV/
 *.py,cover
 db.sqlite3
 media/
-staticfiles/
 
-# If using collectstatic
-/static/
+
 
 # VSCode / PyCharm settings
 .vscode/
