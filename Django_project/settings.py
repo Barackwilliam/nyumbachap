@@ -157,29 +157,17 @@ USE_I18N = True
 
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# directory ya files zako za development (lazima iwepo)
+STATICFILES_DIRS = [ BASE_DIR / "static" ]
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static", ]
+# directory ya production (collectstatic itahifadhi hapa)
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
-
-STATIC_ROOT = BASE_DIR / "staticfiles"  
-
+# whitenoise kwa hosting ya static
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
