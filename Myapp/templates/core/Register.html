@@ -1,263 +1,315 @@
-
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NyumbaChap | Register</title>
 
-    <script>
-        var a=10,b=20;console.log(a+b);
-    </script>
+<link rel="shortcut icon" href="{% static 'images/fav.jpg' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
-    <script>
-        // Kuzuia Right Click
-        document.addEventListener("contextmenu", function(event) {
-            event.preventDefault();
-            alert("🚫 Sorry, Right Click is Disabled! Wasiliana na Developer No: 0629712678");
-        });
-    
-        // Kuzuia DevTools (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
-        document.addEventListener("keydown", function(event) {
-            if (event.keyCode == 123) {  // F12
-                event.preventDefault();
-                alert("🚫 Sorry, Inspect Element is Disabled! Wasiliana na Developer No: 0629712678");
-            }
-            if (event.ctrlKey && event.shiftKey && (event.keyCode == 73 || event.keyCode == 74)) {  // Ctrl+Shift+I or Ctrl+Shift+J
-                event.preventDefault();
-                alert("🚫 Sorry, Developer Tools is Disabled! Wasiliana na Developer No: 0629712678");
-            }
-            if (event.ctrlKey && event.keyCode == 85) {  // Ctrl+U
-                event.preventDefault();
-                alert("🚫 Sorry, View Source is Disabled! Wasiliana na Developer No: 0629712678");
-            }
-        });
-    </script>
-    
-
-
-
-<!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
-
-
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8FYVV0MZV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-L8FYVV0MZV');
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Jisajili bure</title>
-
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="{% static 'fonts/material-icon/css/material-design-iconic-font.min.css' %}">
-
-    <!-- Main css -->
-    <link rel="stylesheet" href="{% static 'css2/style.css' %}">
-    <style>
-        .recaptcha-wrapper {
-    text-align: center;
-    margin-top: 15px;
-    margin-bottom: 20px;
+<style>
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  margin: 0;
+  padding: 0;
 }
 
-  /* Popup container */
-#popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+/* Container */
+.signup-container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
-/* Popup content */
-#popupContent {
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
-    padding: 20px;  /* Reduce padding to make popup smaller */
-    border-radius: 10px;  /* Slightly smaller border radius */
-    text-align: center;
-    color: #fff; /* White text */
-    max-width: 300px;  /* Smaller max-width */
-    width: 80%;  /* Ensure it takes up most of the viewport */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Stylish shadow */
-    animation: fadeIn 0.8s ease-in-out; /* Animation */
+/* Left Form */
+.signup-form-container {
+  flex: 1;
+  min-width: 320px;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Heading style */
-#popupContent h2 {
-    font-size: 24px;  /* Smaller font size for heading */
-    margin-bottom: 10px;  /* Reduced space below the heading */
-    font-family: 'Arial', sans-serif;
+.signup-form-container h2 {
+  color: #e11d48;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.2rem;
+  font-weight: bold;
 }
 
-/* Paragraph style */
-#popupContent p {
-    font-size: 16px;  /* Smaller font size for paragraph */
-    margin-bottom: 15px;  /* Reduced space below paragraph */
+.signup-form-container form {
+  width: 100%;
 }
 
-/* Close button style */
-#closePopup {
-    background: #ff6b6b; /* Soft red color */
-    color: #fff;
-    border: none;
-    padding: 10px 18px;  /* Smaller padding for the button */
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;  /* Smaller button text */
-    transition: all 0.3s ease;
+.form-group {
+  position: relative;
+  margin-bottom: 25px;
 }
 
-#closePopup:hover {
-    background: #ff3b3b; /* Darker red on hover */
+.form-group input {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 15px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
-/* Animation for popup */
-@keyframes fadeIn {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+.form-group input:focus {
+  border-color: #e11d48;
+  box-shadow: 0 0 0 3px rgba(225,29,72,0.15);
 }
 
-    </style>
+.form-group label {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  background: #fff;
+  padding: 0 5px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: -10px;
+  left: 15px;
+  font-size: 0.8rem;
+  color: #e11d48;
+}
+
+/* Buttons */
+.form-submit {
+  width: 100%;
+  padding: 16px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, #e11d48, #be123c);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(225,29,72,0.3);
+}
+
+/* reCAPTCHA */
+.recaptcha-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Terms */
+.agree-term {
+  margin-right: 10px;
+}
+
+.label-agree-term a {
+  color: #e11d48;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Login Link */
+.loginhere {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.loginhere-link {
+  color: #e11d48;
+  font-weight: bold;
+}
+
+/* Right Banner */
+.signup-banner {
+  flex: 1;
+  min-width: 300px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 50px;
+}
+
+.signup-banner h2 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.signup-banner p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin-bottom: 25px;
+}
+
+.btn-outline-light {
+  border-radius: 50px;
+  padding: 12px 25px;
+  font-weight: 600;
+  color: #fff;
+  border: 2px solid #fff;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background: #fff;
+  color: #0f172a;
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .signup-container {
+    flex-direction: column;
+  }
+  .signup-banner {
+    padding: 40px 30px;
+  }
+  .signup-form-container {
+    padding: 40px 30px;
+  }
+}
+
+
+
+/* Custom Checkbox */
+.agree-term-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.agree-term-wrapper input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid #d1d5db;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.agree-term-wrapper input[type="checkbox"]:checked {
+  background: #e11d48;
+  border-color: #e11d48;
+}
+
+.agree-term-wrapper input[type="checkbox"]:checked::after {
+  content: "\f00c"; /* FontAwesome check */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #fff;
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: 14px;
+}
+
+.agree-term-wrapper a {
+  color: #e11d48;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.agree-term-wrapper a:hover {
+  text-decoration: underline;
+}
+
+</style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
-    <!-- <script defer src="https://static.getbutton.io/widget/bundle.js?id=2zrH8" ></script> -->
-    <script defer src="https://static.getbutton.io/widget/bundle.js?id=UaD5Y"></script>
+<div class="signup-container">
 
-  <!-- Popup container -->
-  <!-- <div id="popup">
-    <div id="popupContent">
-        <h2>👋 Karibu NyumbaChap!</h2>
-        <p style="color:white;">Je unafahamu kuwa kusajili Nyumba 3 Kwenye Tovuti hii Utalipwa Tsh 9000/=..?</p>
-        <button id="closePopup">Sawa..!</button>
-    </div>
-</div> -->
+  <!-- Left Form -->
+  <div class="signup-form-container">
+    <h2>Unda Akaunti</h2>
+    {% for message in messages %}
+      <h3 style="text-align: center; color: red">{{message}}</h3>
+    {% endfor %}
+    <form method="POST">
+      {% csrf_token %}
 
+      <div class="form-group">
+        <input type="text" name="username" placeholder=" " required>
+        <label>Username</label>
+      </div>
 
-  <!-- Popup container end -->
+      <div class="form-group">
+        <input type="email" name="email" placeholder=" " required>
+        <label>Email</label>
+      </div>
 
-    <div class="main">
+      <div class="form-group">
+        <input type="password" name="password" placeholder=" " required>
+        <label>Password</label>
+      </div>
 
-        <section class="signup">
-            <!-- <img src="images/signup-bg.jpg" alt=""> -->
-            <div class="container">
-                
-                <div class="signup-content">
-                   
-                    <form method="POST" id="signup-form" class="signup-form">
-                        {% csrf_token %}
-                        <h2 class="form-title">Unda Akaunti</h2>
-                        {% for message in messages %}
-                        <h3 style="text-align: center; color: red">{{message}}</h3>
-                            {% endfor %}
-                        <div class="form-group">
-                            <label>Username</label>
-                            <i class="ti-user"></i>
-                            <input type="text" class="form-input" name="username" id="username" placeholder='Jaza jina lako' required/>
-                        </div>
+      <div class="form-group">
+        <input type="password" name="password2" placeholder=" " required>
+        <label>Confirm Password</label>
+      </div>
 
-                        <div class="form-group">
-                            <label>Your Email</label>
-                            <input type="email" class="form-input" name="email" id="email" placeholder="Jaza Email Yako"  required/>
-                            <i class="icon_mail_alt"></i>
-                        </div>
+      <div class="recaptcha-wrapper">
+        <div class="g-recaptcha" data-sitekey="6Lfr4xUrAAAAACmeCbB_ii2950eZIQBfWUfOX0Kc"></div>
+      </div>
 
-                        <div class="form-group">
-                            <label>Your password</label>
-                            <input type="password" class="form-input" name="password" id="password" placeholder="Weka Neno Siri" required/>
-                            <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span> 
-                            <i class="icon_lock_alt"></i>
-                        </div>
+      <div class="form-group agree-term-wrapper">
+        <input type="checkbox" id="agree-term" name="agree-term" required>
+        <label for="agree-term">
+            Nimekubali masharti yote kwenye 
+            <a href="{% url 'policy' %}" target="_blank">Terms of Service</a>
+        </label>
+        </div>
 
-                        <div class="form-group">
-                            <label>Confirm password</label>
-                            <input type="password" class="form-input" name="password2" id="password2" placeholder='Thibitisha Neno Siri' required/>
-                            <i class="icon_lock_alt"></i>
-                        </div>
+      <div class="form-group">
+        <input type="submit" class="form-submit" value="Sign Up">
+      </div>
+    </form>
 
-                        <!-- reCAPTCHA hapa -->
-                       <div class="recaptcha-wrapper">
-                            <div class="g-recaptcha" data-sitekey="6Lfr4xUrAAAAACmeCbB_ii2950eZIQBfWUfOX0Kc"></div>
-                        </div>
-                                            
+    <p class="loginhere">Tayari una account? <a href="{% url 'login' %}" class="loginhere-link">Ingia Hapa</a></p>
+  </div>
 
-                        <div class="form-group">
-                           <input type="checkbox" name="agree-term" id="agree-term" class="agree-term"/>
-                            <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href=" {% url 'policy' %}" class="term-service">Terms of service</a></label>
-                        </div>
+  <!-- Right Banner -->
+  <div class="signup-banner">
+    <h2>Karibu NyumbaChap</h2>
+    <p>Unganisha nasi sasa na upate nyumba ya ndoto yako bila usumbufu wa madalali.</p>
+    <a href="{% url 'login' %}" class="btn btn-outline-light">Ingia Sasa</a>
+  </div>
 
-                      <!-- Google reCAPTCHA -->
-        <!-- <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}"></div><br> -->
+</div>
 
-
-
-                        <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Sign up"/>
-                        </div>
-                    </form>
-
-                    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-                    <div>
-                    <p class="loginhere">
-                        Je Tayari Una account ? <a href="{% url 'login' %}" class="loginhere-link">Ingia Hapa</a>
-                    </p>
-                </div>
-                </div>
-            </div>
-
-                <!-- Google Login Button -->
-                <!-- <div style="text-align: center; margin-top: 20px;">
-                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}"
-                       style="display: inline-block; background: #4285F4; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
-                       <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 20px; vertical-align: middle; margin-right: 8px;">
-                       Sign Up with Google
-                     </a>
-                </div>
- -->
-
-        </section>
-
-    </div>
-
-
-    
-    <script>
-        // Show the popup after 5 seconds
-        window.onload = function () {
-            setTimeout(function () {
-                const popup = document.getElementById('popup');
-                popup.style.display = 'flex'; // Show the popup
-            }, 5000); // 5000ms = 5 seconds
-
-            // Close the popup when the close button is clicked
-            document.getElementById('closePopup').onclick = function () {
-                const popup = document.getElementById('popup');
-                popup.style.display = 'none'; // Hide the popup
-            };
-        };
-    </script>
-
-    <!-- JS -->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
-
-
