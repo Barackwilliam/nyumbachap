@@ -9,263 +9,287 @@
   <link rel="shortcut icon" href="{% static 'images/fav.jpg' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/fontawsom-all.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     body {
-      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      background: linear-gradient(135deg, #0f172a, #1e293b);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow-x: hidden;
     }
+
+    /* Glassmorphism */
     .login-box {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(25px);
       border-radius: 25px;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
       overflow: hidden;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .login-box:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
     }
+
     .log-det {
       padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
     }
-    .small-logo {
-      font-size: 1.6rem;
+
+    /* Gradient Logo */
+    .gradient-text {
+      background: linear-gradient(90deg, #e11d48, #f43f5e, #f87171);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 4s infinite alternate;
+      font-weight: 800;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    /* Logo Animation */
+    .animate-logo {
+      font-size: 2rem;
       font-weight: bold;
-      color: #e11d48;
-      margin-bottom: 15px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
+      animation: pulse 2.5s infinite;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
-    .dfmn {
+    .animate-logo:hover {
+      transform: scale(1.1) rotate(-2deg);
+      text-shadow: 0 0 15px rgba(225,29,72,0.5);
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Typing text */
+    .typing-text {
       font-size: 1rem;
-      color: #444;
-      margin-bottom: 25px;
-      line-height: 1.6;
+      color: #374151;
+      display: inline-block;
+      border-right: 3px solid #e11d48;
+      text-align: center;
+      white-space: pre-wrap; /* ruhusu kuvunjika mstari */
+      overflow-wrap: break-word;
+      min-height: 60px;
+      margin: 10px auto 0;
+      padding: 0 10px;
     }
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: #e11d48; }
+    }
+    .typing-text.active {
+      animation: blink 0.8s step-end infinite;
+    }
+
     .form-control {
       border-radius: 12px;
-      box-shadow: none !important;
       border: 1px solid #d1d5db;
+      padding: 12px;
       transition: all 0.3s ease;
     }
     .form-control:focus {
       border-color: #e11d48;
-      box-shadow: 0 0 0 0.25rem rgba(225, 29, 72, 0.25);
+      box-shadow: 0 0 12px rgba(225, 29, 72, 0.3);
     }
+
     .input-group-text {
       background: #f1f5f9;
-      border: 1px solid #d1d5db;
+      border: none;
       border-radius: 12px 0 0 12px;
       color: #374151;
     }
+
     .btn-round {
       border-radius: 50px;
-      padding: 12px 20px;
+      padding: 14px 22px;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
     }
     .btn-danger {
-      background-color: #e11d48;
-      border-color: #e11d48;
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      border: none;
+      color: #fff;
+      box-shadow: 0 8px 15px rgba(225, 29, 72, 0.4);
     }
     .btn-danger:hover {
-      background-color: #be123c;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px rgba(225, 29, 72, 0.5);
     }
-    .forget-p, .small-info {
+
+    .forget-p {
       font-size: 0.95rem;
-      margin-top: 10px;
-      color: #374151;
+      margin-top: 15px;
+      text-align: center;
     }
+    .forget-p a {
+      color: #e11d48;
+      font-weight: bold;
+    }
+
+    /* Right box */
     .box-de {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px;
-    }
-    .inn-cover {
-      text-align: center;
+      padding: 50px;
     }
     .inn-cover h2 {
-      font-weight: bold;
+      font-size: 2rem;
       margin-bottom: 15px;
-      font-size: 1.8rem;
     }
     .inn-cover p {
-      font-size: 1rem;
-      margin-bottom: 20px;
       color: #cbd5e1;
-      line-height: 1.6;
+      margin-bottom: 20px;
     }
     .btn-outline-light {
       border-radius: 50px;
-      padding: 12px 24px;
+      padding: 12px 28px;
       font-weight: 600;
       transition: all 0.3s ease;
     }
     .btn-outline-light:hover {
       background: #fff;
       color: #0f172a;
+      transform: scale(1.05);
     }
-    .foter-credit {
-      margin-top: 30px;
-      font-size: 0.8rem;
-      color: #94a3b8;
-    }
-    .row ul {
+
+    /* Social Icons */
+    .social-icons {
       display: flex;
       gap: 15px;
       list-style: none;
-      padding: 0;
       justify-content: center;
-      margin-top: 15px;
+      padding: 0;
+      margin-top: 20px;
     }
-    .row ul li {
-      background: #f1f5f9;
-      padding: 12px;
+    .social-icons li a {
+      font-size: 20px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      transition: all 0.3s;
-      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
       color: #374151;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    .row ul li:hover {
-      background: #e11d48;
+    .social-icons li a:hover {
       color: #fff;
-      transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: scale(1.15) rotate(10deg);
+      background: #e11d48;
+      box-shadow: 0 6px 20px rgba(225,29,72,0.5);
     }
 
-
-        .social-icons {
-        display: flex;
-        gap: 15px;
-        list-style: none;
-        padding: 0;
-        justify-content: center;
-        }
-
-        .social-icons li a {
-        font-size: 20px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f1f5f9;
-        color: #374151;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .social-icons li a:hover {
-        color: #fff;
-        transform: scale(1.15);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Colors specific to each platform */
-        .social-icons li a .fa-facebook-f { color: #1877f2; }
-        .social-icons li a .fa-twitter { color: #1da1f2; }
-        .social-icons li a .fa-linkedin-in { color: #0077b5; }
-        .social-icons li a .fa-instagram { 
-        background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        }
-        .social-icons li a .fa-youtube { color: #ff0000; }
-
+    /* Responsive */
+    @media (max-width: 991px) {
+      .login-box { flex-direction: column; }
+      .box-de { padding: 30px; }
+      .typing-text { font-size: 0.9rem; border-right: none; }
+    }
   </style>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 </head>
 <body>
 
-<script defer src="https://static.getbutton.io/widget/bundle.js?id=UaD5Y"></script>
-
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-lg-10 col-md-12 login-box">
-      <div class="row">
-
-        <!-- Left Form -->
-        <div class="col-lg-6 col-md-6 log-det">
-          <div class="small-logo"><i class="fab fa-asymmetrik"></i> NyumbaChap</div>
-          <p class="dfmn">Tafadhari ingiza taarifa Ulizo fungulia Akaunt ili Upate Maelezo yote ya nyumba uliyoichagua ikiwemo mawasiliano na wamiliki wa nyumba</p>
-
-          <div class="text-box-cont">
-            {% for message in messages %}
-              <p class="dfmn" style="text-align: center; color: red">{{message}}</p>
-            {% endfor %}
-
-            <form action="" method="POST">
-              {% csrf_token %}
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="fas fa-user"></i></span>
-                </div>
-                <input type="text" class="form-control" placeholder="Jina Lako" name="username" id="username">
-              </div>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                </div>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Neno Siri">
-              </div>
-
-              <div class="recaptcha-wrapper mb-3">
-                <div class="g-recaptcha" data-sitekey="6Lfr4xUrAAAAACmeCbB_ii2950eZIQBfWUfOX0Kc"></div>
-              </div>
-
-              <div class="input-group center mb-3">
-                <button type="submit" class="btn btn-danger btn-round w-100">SIGN IN</button>
-              </div>
-
-              <div class="text-center my-3">Or</div>
-
-              <p class="forget-p">Je Hauna Account..? <a href="{% url 'Register' %}"><span>Jisajili Sasa</span></a></p>
-              <p class="small-info">Connect With Social Media</p>
-            </form>
+    <div class="col-lg-10 col-md-12 login-box d-flex flex-wrap">
+      
+      <!-- Left -->
+      <div class="col-lg-6 col-md-6 log-det">
+        <div class="brand-header text-center mb-4">
+          <div class="small-logo animate-logo">
+            <i class="fab fa-asymmetrik"></i> 
+            <span class="gradient-text">NyumbaChap</span>
           </div>
-
-                    <div class="row mt-3">
-                    <ul class="social-icons">
-                        <li><a href="https://www.facebook.com/profile.php?id=61567418936014" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="https://twitter.com/Willycodeer" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="https://www.linkedin.com/in/nyumbachap-tanzania-277736275" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
-                    </ul>
-                    </div>
-
+          <p id="typing" class="typing-text"></p>
         </div>
+        
+        {% for message in messages %}
+          <p class="dfmn" style="text-align: center; color: red">{{message}}</p>
+        {% endfor %}
 
-        <!-- Right Side -->
-        <div class="col-lg-6 col-md-6 box-de">
-          <div class="inn-cover">
-            <div class="small-logo"><i class="fab fa-asymmetrik"></i> NyumbaChap</div>
-            <h2>Je hauna Account..?</h2>
-            <p>Jisajili NyumbaChap sasa Upate njia rahisi ya kupata nyumba ya ndoto yako bila Usumbufu wa madalali na gharama zake</p>
-            <a href="{% url 'Register' %}"><button type="button" class="btn btn-outline-light">Jisajili Hapa</button></a>
-            <div class="foter-credit mt-3">
-              <a href="https://barackwilliam.github.io/me/" class="text-white-50">Designed by : chipindi</a>
-            </div>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" class="form-control" placeholder="Jina Lako" name="username">
           </div>
-        </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" placeholder="Neno Siri" name="password">
+          </div>
+          <div class="mb-3">
+            <div class="g-recaptcha" data-sitekey="6Lfr4xUrAAAAACmeCbB_ii2950eZIQBfWUfOX0Kc"></div>
+          </div>
+          <button type="submit" class="btn btn-danger btn-round w-100">SIGN IN</button>
+          <div class="text-center my-3">Or</div>
+          <p class="forget-p">Hauna account..? <a href="{% url 'Register' %}">Jisajili Sasa</a></p>
+        </form>
 
+        <!-- Social -->
+        <ul class="social-icons">
+          <li><a href="https://www.facebook.com/profile.php?id=61567418936014" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href="https://twitter.com/Willycodeer" target="_blank"><i class="fab fa-twitter"></i></a></li>
+          <li><a href="https://www.linkedin.com/in/nyumbachap-tanzania-277736275" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+          <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+          <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+        </ul>
       </div>
+
+      <!-- Right -->
+      <div class="col-lg-6 col-md-6 box-de">
+        <div class="inn-cover text-center">
+          <div class="small-logo"><i class="fab fa-asymmetrik"></i> NyumbaChap</div>
+          <h2>Je hauna Account?</h2>
+          <p>Jisajili sasa upate njia rahisi ya kupata nyumba ya ndoto yako bila usumbufu wa madalali na gharama zake.</p>
+          <a href="{% url 'Register' %}" class="btn btn-outline-light">Jisajili Hapa</a>
+          <div class="foter-credit mt-3">
+            <a href="https://barackwilliam.github.io/me/" class="text-white-50">Designed by : chipindi</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+
+<script>
+  const text = "Tafadhari ingiza taarifa ulizo fungulia akaunt ili upate maelezo ya nyumba uliyoichagua ikiwemo mawasiliano ya wamiliki.";
+  const typingElement = document.getElementById("typing");
+  let index = 0;
+
+  function type() {
+    if (index < text.length) {
+      typingElement.textContent += text.charAt(index);
+      index++;
+      setTimeout(type, 50); // speed ya typing
+    } else {
+      typingElement.classList.add("active"); // cursor blink baada ya kumaliza
+    }
+  }
+  type();
+</script>
 
 </body>
 </html>
