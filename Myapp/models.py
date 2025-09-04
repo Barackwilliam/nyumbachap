@@ -4,6 +4,7 @@ from cloudinary.models import CloudinaryField
 from datetime import timedelta
 from django.utils.timezone import now
 from django.utils.text import slugify
+
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
@@ -65,21 +66,34 @@ class Property(models.Model):
     image_3 = models.URLField(max_length=500, blank=True, null=True)
     property_owner_0 = models.URLField(max_length=500, blank=True, null=True)
     video_link = models.URLField(max_length=300, blank=True, null=True)
+    url_name = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.url_name:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            n = 1
+            while Property.objects.filter(url_name=slug).exists():
+                slug = f"{base_slug}-{n}"
+                n += 1
+            self.url_name = slug
+        super().save(*args, **kwargs)
 
 
     def add_view(self, user=None):
         """
         Add a view to the property.
-        Logged-in users are added to viewers; anonymous users only increment views.
+        Logged-in users are added to viewers; anonymous users only increment view_count.
         """
-        self.views += 1  # Increment always
+        self.view_count += 1  # increment view_count
 
         if user and user.is_authenticated:
-            # Add user to viewers only if not already added
             if not self.viewers.filter(id=user.id).exists():
                 self.viewers.add(user)
 
         self.save()
+
+
 
     # ✅ OG Image for main image
     def get_og_image_url(self):
@@ -97,12 +111,6 @@ class Property(models.Model):
     def get_og_image1_url(self):
         if self.image_0:
             return self.image_0.build_url(width=1200, height=630, crop='fill')
-        return ''
-
-    # ✅ Optimized Image for image1
-    def get_image1_url(self):
-        if self.image_0:
-            return self.image_0.build_url(format='jpg', quality='auto', fetch_format='auto')
         return ''
 
     # ✅ OG Image for image2
@@ -159,15 +167,9 @@ class Property(models.Model):
             return str(self.image_0)
         return ""
 
-
-    def add_view(self,user):
-        if user not in self.viewers.all():
-            self.viewers.add(user)
-            self.view_count +=1
-            self.save()
-
     def get_absolute_url(self):
-        return f"/property/{self.id}/"
+        return f"/property/{self.url_name}/"
+
     
 
 class ChatMessage(models.Model):

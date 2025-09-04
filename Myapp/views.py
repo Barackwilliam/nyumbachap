@@ -213,14 +213,19 @@ def property_list(request):
     return render(request, 'core/property_list.html', context)
 
 
-@login_required(login_url='login')
-def property_detail(request, property_id):
-    property = get_object_or_404(Property, id=property_id)
+# @login_required(login_url='login')
+# def property_detail(request, property_id):
+#     property = get_object_or_404(Property, id=property_id)
+#     user = request.user if request.user.is_authenticated else None
+#     property.add_view(user)
+
+#     return render(request, 'core/single_property.html', {'property': property})
+
+def property_detail(request, url_name):
+    property = get_object_or_404(Property, url_name=url_name)
     user = request.user if request.user.is_authenticated else None
     property.add_view(user)
-
     return render(request, 'core/single_property.html', {'property': property})
-
 
 
 @login_required(login_url='login')

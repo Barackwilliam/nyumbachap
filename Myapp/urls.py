@@ -64,11 +64,11 @@ urlpatterns = [
 
     path('offers/', views.offer_list, name='offer_list'),
     path('offers/<slug:slug>/', views.offer_detail, name='offer_detail'),
-    #path('property/<int:property_id>/<slug:slug>/', views.property_detail, name='property_detail'),  # URL for property details with id and slug
 
 
+    # path('property/<int:property_id>/', views.property_detail, name='property_detail'),
+    path('property/<str:url_name>/', views.property_detail, name='property_detail'),
 
-    path('property/<int:property_id>/', views.property_detail, name='property_detail'),
     path('add_property/', views.add_property, name='add_property'),
     path('search_property/', views.search_property, name='search_property'),
     path('policy/', views.policy, name='policy'),
