@@ -213,7 +213,7 @@ def property_list(request):
     return render(request, 'core/property_list.html', context)
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def property_detail(request, property_id):
     property = get_object_or_404(Property, id=property_id)  # Fetch property using id and slug
     property.add_view(request.user)  # Increment view count and add viewer

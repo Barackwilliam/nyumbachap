@@ -120,14 +120,55 @@ body {
 }
 
 /* Terms */
-.agree-term {
-  margin-right: 10px;
+.agree-term-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: #374151;
+  position: relative;
 }
 
-.label-agree-term a {
+.agree-term-wrapper input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid #d1d5db;
+  cursor: pointer;
+  appearance: none;
+  position: relative;
+}
+
+.agree-term-wrapper input[type="checkbox"]:checked {
+  background: #e11d48;
+  border-color: #e11d48;
+}
+
+.agree-term-wrapper input[type="checkbox"]:checked::before {
+  content: "\f00c"; /* FontAwesome check */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 14px;
+}
+
+.agree-term-wrapper label {
+  color: black;
+  line-height: 1.2;
+}
+
+.agree-term-wrapper label a {
   color: #e11d48;
   font-weight: bold;
   text-decoration: none;
+}
+
+.agree-term-wrapper label a:hover {
+  text-decoration: underline;
 }
 
 /* Login Link */
@@ -195,58 +236,8 @@ body {
     padding: 40px 30px;
   }
 }
-
-
-
-/* Custom Checkbox */
-.agree-term-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  font-size: 0.95rem;
-  color: #374151;
-}
-
-.agree-term-wrapper input[type="checkbox"] {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  border: 2px solid #d1d5db;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.agree-term-wrapper input[type="checkbox"]:checked {
-  background: #e11d48;
-  border-color: #e11d48;
-}
-
-.agree-term-wrapper input[type="checkbox"]:checked::after {
-  content: "\f00c"; /* FontAwesome check */
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  color: #fff;
-  position: absolute;
-  top: 1px;
-  left: 3px;
-  font-size: 14px;
-}
-
-.agree-term-wrapper a {
-  color: #e11d48;
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.agree-term-wrapper a:hover {
-  text-decoration: underline;
-}
-
 </style>
+
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
@@ -286,13 +277,11 @@ body {
         <div class="g-recaptcha" data-sitekey="6Lfr4xUrAAAAACmeCbB_ii2950eZIQBfWUfOX0Kc"></div>
       </div>
 
-      <div class="form-group agree-term-wrapper">
+      <!-- Agree Terms -->
+      <!-- <div class="form-group agree-term-wrapper">
         <input type="checkbox" id="agree-term" name="agree-term" required>
-        <label for="agree-term">
-            Nimekubali masharti yote kwenye 
-            <a href="{% url 'policy' %}" target="_blank">Terms of Service</a>
-        </label>
-        </div>
+        <label>Agree <a href="{% url 'policy' %}" target="_blank">Terms of Service</a></label>
+      </div> -->
 
       <div class="form-group">
         <input type="submit" class="form-submit" value="Sign Up">
