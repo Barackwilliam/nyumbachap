@@ -216,24 +216,24 @@ def property_list(request):
 @login_required(login_url='login')
 def property_detail(request, property_id):
     property = get_object_or_404(Property, id=property_id)
-
-    # Pass None for anonymous users to avoid IntegrityError
     user = request.user if request.user.is_authenticated else None
     property.add_view(user)
 
     return render(request, 'core/single_property.html', {'property': property})
 
 
-# @login_required(login_url='login')
+
+@login_required(login_url='login')
 def offer_list(request):
     offers = Offer.objects.all()
     return render(request, 'core/offer_list.html', {'offers': offers})
-# @login_required(login_url='login')
+
+@login_required(login_url='login')
 def offer_detail(request, slug):
     offer = get_object_or_404(Offer, slug=slug)
     return render(request, 'core/offer_detail.html', {'offer': offer})
  
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def popular_properties(request):
     popular_p = Property.objects.all()
     context ={
@@ -470,7 +470,39 @@ def logout(request):
 
 import requests  # On top if not already
 
+# def login(request):
+#     if request.method == 'POST':
+#         recaptcha_response = request.POST.get('g-recaptcha-response')
+#         data = {
+#             'secret': '6Lfr4xUrAAAAAHJxI7wm4xFza7BTBYotysJocKbn',
+#             'response': recaptcha_response
+#         }
+#         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+#         result = r.json()
+
+#         if result['success']:
+#             username = request.POST['username']
+#             password = request.POST['password']
+#             User = auth.authenticate(username=username, password=password)
+#             if User is not None:
+#                 auth.login(request, User)
+#                 return redirect('/')
+#             else:
+#                 messages.error(request, 'Tafadhari ingiza Taarifa Sahihi na Ujaribu Tena au Jisajili Upya!')
+#                 return redirect(login)
+#         else:
+#             messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhari jaribu tena.')
+#             return redirect(login)
+#     else:
+#         return render(request, 'core/login.html')
+
+
+
+
 def login(request):
+    # Chukua URL ya 'next' ili kurudisha mtu pale alipoishia
+    next_url = request.GET.get('next') or request.POST.get('next') or '/'
+
     if request.method == 'POST':
         recaptcha_response = request.POST.get('g-recaptcha-response')
         data = {
@@ -480,22 +512,19 @@ def login(request):
         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
         result = r.json()
 
-        if result['success']:
+        if result.get('success'):
             username = request.POST['username']
             password = request.POST['password']
-            User = auth.authenticate(username=username, password=password)
-            if User is not None:
-                auth.login(request, User)
-                return redirect('/')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return redirect(next_url)  # Redirect to original page
             else:
                 messages.error(request, 'Tafadhari ingiza Taarifa Sahihi na Ujaribu Tena au Jisajili Upya!')
-                return redirect(login)
         else:
             messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhari jaribu tena.')
-            return redirect(login)
-    else:
-        return render(request, 'core/login.html')
 
+    return render(request, 'core/login.html', {'next': next_url})
     
 
 
