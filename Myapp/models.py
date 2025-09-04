@@ -66,6 +66,21 @@ class Property(models.Model):
     property_owner_0 = models.URLField(max_length=500, blank=True, null=True)
     video_link = models.URLField(max_length=300, blank=True, null=True)
 
+
+    def add_view(self, user=None):
+        """
+        Add a view to the property.
+        Logged-in users are added to viewers; anonymous users only increment views.
+        """
+        self.views += 1  # Increment always
+
+        if user and user.is_authenticated:
+            # Add user to viewers only if not already added
+            if not self.viewers.filter(id=user.id).exists():
+                self.viewers.add(user)
+
+        self.save()
+
     # ✅ OG Image for main image
     def get_og_image_url(self):
         if self.image_0:

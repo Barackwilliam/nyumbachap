@@ -213,22 +213,27 @@ def property_list(request):
     return render(request, 'core/property_list.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def property_detail(request, property_id):
-    property = get_object_or_404(Property, id=property_id)  # Fetch property using id and slug
-    property.add_view(request.user)  # Increment view count and add viewer
+    property = get_object_or_404(Property, id=property_id)
+
+    # Pass None for anonymous users to avoid IntegrityError
+    user = request.user if request.user.is_authenticated else None
+    property.add_view(user)
+
     return render(request, 'core/single_property.html', {'property': property})
 
-@login_required(login_url='login')
+
+# @login_required(login_url='login')
 def offer_list(request):
     offers = Offer.objects.all()
     return render(request, 'core/offer_list.html', {'offers': offers})
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def offer_detail(request, slug):
     offer = get_object_or_404(Offer, slug=slug)
     return render(request, 'core/offer_detail.html', {'offer': offer})
  
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def popular_properties(request):
     popular_p = Property.objects.all()
     context ={
@@ -355,7 +360,7 @@ def reset_password(request):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def chat(request):
     return render(request, 'core/chat.html')
 
