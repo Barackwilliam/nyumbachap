@@ -516,8 +516,6 @@
 {% endif %}
 
 
-
-
 <!-- Loading overlay -->
 <div id="loadingOverlay" style="
     display: none;
@@ -554,9 +552,20 @@
 
 <script>
 function showLoading(event) {
-  // Hii function itafika tu wakati user abonye button
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
+
+// ✅ Wakati page inafunguka fully, overlay iondoke
+window.addEventListener("load", function () {
+  document.getElementById('loadingOverlay').style.display = 'none';
+});
+
+// ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) { 
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+});
 </script>
 
 

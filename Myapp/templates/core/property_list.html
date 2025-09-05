@@ -605,25 +605,25 @@
                         <!-- Main Navigation -->
                         <nav id="navigation" class="style-1">
                             <ul id="responsive">
-                                <li><a href="{% url 'popular_featured' %}">Home</a>
+                                <li><a href="{% url 'popular_featured' %}" onclick="showLoading(event)">Home</a>
                                    
                                     </li>
-                                    <li><a href="{% url 'property_map' %}">Search Via Map</a>
+                                    <li><a href="{% url 'property_map' %}" onclick="showLoading(event)">Search Via Map</a>
 
-                                    <li><a href="{% url 'dashboard' %}">Dashboard</a>
+                                    <li><a href="{% url 'dashboard' %}" onclick="showLoading(event)">Dashboard</a>
                                
                                     </li>
-                                    <li><a href="{% url 'help_center' %}">Help Center</a>
+                                    <li><a href="{% url 'help_center' %}" onclick="showLoading(event)">Help Center</a>
                                     </li>
                                     
                                 {% if request.user.is_authenticated and request.user.referrals.exists %}
-                                <li><a href="{% url 'referral_dashboard' %}">Get Money</a></li>
+                                <li><a href="{% url 'referral_dashboard' %}" onclick="showLoading(event)">Get Money</a></li>
                             {% endif %}
                         
-                                    <li><a href="{% url 'Blog_post' %}">Pages</a>
+                                    <li><a href="{% url 'Blog_post' %}" onclick="showLoading(event)">Pages</a>
                                        
                                     </li>
-                                    <li><a href="{% url 'post_list' %}">Blog</a>
+                                    <li><a href="{% url 'post_list' %}" onclick="showLoading(event)">Blog</a>
                                        
                                     </li>
                                    
@@ -639,7 +639,7 @@
 
                      {% if request.user.is_authenticated %}
                      <div class="header-widget">
-                            <a href="{% url 'add_property' %}" class="button border">Sajili Nyumba<i class="fas fa-laptop-house ml-2"></i></a>
+                            <a href="{% url 'add_property' %}" class="button border" onclick="showLoading(event)">Sajili Nyumba<i class="fas fa-laptop-house ml-2"></i></a>
                         </div>
                         {% endif %}
                         <!-- Header Widget / End -->
@@ -657,11 +657,11 @@
                          {% if request.user.is_authenticated %}
 
                          <ul>
-                            <li><a href="{% url 'edit_profile' %}"> Edit profile</a></li>
-                            <li><a href="{% url 'add_property' %}"> Sajili Nyumba</a></li>
-                            <li><a href="{% url 'jihudumie' %}">  Payments</a></li>
-                            <li><a href="{% url 'reset_password' %}"> Change Password</a></li>
-                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                            <li><a href="{% url 'edit_profile' %}"onclick="showLoading(event)"> Edit profile</a></li>
+                            <li><a href="{% url 'add_property' %}"onclick="showLoading(event)"> Sajili Nyumba</a></li>
+                            <li><a href="{% url 'jihudumie' %}"onclick="showLoading(event)">  Payments</a></li>
+                            <li><a href="{% url 'reset_password' %}"onclick="showLoading(event)"> Change Password</a></li>
+                            <li><a href="{% url 'logout' %}"onclick="showLoading(event)">Log Out</a></li>
                         </ul>
                         {% endif %}
                     </div>
@@ -706,7 +706,7 @@
                 🚀 Unataka kuona nyumba zote? Jiunge na kifurushi cha Gold au Platinum leo! 🔑</p>
             </div>
             <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'">Jiunge Hapa</button>
+                <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'"onclick="showLoading(event)">Jiunge Hapa</button>
             </div>
             
         {% endif %}
@@ -718,7 +718,7 @@
                      Unatumia Kifurushi cha Silver ambacho ni Bure na Hakina Nyumba zakutosha Jiunge na kifurushi cha Gold au Platinum leo! 🏡</p>
                 </div>
                 <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'">Jiunge Hapa</button>
+                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'"onclick="showLoading(event)">Jiunge Hapa</button>
                 </div>
                 
 
@@ -728,7 +728,7 @@
                 Una kifurushi Cha Gold kitakachodumu kwa Mwezi Mmoja Tafadhari Tembelea Mara kwa Mara Ili upate Nyumba mpya Kila zinaposajiliwa Au jiunge kifurushi cha Platinum ili ujulishwe kila nyumba inaposajiliwa</p> 
              </div>
                 <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'">Jiunge Hapa</button>
+                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'"onclick="showLoading(event)">Jiunge Hapa</button>
                 </div>
                 
                 {% else %}
@@ -742,225 +742,139 @@
             {% endif %}
             {% endif %}
         
-            
-       
-        <section class="properties-list featured portfolio blog">
-            <div class="container">
-                
-        
-             <!-- Search Form -->
-             <div class="col-12">
-                <form method="GET" action="{% url 'search_property' %}">                                       
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs_1">
-                            <div class="rld-main-search">
-                                <div class="row">
-                                    <div class="rld-single-input">
-                                        <input type="text" placeholder="Enter Keyword..." name="q" value="{{request.GET.q}}">
-                                    </div>
-                                   
-                                    <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                                        <!-- <a class="btn btn-yellow" href="#"><button type="submit"> Search Now </button> </a>  -->
-                                        <button type="submit" class="btn btn-yellow"onclick="showLoading(event)">Search Now</button>
+<section class="properties-list featured portfolio blog">
+  <div class="container">
 
-                                    </div>
-                                </form>
-
-
-                <!--/ End Search Form -->
-                <section class="headings-2 pt-0">
-                    <div class="pro-wrapper">
-                        <div class="detail-wrapper-body">
-                            <div class="listing-title-bar">
-                                <div class="text-heading text-left">
-                                    <!-- <p class="font-weight-bold mb-0 mt-3">9 Search results</p> -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="cod-pad single detail-wrapper mr-2 mt-0 d-flex justify-content-md-end align-items-center">
-                            <div class="input-group border rounded input-group-lg w-auto mr-4">
-                            
-                            </div>
-                           
-                        </div>
-                    </div>
-                </section>
-            <!-- homes content -->
-
-                        <!-- <h2>Total houses</h2> -->
-     {% load static %}
-<div class="container">
-
- {% load static %}
-<div class="container">
-
-<div class="row">
-{% for property in listings %}
-    <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
-        <div class="project-single" data-aos="fade-up">
-            <div class="project-inner project-head">
-                <div class="homes">
-                    {% if property.listing_type == 'local' %}
-                        <div class="homes-tag button alt featured">{{property.p_status}}</div>
-                        <div class="homes-tag button alt sale">
-                            {% if property.p_status == "Sold" %}Closed{% else %}{{property.status}}{% endif %}
-                        </div>
-                        <div class="homes-price">{{property.price}} Tsh</div>
-                        <img src="{{ property.image_0 }}" alt="{{property.title}}" class="img-responsive">
-                    {% elif property.listing_type == 'beforward' %}
-                        <div class="homes-tag button alt featured">Active</div>
-                        <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                        <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/300x200?text=Beforward' }}"class="img-responsive" width="400" height="300"
-                             alt="Picha ya {{ property.title }}" class="img-fluid" loading="lazy">
-                    {% elif property.listing_type == 'makazi' %}
-                        <div class="homes-tag button alt featured">Active</div>
-                        <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-<img src="{{ property.main_image_url|default:'https://via.placeholder.com/300x200?text=Makazi' }}" 
-     alt="{{ property.title }}" class="img-responsive" width="400" height="300"
-                             alt="Picha ya {{ property.title }}" class="img-responsive" loading="lazy">
-                    {% endif %}
+    <!-- Search Form -->
+    <div class="col-12">
+      <form method="GET" action="{% url 'search_property' %}">
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="tabs_1">
+            <div class="rld-main-search">
+              <div class="row">
+                <div class="rld-single-input">
+                  <input type="text" placeholder="Enter Keyword..." name="q" value="{{request.GET.q}}">
                 </div>
-
-                <div class="button-effect">
-                    {% if property.listing_type == 'local' %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="btn"><i class="fa fa-link"></i></a>
-                        {% if property.video_link %}
-                            <a href="{{property.video_link}}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                        {% endif %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="img-poppu btn"><i class="fa fa-photo"></i></a>
-                    {% elif property.listing_type == 'beforward' %}
-                        <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn"><i class="fa fa-link"></i></a>
-                        {% if property.video_link %}
-                            <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                        {% endif %}
-                    {% elif property.listing_type == 'makazi' %}
-                        <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn"><i class="fa fa-link"></i></a>
-                    {% endif %}
+                <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
+                  <button type="submit" class="btn btn-yellow" onclick="showLoading(event)">Search Now</button>
                 </div>
+              </div>
             </div>
-
-            <div class="homes-content">
-                {% if property.listing_type == 'local' %}
-                    <h3><a href="{% url 'property_detail' property.url_name %}">{{property.title}}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i><span>{{property.region}}, {{property.ward}}</span></p>
-                    <ul class="homes-list clearfix pb-3">
-                        <li class="the-icons"><i class="flaticon-bed mr-2"></i><span>{{property.bedrooms}} Bedrooms</span></li>
-                        <li class="the-icons"><i class="flaticon-bathtub mr-2"></i><span>{{property.bathrooms}} Bathrooms</span></li>
-                        <li class="the-icons"><i class="flaticon-square mr-2"></i><span>{{property.house_size}} sq m</span></li>
-                    </ul>
-                    <div style="margin-top: 10px;">
-                        <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
-                    </div>
-                    <div class="footer mt-2">
-                        <a href="{% url 'property_detail' property.url_name %}">
-                            <img src="{{property.property_owner_0}}" alt="" class="mr-2 rounded-circle"> {{ property.owner }}
-                        </a>
-                        <span class="ml-2">Posted at {{property.date_posted}}</span>
-                    </div>
-
-                {% elif property.listing_type == 'beforward' %}
-                    <h3><a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i><span>{{ property.city }}</span></p>
-                    <div style="margin-top: 10px;">
-                        <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
-                    </div>
-
-                {% elif property.listing_type == 'makazi' %}
-                    <h3><a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i><span>{{ property.location }}</span></p>
-                    <div style="margin-top: 10px;">
-            <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn btn-primary" onclick="showLoading(event)">
-              Tazama
-              </a>
-                    </div>
-
-
-
-
-
-                {% endif %}
-            </div>
+          </div>
         </div>
+      </form>
     </div>
-{% endfor %}
-</div>
-{% if is_paginated %}
-<nav class="pagination">
-    <ul class="pagination">
-
-        {# Previous button #}
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <span class="page-link">Previous</span>
-        </li>
-        {% endif %}
-
-        {# First page always #}
-        {% if page_obj.number != 1 %}
-        <li class="page-item">
-            <a class="page-link" href="?page=1">1</a>
-        </li>
-        {% endif %}
-
-        {# Ellipsis if gap between first and previous page #}
-        {% if page_obj.number > 3 %}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-        {% endif %}
-
-        {# Previous page #}
-        {% if page_obj.number > 1 %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.number|add:-1 }}">{{ page_obj.number|add:-1 }}</a>
-        </li>
-        {% endif %}
-
-        {# Current page #}
-        <li class="page-item active">
-            <span class="page-link">{{ page_obj.number }}</span>
-        </li>
-
-        {# Next page #}
-        {% if page_obj.number < paginator.num_pages %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.number|add:1 }}">{{ page_obj.number|add:1 }}</a>
-        </li>
-        {% endif %}
-
-        {# Ellipsis if gap between next page and last page #}
-        {% if page_obj.number < paginator.num_pages|add:-2 %}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-        {% endif %}
-
-        {# Last page always #}
-        {% if page_obj.number != paginator.num_pages %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
-        </li>
-        {% endif %}
-
-        {# Next button #}
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <span class="page-link">Next</span>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-{% endif %}
+    <!-- End Search Form -->
 
 
 
+    <!-- Homes Content -->
+    <div class="container mt-4">
+      <div class="row g-4">
+        {% for property in listings %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="project-single shadow-sm h-100">
+            <div class="project-inner project-head">
+
+              <div class="homes position-relative">
+                {% if property.listing_type == 'local' %}
+                  <div class="homes-tag button alt featured">{{property.p_status}}</div>
+                  <div class="homes-tag button alt sale">
+                    {% if property.p_status == "Sold" %}Closed{% else %}{{property.status}}{% endif %}
+                  </div>
+                  <div class="homes-price">{{property.price}} Tsh</div>
+                  <img src="{{ property.image_0 }}" alt="{{property.title}}" class="img-fluid w-100" style="height:230px;object-fit:cover;">
+                {% elif property.listing_type == 'beforward' %}
+                  <div class="homes-tag button alt featured">Active</div>
+                  <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                  <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x230?text=Beforward' }}" 
+                       alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;" loading="lazy">
+                {% elif property.listing_type == 'makazi' %}
+                  <div class="homes-tag button alt featured">Active</div>
+                  <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                  <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x230?text=Makazi' }}" 
+                       alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;" loading="lazy">
+                {% endif %}
+              </div>
+
+              <!-- Buttons -->
+              <div class="button-effect">
+                {% if property.listing_type == 'local' %}
+                  <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                  {% if property.video_link %}
+                    <a href="{{property.video_link}}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
+                  {% endif %}
+                  <a href="{% url 'property_detail' property.url_name %}" class="img-poppu btn" onclick="showLoading(event)"><i class="fa fa-photo"></i></a>
+                {% elif property.listing_type == 'beforward' %}
+                  <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                  {% if property.video_link %}
+                    <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
+                  {% endif %}
+                {% elif property.listing_type == 'makazi' %}
+                  <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                {% endif %}
+              </div>
             </div>
-        </section>
+
+            <!-- Content -->
+            <div class="homes-content p-3">
+              {% if property.listing_type == 'local' %}
+                <h3><a href="{% url 'property_detail' property.url_name %}" onclick="showLoading(event)">{{property.title}}</a></h3>
+                <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{property.region}}, {{property.ward}}</p>
+                <ul class="homes-list clearfix pb-3">
+                  <li class="the-icons"><i class="flaticon-bed mr-2"></i>{{property.bedrooms}} Bedrooms</li>
+                  <li class="the-icons"><i class="flaticon-bathtub mr-2"></i>{{property.bathrooms}} Bathrooms</li>
+                  <li class="the-icons"><i class="flaticon-square mr-2"></i>{{property.house_size}} sq m</li>
+                </ul>
+                <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+                <div class="footer mt-3 small text-muted">
+                  <img src="{{property.property_owner_0}}" alt="" class="mr-2 rounded-circle" width="30"> {{ property.owner }}
+                  <span class="ml-2">Posted at {{property.date_posted}}</span>
+                </div>
+              {% elif property.listing_type == 'beforward' %}
+                <h3><a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
+                <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.city }}</p>
+                <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+              {% elif property.listing_type == 'makazi' %}
+                <h3><a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
+                <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.location }}</p>
+                <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if is_paginated %}
+      <nav class="pagination mt-4">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" onclick="showLoading(event)">Previous</a></li>
+          {% else %}
+          <li class="page-item disabled"><span class="page-link">Previous</span></li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"onclick="showLoading(event)">Next</a></li>
+          {% else %}
+          <li class="page-item disabled"><span class="page-link">Next</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+</section>
 
 <style>
 .property-img {
@@ -1215,9 +1129,6 @@ document.addEventListener('keydown', function(event) {
 
 </script>
 
-
-
-
 <!-- Loading overlay -->
 <div id="loadingOverlay" style="
     display: none;
@@ -1254,15 +1165,21 @@ document.addEventListener('keydown', function(event) {
 
 <script>
 function showLoading(event) {
-  // Hii function itafika tu wakati user abonye button
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
+
+// ✅ Wakati page inafunguka fully, overlay iondoke
+window.addEventListener("load", function () {
+  document.getElementById('loadingOverlay').style.display = 'none';
+});
+
+// ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) { 
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+});
 </script>
-
-
-
-
-
 
     
 <!-- Feedback Modal -->
@@ -1282,7 +1199,7 @@ function showLoading(event) {
           <option value="4">★★★★☆ - Very good</option>
           <option value="5">★★★★★ - Excellent</option>
         </select>
-        <button type="submit">Send Feedback</button>
+        <button type="submit" onclick="showLoading(event)">Send Feedback</button>
       </form>
       <p id="feedback-message"></p>
     </div>

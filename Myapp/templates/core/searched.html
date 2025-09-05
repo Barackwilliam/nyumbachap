@@ -394,27 +394,27 @@
                         <!-- Main Navigation -->
                         <nav id="navigation" class="style-1">
                             <ul id="responsive">
-                                <li><a href="{% url 'popular_featured' %}">Home</a>
+                                <li><a href="{% url 'popular_featured' %}" onclick="showLoading(event)">Home</a>
                                    
                                     </li>
-                                    <li><a href="{% url 'property_list' %}">Property List</a>
+                                    <li><a href="{% url 'property_list' %}" onclick="showLoading(event)">Property List</a>
                                        
                                     </li>
-                                    <li><a href="{% url 'help_center' %}">Help Center</a>
+                                    <li><a href="{% url 'help_center' %}" onclick="showLoading(event)">Help Center</a>
                                     </li>
-                                    <li><a href="{% url 'property_map' %}">Search Via Map</a>
+                                    <li><a href="{% url 'property_map' %}" onclick="showLoading(event)">Search Via Map</a>
 
 
                                 {% if request.user.is_authenticated and request.user.referrals.exists %}
-                                    <li><a href="{% url 'referral_dashboard' %}">Get rewards</a></li>
+                                    <li><a href="{% url 'referral_dashboard' %}" onclick="showLoading(event)">Get rewards</a></li>
                                 {% endif %}
                             
                                        
                                     </li>
-                                    <li><a href="{% url 'Blog_post' %}">Pages</a>
+                                    <li><a href="{% url 'Blog_post' %}" onclick="showLoading(event)">Pages</a>
                                        
                                     </li>
-                                    <li><a href="{% url 'post_list' %}">Blog</a>
+                                    <li><a href="{% url 'post_list' %}" onclick="showLoading(event)">Blog</a>
                                         
                                     </li>
                                    
@@ -428,7 +428,7 @@
                     <div class="right-side d-none d-none d-lg-none d-xl-flex">
                         <!-- Header Widget -->
                         <div class="header-widget">
-                            <a href="{% url 'add_property' %}" class="button border">Sajili Nyumba<i class="fas fa-laptop-house ml-2"></i></a>
+                            <a href="{% url 'add_property' %}" class="button border" onclick="showLoading(event)">Sajili Nyumba<i class="fas fa-laptop-house ml-2"></i></a>
                         </div>
                         <!-- Header Widget / End -->
                     </div>
@@ -443,11 +443,11 @@
                                
                         </div>
                         <ul>
-                            <li><a href="{% url 'edit_profile' %}"> Edit profile</a></li>
-                            <li><a href="{% url 'add_property' %}"> Sajili nyumba</a></li>
-                            <li><a href="{% url 'jihudumie' %}">  Payments</a></li>
-                            <li><a href="{% url 'reset_password' %}"> Change Password</a></li>
-                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                            <li><a href="{% url 'edit_profile' %}" onclick="showLoading(event)"> Edit profile</a></li>
+                            <li><a href="{% url 'add_property' %}" onclick="showLoading(event)"> Sajili nyumba</a></li>
+                            <li><a href="{% url 'jihudumie' %}" onclick="showLoading(event)">  Payments</a></li>
+                            <li><a href="{% url 'reset_password' %}" onclick="showLoading(event)"> Change Password</a></li>
+                            <li><a href="{% url 'logout' %}" onclick="showLoading(event)">Log Out</a></li>
                         </ul>
                     </div>
                     <!-- Right Side Content / End -->
@@ -487,7 +487,7 @@
                 🚀 Unataka kuona nyumba zote? Jiunge na kifurushi cha Gold au Platinum leo!</p>
             </div>
             <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'">Jiunge Hapa</button>
+                <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'" onclick="showLoading(event)">Jiunge Hapa</button>
             </div>
             
         {% endif %}
@@ -499,7 +499,7 @@
                      Unatumia Kifurushi cha Silver ambacho ni Bure na Hakina Nyumba zakutosha Jiunge na kifurushi cha Gold au Platinum leo! 🏡</p>
                 </div>
                 <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'">Jiunge Hapa</button>
+                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'" onclick="showLoading(event)">Jiunge Hapa</button>
                 </div>
                 
 
@@ -510,7 +510,7 @@
 
                  </div>
                  <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'">Jiunge Hapa</button>
+                    <button type="submit" class="btn btn-unique" onclick="window.location.href='{% url 'jihudumie' %}'" onclick="showLoading(event)">Jiunge Hapa</button>
                 </div>
                 
                 {% else %}
@@ -590,7 +590,7 @@
 
             <!-- ================= LOCAL PROPERTY ================= -->
             {% if property.listing_type == "local" %}
-              <a href="{% url 'property_detail' property.url_name %}" class="homes-img">
+              <a href="{% url 'property_detail' property.url_name %}" class="homes-img"onclick="showLoading(event)">
                   <div class="homes-tag button alt featured">Featured</div>
                   <div class="homes-tag button alt sale">{{ property.status }}</div>
                   <div class="homes-price">{{ property.price }} Tsh</div>
@@ -600,7 +600,7 @@
 
             <!-- ================= BEFORWARD PROPERTY ================= -->
             {% elif property.listing_type == "beforward" %}
-              <a href="{% url 'Beforward_detail' property.id %}" class="homes-img">
+              <a href="{% url 'Beforward_detail' property.id %}" class="homes-img"onclick="showLoading(event)">
                 <div class="homes-tag button alt featured">Active</div>
                 <div class="homes-price">{{ property.price|default:"N/A" }}</div>
                 <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
@@ -609,7 +609,7 @@
 
             <!-- ================= MAKAZI PROPERTY ================= -->
             {% elif property.listing_type == "makazi" %}
-              <a href="{% url 'makazi_detail' property.id %}" class="homes-img">
+              <a href="{% url 'makazi_detail' property.id %}" class="homes-img"onclick="showLoading(event)">
                 <div class="homes-tag button alt featured">Active</div>
                 <div class="homes-price">{{ property.price|default:"N/A" }}</div>
                 <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
@@ -622,7 +622,7 @@
           <!-- ================= BUTTON EFFECT ================= -->
           <div class="button-effect">
             {% if property.listing_type == "local" %}
-              <a href="{% url 'property_detail' property.url_name %}" class="btn"><i class="fa fa-link"></i></a>
+              <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
               {% if property.video_link %}
                 <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
               {% endif %}
@@ -633,9 +633,9 @@
                 {% endif %}
               {% endfor %}
             {% elif property.listing_type == "beforward" %}
-              <a href="{% url 'Beforward_detail' property.id %}" class="btn"><i class="fa fa-link"></i></a>
+              <a href="{% url 'Beforward_detail' property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
             {% elif property.listing_type == "makazi" %}
-              <a href="{% url 'makazi_detail' property.id %}" class="btn"><i class="fa fa-link"></i></a>
+              <a href="{% url 'makazi_detail' property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
             {% endif %}
           </div>
         </div>
@@ -644,11 +644,11 @@
         <div class="homes-content">
           <h3>
             {% if property.listing_type == "local" %}
-              <a href="{% url 'property_detail' property.url_name %}">{{ property.title }}</a>
+              <a href="{% url 'property_detail' property.url_name %}" onclick="showLoading(event)">{{ property.title }}</a>
             {% elif property.listing_type == "beforward" %}
-              <a href="{% url 'Beforward_detail' property.id %}">{{ property.title }}</a>
+              <a href="{% url 'Beforward_detail' property.id %}" onclick="showLoading(event)">{{ property.title }}</a>
             {% elif property.listing_type == "makazi" %}
-              <a href="{% url 'makazi_detail' property.id %}">{{ property.title }}</a>
+              <a href="{% url 'makazi_detail' property.id %}" onclick="showLoading(event)">{{ property.title }}</a>
             {% endif %}
           </h3>
 
@@ -946,7 +946,6 @@ document.addEventListener('keydown', function(event) {
 
 
 
-
 <!-- Loading overlay -->
 <div id="loadingOverlay" style="
     display: none;
@@ -983,9 +982,20 @@ document.addEventListener('keydown', function(event) {
 
 <script>
 function showLoading(event) {
-  // Hii function itafika tu wakati user abonye button
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
+
+// ✅ Wakati page inafunguka fully, overlay iondoke
+window.addEventListener("load", function () {
+  document.getElementById('loadingOverlay').style.display = 'none';
+});
+
+// ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) { 
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+});
 </script>
 
 

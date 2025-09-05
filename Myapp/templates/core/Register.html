@@ -248,7 +248,7 @@ body {
   <div class="signup-form-container">
     <h2>Unda Akaunti</h2>
     {% for message in messages %}
-      <h3 style="text-align: center; color: red">{{message}}</h3>
+      <h3 style="text-align: center; color: rgb(12, 145, 72)">{{message}}</h3>
     {% endfor %}
     <form method="POST">
       {% csrf_token %}
@@ -288,17 +288,73 @@ body {
       </div>
     </form>
 
-    <p class="loginhere">Tayari una account? <a href="{% url 'login' %}" class="loginhere-link">Ingia Hapa</a></p>
+    <p class="loginhere">Tayari una account? <a href="{% url 'login' %}" class="loginhere-link" onclick="showLoading(event)">Ingia Hapa</a></p>
   </div>
 
   <!-- Right Banner -->
   <div class="signup-banner">
     <h2>Karibu NyumbaChap</h2>
     <p>Ungana nasi sasa na upate nyumba ya ndoto yako bila usumbufu wa madalali.</p>
-    <a href="{% url 'login' %}" class="btn btn-outline-light">Ingia Sasa</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-light" onclick="showLoading(event)">Ingia Sasa</a>
   </div>
 
 </div>
+
+
+
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    text-align: center;
+">
+  <div class="spinner" style="
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #e63946;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+  "></div>
+  <p>wait for sec... 🔄</p>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+function showLoading(event) {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+// ✅ Wakati page inafunguka fully, overlay iondoke
+window.addEventListener("load", function () {
+  document.getElementById('loadingOverlay').style.display = 'none';
+});
+
+// ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) { 
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+});
+</script>
+
 
 </body>
 </html>
