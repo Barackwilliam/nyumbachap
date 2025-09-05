@@ -80,7 +80,7 @@
 
                                                         <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
                                                             <!-- <a class="btn btn-yellow" href="#"><button type="submit"> Search Now </button> </a>  -->
-                                                            <button type="submit" class="btn btn-yellow">Tafuta</button>
+                                                            <button type="submit" class="btn btn-yellow"onclick="showLoading(event)">Tafuta</button>
 
                                                         </div>
 
@@ -141,9 +141,9 @@
                   
                     <div class="col-sm-6 col-lg-4 col-xl-4" data-aos="zoom-in" data-aos-delay="350">
                         <!-- Image Box -->
-                        <a href="{% url 'property_list'%}" class="img-box hover-effect no-mb x3">
+                        <a href="{% url 'property_list'%}" class="img-box hover-effect no-mb x3"onclick="showLoading(event)">
                             
-                            <img src="{{place.image_of_place_1}} " class="img-responsive" alt="{{place.name_of_place}}">
+                            <img src="{{place.image_of_place_1}} " class="img-responsive" onclick="showLoading(event)" alt="{{place.name_of_place}}">
                             <!-- Badge -->
                             <div class="listing-badges">
                                 <span class="featured">Featured</span>
@@ -165,7 +165,7 @@
                 
                
         <div class="bg-all">
-            <a href="{% url 'property_map'%}" class="btn btn-outline-light">Tafuta Kwenye Ramanai</a>
+            <a href="{% url 'property_map'%}" class="btn btn-outline-light" onclick="showLoading(event)">Tafuta Kwenye Ramanai</a>
         </div>
         <!-- START SECTION FEATURED PROPERTIES -->
         <section class="featured portfolio bg-white-2 rec-pro full-l">
@@ -188,7 +188,7 @@
                                  <div class="homes">
                                     
                                     <!-- homes img --> 
-                                    <a href="{% url 'property_list' %}" class="homes-img">
+                                    <a href="{% url 'property_list' %}" class="homes-img" onclick="showLoading(event)">
                                         <div class="homes-tag button alt featured">Featured</div>
                                         <div class="homes-tag button alt sale">For Sale</div>
                                         <img src="{{property.f_property_name.image_0}}" alt="home-1" class="img-responsive">
@@ -259,7 +259,7 @@
                 
                
                 <div class="bg-all">
-                    <a href="{% url 'makazi_list'%}" class="btn btn-outline-light">Nyumba za hivi punde</a>
+                    <a href="{% url 'makazi_list'%}" class="btn btn-outline-light" onclick="showLoading(event)">Nyumba za hivi punde</a>
                 </div>
             </div>
         </section>
@@ -343,7 +343,7 @@
                             <div class="project-inner project-head">
                                 <div class="homes">
                                     <!-- homes img --> 
-                                    <a href="{% url 'search_property' %}" class="homes-img">
+                                    <a href="{% url 'search_property' %}" class="homes-img" onclick="showLoading(event)">
                                         <div class="homes-tag button alt featured">Featured</div>
                                         <div class="homes-tag button alt sale">For Sale</div>
                                         <div class="homes-price">{{nyumba.p_property_name.price}} Tsh</div>
@@ -514,5 +514,52 @@
   }, 3000); // 3000 ms = 3 seconds
 </script>
 {% endif %}
+
+
+
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    text-align: center;
+">
+  <div class="spinner" style="
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #e63946;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+  "></div>
+  <p>wait for sec... 🔄</p>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+function showLoading(event) {
+  // Hii function itafika tu wakati user abonye button
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+</script>
+
+
+
 
         {% endblock %}

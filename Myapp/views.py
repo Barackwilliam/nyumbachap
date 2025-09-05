@@ -184,32 +184,146 @@ def dashboard(request):
 
 
 # @login_required(login_url='login')
-def property_list(request):
-    prop_list = Property.objects.all().order_by('-date_posted')
+# def property_list(request):
+#     prop_list = Property.objects.all().order_by('-date_posted')
 
-    # **Chukua title za nyumba chache kwa ajili ya SEO**
-    property_titles = ", ".join(prop_list.values_list('title', flat=True)[:3])  
-    page_title = f"{property_titles} - Nyumba za Kupanga na Kuuza Tanzania" if property_titles else "NyumbaChap - Tafuta Nyumba"
+#     # **Chukua title za nyumba chache kwa ajili ya SEO**
+#     property_titles = ", ".join(prop_list.values_list('title', flat=True)[:3])  
+#     page_title = f"{property_titles} - Nyumba za Kupanga na Kuuza Tanzania" if property_titles else "NyumbaChap - Tafuta Nyumba"
 
-    # **Pagination**
-    page = request.GET.get('page', 1)
-    property_paginator = Paginator(prop_list, PROPERTIES_PER_PAGE)
+#     # **Pagination**
+#     page = request.GET.get('page', 1)
+#     property_paginator = Paginator(prop_list, PROPERTIES_PER_PAGE)
 
+#     try:
+#         prop_list = property_paginator.page(page)
+#     except PageNotAnInteger:
+#         prop_list = property_paginator.page(1)
+#     except EmptyPage:
+#         prop_list = property_paginator.page(property_paginator.num_pages)
+
+#     context = {
+#         "page_obj": prop_list,
+#         "prop_list": prop_list,
+#         "is_paginated": property_paginator.num_pages > 1,
+#         "paginator": property_paginator,
+#         "page_title": page_title  # **Title ya ukurasa**
+#     }
+
+#     return render(request, 'core/property_list.html', context)
+
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+# from .models import Property, Scrape_BeforwardListing, Scrape_MakaziListing
+
+# PROPERTIES_PER_PAGE = 12
+# MAKAZI_PER_PAGE = 12
+# BEFORWARD_PER_PAGE = 12  # paginate Beforward
+
+# def property_list(request):
+#     # --- Local Properties ---
+#     prop_list = Property.objects.all().order_by('-date_posted')
+
+#     # SEO
+#     property_titles = ", ".join(prop_list.values_list('title', flat=True)[:3])  
+#     page_title = f"{property_titles} - Nyumba za Kupanga na Kuuza Tanzania" if property_titles else "NyumbaChap - Tafuta Nyumba"
+
+#     # Pagination for Local Properties
+#     page = request.GET.get('page', 1)
+#     property_paginator = Paginator(prop_list, PROPERTIES_PER_PAGE)
+#     try:
+#         prop_list_paginated = property_paginator.page(page)
+#     except PageNotAnInteger:
+#         prop_list_paginated = property_paginator.page(1)
+#     except EmptyPage:
+#         prop_list_paginated = property_paginator.page(property_paginator.num_pages)
+
+#     # --- Scraped Listings ---
+#     bef_listings_all = Scrape_BeforwardListing.objects.all().order_by('-scraped_at')
+#     makazi_listings_all = Scrape_MakaziListing.objects.all().order_by('-scraped_at')
+
+#     # Pagination for Makazi
+#     makazi_page = request.GET.get('makazi_page', 1)
+#     makazi_paginator = Paginator(makazi_listings_all, MAKAZI_PER_PAGE)
+#     try:
+#         makazi_listings = makazi_paginator.page(makazi_page)
+#     except PageNotAnInteger:
+#         makazi_listings = makazi_paginator.page(1)
+#     except EmptyPage:
+#         makazi_listings = makazi_paginator.page(makazi_paginator.num_pages)
+
+#     # Pagination for Beforward
+#     bef_page = request.GET.get('bef_page', 1)
+#     bef_paginator = Paginator(bef_listings_all, BEFORWARD_PER_PAGE)
+#     try:
+#         bef_listings = bef_paginator.page(bef_page)
+#     except PageNotAnInteger:
+#         bef_listings = bef_paginator.page(1)
+#     except EmptyPage:
+#         bef_listings = bef_paginator.page(bef_paginator.num_pages)
+
+#     context = {
+#         "page_obj": prop_list_paginated,
+#         "prop_list": prop_list_paginated,
+#         "is_paginated": property_paginator.num_pages > 1,
+#         "paginator": property_paginator,
+#         "page_title": page_title,
+#         "bef_listings": bef_listings,
+#         "makazi_listings": makazi_listings,
+#     }
+
+#     return render(request, 'core/property_list.html', context)
+
+
+
+
+from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .models import Property, Scrape_BeforwardListing, Scrape_MakaziListing
+from random import shuffle
+
+# Number of items per page
+ITEMS_PER_PAGE = 40
+
+def paginate_listings(request, listings, per_page=ITEMS_PER_PAGE, page_param='page'):
+    """Generic function to paginate any list"""
+    page_number = request.GET.get(page_param, 1)
+    paginator = Paginator(listings, per_page)
     try:
-        prop_list = property_paginator.page(page)
+        paginated_list = paginator.page(page_number)
     except PageNotAnInteger:
-        prop_list = property_paginator.page(1)
+        paginated_list = paginator.page(1)
     except EmptyPage:
-        prop_list = property_paginator.page(property_paginator.num_pages)
+        paginated_list = paginator.page(paginator.num_pages)
+    return paginated_list, paginator
+
+def property_list(request):
+    # --- Get all listings ---
+    local_props = list(Property.objects.all())
+    beforward_props = list(Scrape_BeforwardListing.objects.all())
+    makazi_props = list(Scrape_MakaziListing.objects.all())
+
+    # Tag each property with its type for template
+    for p in local_props:
+        p.listing_type = 'local'
+    for p in beforward_props:
+        p.listing_type = 'beforward'
+    for p in makazi_props:
+        p.listing_type = 'makazi'
+
+    # Combine and shuffle
+    all_listings = local_props + beforward_props + makazi_props
+    shuffle(all_listings)
+
+    # Paginate combined listings
+    paginated_listings, paginator = paginate_listings(request, all_listings)
 
     context = {
-        "page_obj": prop_list,
-        "prop_list": prop_list,
-        "is_paginated": property_paginator.num_pages > 1,
-        "paginator": property_paginator,
-        "page_title": page_title  # **Title ya ukurasa**
+        'listings': paginated_listings,
+        'is_paginated': paginator.num_pages > 1,
+        'paginator': paginator,
+        'page_obj': paginated_listings,
+        'page_title': 'NyumbaChap - Properties & Listings',
     }
-
     return render(request, 'core/property_list.html', context)
 
 
@@ -249,23 +363,85 @@ def popular_properties(request):
 
 
 # @login_required(login_url='login')
-def search_property(request):
-    query = request.GET.get('q') #Fetching the user's input from the search box
 
-    results = Property.objects.all()
+
+# def search_property(request):
+#     query = request.GET.get('q') #Fetching the user's input from the search box
+
+#     results = Property.objects.all()
+
+#     if query:
+#          results = results.filter(Q(region__icontains=query) |
+#         Q(district__icontains=query) |
+#         Q(title__icontains=query) |
+#         Q(description__icontains=query) |
+#         Q(status__icontains=query) |
+#         Q(bedrooms__iexact=query) |
+#         Q(ward__icontains=query) |
+#         Q(price__iexact=query))
+
+#     return render(request,'core/searched.html',{'results':results})
+
+from django.db.models import Q
+
+def search_property(request):
+    query = request.GET.get("q", "").strip()
+
+    # Default: zote models
+    local_props = list(Property.objects.all())
+    beforward_props = list(Scrape_BeforwardListing.objects.all())
+    makazi_props = list(Scrape_MakaziListing.objects.all())
 
     if query:
-         results = results.filter(Q(region__icontains=query) |
-        Q(district__icontains=query) |
-        Q(title__icontains=query) |
-        Q(description__icontains=query) |
-        Q(status__icontains=query) |
-        Q(bedrooms__iexact=query) |
-        Q(ward__icontains=query) |
-        Q(price__iexact=query))
+        # Search kwenye Property
+        local_props = list(
+            Property.objects.filter(
+                Q(region__icontains=query) |
+                Q(district__icontains=query) |
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(status__icontains=query) |
+                Q(bedrooms__iexact=query) |
+                Q(ward__icontains=query) |
+                Q(price__iexact=query)
+            )
+        )
 
-    return render(request,'core/searched.html',{'results':results})
+        # Search kwenye Beforward
+        beforward_props = list(
+            Scrape_BeforwardListing.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(city__icontains=query) |
+                Q(price__icontains=query)
+            )
+        )
 
+        # Search kwenye Makazi
+        makazi_props = list(
+            Scrape_MakaziListing.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(location__icontains=query) |
+                Q(price__icontains=query)
+            )
+        )
+
+    # Ongeza label (kujua imetoka model ipi)
+    for p in local_props:
+        p.listing_type = "local"
+    for p in beforward_props:
+        p.listing_type = "beforward"
+    for p in makazi_props:
+        p.listing_type = "makazi"
+
+    # Changanya zote
+    results = local_props + beforward_props + makazi_props
+
+    return render(request, "core/searched.html", {
+        "results": results,
+        "query": query
+    })
 
 
 import requests

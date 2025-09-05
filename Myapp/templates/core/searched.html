@@ -406,7 +406,7 @@
 
 
                                 {% if request.user.is_authenticated and request.user.referrals.exists %}
-                                    <li><a href="{% url 'referral_dashboard' %}">Get Money</a></li>
+                                    <li><a href="{% url 'referral_dashboard' %}">Get rewards</a></li>
                                 {% endif %}
                             
                                        
@@ -460,7 +460,6 @@
                     <!-- lang-wrap-->
                     <div class="header-user-menu user-menu add d-none d-lg-none d-xl-flex">
                         <div class="lang-wrap">
-                            <div class="show-lang"><span><i class="fas fa-globe-americas"></i><strong>ENG</strong></span><i class="fa fa-caret-down arrlan"></i></div>
                             <ul class="lang-tooltip lang-action no-list-style">
                                
                             </ul>
@@ -546,7 +545,7 @@
                                     <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
                                         <!-- <a class="btn btn-yellow" href="#"><button type="submit"> Search Now </button> </a>  -->
                                         
-                                      <div style="text-align: center;"><button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;">Tafuta Sasa</button></div>
+                                      <div style="text-align: center;"><button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button></div>
 
                      
                                     </div>
@@ -582,137 +581,128 @@
                         <div></div>  
                         
                         <br><br><br>
-            <div class="row">
-    {% for property in results reversed %} 
-
-    <a href="{% url 'property_detail' property.id %}"></a>
-    
+        <div class="row">
+  {% for property in results reversed %} 
     <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
-        <div class="project-single" data-aos="fade-up">
-            <div class="project-inner project-head">
-                <div class="homes">
-                    <!-- homes img -->
-                    <a href="{% url 'property_detail' property.id %}" class="homes-img">
-                        <div class="homes-tag button alt featured">Featured</div>
-                        <div class="homes-tag button alt sale">{{ property.status }}</div>
-                        <div class="homes-price">{{ property.price }} Tsh</div>
-                        <img src="{{ property.image_0}}" alt="home-1" class="img-responsive">
-                    </a>
-                </div>
-                <div class="button-effect">
-                    <a href="{% url 'property_detail' property.id %}" class="btn"><i class="fa fa-link"></i></a>
-                    <a href="{% url 'property_detail' property.id %}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                    <a href="{% url 'property_detail' property.id %}" class="img-poppu btn"><i class="fa fa-photo"></i></a>
-                </div>
-            </div>
-            <!-- homes content -->
-            <div class="homes-content">
-                <!-- homes address -->
-                <h3><a href="{% url 'property_detail' property.id %}">{{ property.title }}</a></h3>
-                <p class="homes-address mb-3">
-                    <a href="{% url 'property_detail' property.id %}">
-                        <i class="fa fa-map-marker"></i><span>{{ property.region }}, {{ property.ward }}</span>
-                    </a>
-                </p>
-                <!-- homes List -->
-                <ul class="homes-list clearfix pb-3">
-                    <li class="the-icons">
-                        <i class="flaticon-bed mr-2" aria-hidden="true"></i>
-                        <span>{{ property.bedrooms }} Bedrooms</span>
-                    </li>
-                    <li class="the-icons">
-                        <i class="flaticon-bathtub mr-2" aria-hidden="true"></i>
-                        <span>{{ property.bathrooms }} Bathrooms</span>
-                    </li>
-                    <li class="the-icons">
-                        <i class="flaticon-square mr-2" aria-hidden="true"></i>
-                        <span>{{ property.house_size }} sq m</span>
-                    </li>
-                    <li class="the-icons">
-                        <i class="flaticon-car mr-2" aria-hidden="true"></i>
-                        <span>0 Garages</span>
-                    </li>
-                </ul>
+      <div class="project-single" data-aos="fade-up">
+        <div class="project-inner project-head">
+          <div class="homes">
 
-                <!-- Tazama button -->
-                <div style="margin-bottom: 10px;">
-                    <a href="{% url 'property_detail' property.id %}" class="btn btn-primary">Tazama</a>
-                </div>
+            <!-- ================= LOCAL PROPERTY ================= -->
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" class="homes-img">
+                  <div class="homes-tag button alt featured">Featured</div>
+                  <div class="homes-tag button alt sale">{{ property.status }}</div>
+                  <div class="homes-price">{{ property.price }} Tsh</div>
+                  <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
+                       alt="{{ property.title }}" class="img-responsive">
+              </a>
 
-                <div class="footer">
-                    <a href="{% url 'property_detail' property.id %}">
-                        <img src="{{ property.property_owner_0}}" alt="" class="mr-2"> {{ property.owner }}
-                    </a>
-                    <span>Posted {{ property.date_posted }}</span>
-                </div>
-            </div>
+            <!-- ================= BEFORWARD PROPERTY ================= -->
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" class="homes-img">
+                <div class="homes-tag button alt featured">Active</div>
+                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
+                     alt="{{ property.title }}" class="img-responsive">
+              </a>
+
+            <!-- ================= MAKAZI PROPERTY ================= -->
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" class="homes-img">
+                <div class="homes-tag button alt featured">Active</div>
+                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
+                     alt="{{ property.title }}" class="img-responsive">
+              </a>
+            {% endif %}
+
+          </div>
+
+          <!-- ================= BUTTON EFFECT ================= -->
+          <div class="button-effect">
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" class="btn"><i class="fa fa-link"></i></a>
+              {% if property.video_link %}
+                <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
+              {% endif %}
+              {% comment %} Multiple Images for Local {% endcomment %}
+              {% for img in property.images %}
+                {% if img %}
+                  <a href="{{ img }}" class="img-poppu btn"><i class="fa fa-photo"></i></a>
+                {% endif %}
+              {% endfor %}
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" class="btn"><i class="fa fa-link"></i></a>
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" class="btn"><i class="fa fa-link"></i></a>
+            {% endif %}
+          </div>
         </div>
-   
+
+        <!-- ================= HOMES CONTENT ================= -->
+        <div class="homes-content">
+          <h3>
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}">{{ property.title }}</a>
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}">{{ property.title }}</a>
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}">{{ property.title }}</a>
+            {% endif %}
+          </h3>
+
+          <p class="homes-address mb-3">
+            {% if property.listing_type == "local" %}
+              <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
+            {% elif property.listing_type == "beforward" %}
+              <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
+            {% elif property.listing_type == "makazi" %}
+              <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
+            {% endif %}
+          </p>
+
+          <ul class="homes-list clearfix pb-3">
+            {% if property.listing_type == "local" %}
+              <li class="the-icons"><i class="flaticon-bed mr-2"></i> <span>{{ property.bedrooms }} Bedrooms</span></li>
+              <li class="the-icons"><i class="flaticon-bathtub mr-2"></i> <span>{{ property.bathrooms }} Bathrooms</span></li>
+              <li class="the-icons"><i class="flaticon-square mr-2"></i> <span>{{ property.house_size }} sq m</span></li>
+              <li class="the-icons"><i class="flaticon-car mr-2"></i> <span>0 Garages</span></li>
+            {% endif %}
+          </ul>
+
+          <div style="margin-bottom: 10px;">
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
+            {% endif %}
+          </div>
+
+          {% if property.listing_type == "local" %}
+          <div class="footer">
+            <a href="{% url 'property_detail' property.url_name %}">
+              <img src="{{ property.property_owner_0 }}" alt="" class="mr-2"> {{ property.owner }}
+            </a>
+            <span>Posted {{ property.date_posted }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div><p style="text-align: center;">{{ user.username }} Umekua mtu wetu wa thamani sana. Kwa kulitambua hilo, tumeongeza vipengele hivi muhimu ili kuhakikisha haukosi makazi.
+      Chagua vitufe hivyo viwili hapo chini (Makazi ya kifahari) au (Mchanganyiko) ili uendelee kutafuta Makazi ya chaguo lako.</p></div>
+
+    <div class="d-flex justify-content-center my-4">
+      <a href="{% url 'Beforward_list' %}" class="btn btn-success mx-2" onclick="showLoading(event)">Makazi ya kifahari (VIP)</a>
+      <a href="{% url 'makazi_list' %}" class="btn btn-success mx-2" onclick="showLoading(event)">Makazi Mchanganyiko</a>
+    </div>
+  {% endfor %}
 </div>
 
-             
-
-
-                <br><br><br>
-
-                {% empty %}
-                  <!-- START SECTION COUNTER UP -->
-                  <div><p style="text-align: center;">{{user.username}} Umekua Mtu wetu wa thamani sana Kwa kulitambua hilo tumeongeza vipengere hivi muhimu ili kuhakikisha haukosi makazi.
-                    Chagua vitufe hivyo viwili hapo chini (Makazi ya kifahari) au (Mchanganyiko) ili uendelee kutafuta Makazi ya Chaguo lako
-                  </p></div>
-    
-                       
-                  <div class="d-flex justify-content-center my-4">
-                    <a href="{% url 'Beforward_list' %}" class="btn btn-success mx-2">Makazi ya kifahari (VIP)</a>
-                    <a href="{% url 'makazi_list' %}" class="btn btn-success mx-2">Makazi Mchanganyiko</a>
-                </div>
-                <br><br><br> 
-        <section class="counterup">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="countr">
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                            <div class="count-me">
-                                <a href="{% url 'jihudumie' %}"> <p class="counter text-left">19760</p>
-                                <h3>Jumla ya Makazi</h3></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="countr">
-                            <i class="fa fa-list" aria-hidden="true"></i>
-                            <div class="count-me">
-                                <a href="{% url 'jihudumie' %}"><p class="counter text-left">1250</p>
-                                <h3>Zilizouzwa</h3></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="countr mb-0">
-                            <i class="fa fa-users" aria-hidden="true"></i>
-                            <div class="count-me">
-                                <a href="{% url 'jihudumie' %}"> <p class="counter text-left">12400</p>
-                                <h3>Zilizopangishwa</h3></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="countr mb-0 last">
-                            <i class="fa fa-trophy" aria-hidden="true"></i>
-                            <div class="count-me">
-                                <a href="{% url 'jihudumie' %}"> <p class="counter text-left">6110</p>
-                                <h3>Zilizopo</h3></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END SECTION COUNTER UP -->
-        
-            
-                {% endfor %}
 
      {% if request.user.is_authenticated %}
 
@@ -721,11 +711,6 @@
                    Gusa Maandishi ya blue kwa <a href="{% url 'Beforward_list' %}">(Makazi ya kifahari)</a> au <a href="{% url 'makazi_list' %}">(Mchanganyiko)</a> ili uendelee kutafuta Makazi ya Chaguo lako
                   </p></div>
     
-<!--                        
-                        <div class="center-screen d-flex justify-content-center">
-            <a href="" class="btn btn-success mx-2">Makazi ya kifahari (VIP)</a>
-            <a href="" class="btn btn-success mx-2">Makazi Mchanganyiko</a>
-        </div> -->
 
                
                      {% endif %}
@@ -958,6 +943,52 @@ document.addEventListener('keydown', function(event) {
 });
 
 </script>
+
+
+
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    text-align: center;
+">
+  <div class="spinner" style="
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #e63946;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+  "></div>
+  <p>wait for sec... 🔄</p>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+function showLoading(event) {
+  // Hii function itafika tu wakati user abonye button
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+</script>
+
+
 
 
 

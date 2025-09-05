@@ -29,6 +29,12 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+     .blurred-card {
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -492,10 +498,14 @@
           <div class="price-tag">
            {{ listing.price|intcomma }}
           </div>
+        <div class="description">
+          {{ listing.description|linebreaksbr }}
+        </div>  
+         
 
-          <div class="description">
-            {{ listing.description|linebreaksbr }}
-          </div>
+</div>
+
+
 
           <h2>Vipengele</h2>
           <div class="features-grid">
@@ -511,24 +521,100 @@
         <div class="action-section">
           <h2>Mawasiliano</h2>
           <p>Piga simu au tuma ujumbe kwa mwenye nyumba:</p>
-
+               {% if user.is_authenticated %}
           <button class="btn btn-primary" onclick="window.location.href='tel:{{ listing.agent_phones.0|default:'' }}'">
             📞 Piga Sasa
           </button>
+            {% else %}
+             <a style="background-color: #ff6b6b; color: white; text-decoration: none;" href="#" 
+            onclick="showLoginPopup(event)" 
+                class="btn reservation btn-radius theme-btn full-width mrg-top-10">
+                              Piga Sasa                            </a>
+              {% endif %}
+
 
           <button class="btn btn-secondary" onclick="window.location.href='sms:{{ listing.agent_phones.0|default:'' }}'">
             💬 Tuma Ujumbe
           </button>
+           <!-- Popup -->
+                        <div id="loginPopup" class="popup-overlay">
+                            <div class="popup-content">
+                                <p>🔒 Login kuongea na mwenye nyumba</p>
+                                <a href="{% url 'login' %}" class="popup-btn">Login</a>
+                                <button onclick="closeLoginPopup()" class="popup-btn cancel">Cancel</button>
+                            </div>
+                        </div>
+
+                        <style>
+                        /* Popup overlay */
+                        .popup-overlay {
+                            display: none;
+                            position: fixed;
+                            top: 0; left: 0;
+                            width: 100%; height: 100%;
+                            background: rgba(0,0,0,0.6);
+                            justify-content: center;
+                            align-items: center;
+                            z-index: 9999;
+                        }
+
+                        /* Popup box */
+                        .popup-content {
+                            background: #fff;
+                            padding: 20px;
+                            border-radius: 12px;
+                            text-align: center;
+                            max-width: 300px;
+                            width: 90%;
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                        }
+
+                        /* Popup buttons */
+                        .popup-btn {
+                            display: inline-block;
+                            margin: 10px 5px 0;
+                            padding: 8px 16px;
+                            border-radius: 8px;
+                            text-decoration: none;
+                            font-size: 0.9rem;
+                            cursor: pointer;
+                        }
+                        .popup-btn {
+                            background: #007bff;
+                            color: #fff;
+                        }
+                        .popup-btn.cancel {
+                            background: #ff6b6b;
+                            color: #fff;
+                        }
+                        </style>
+
+                        <script>
+                        function showLoginPopup(event) {
+                            event.preventDefault();
+                            document.getElementById("loginPopup").style.display = "flex";
+                        }
+                        function closeLoginPopup() {
+                            document.getElementById("loginPopup").style.display = "none";
+                        }
+                        </script>
 
           <p><strong>Jina la wakala:</strong> {{ listing.agent_name|default:"Haijajulikana" }}</p>
-          <p><strong>Namba za Simu:</strong></p>
+                                       
+          <h1><strong>Namba za Simu:</strong></h1>
           <ul>
+
+             {% if user.is_authenticated %}
             {% if listing.agent_phones %}
               {% for phone in listing.agent_phones %}
                 <li>{{ phone }}</li>
               {% endfor %}
             {% else %}
               <li>Haipatikani</li>
+            {% endif %}
+
+            {% else %}
+        <span style="color: #ff6b6b;">🔒 Hidden – <a href="{% url 'login' %}" style="color: #007bff;">Login to view</a></span>
             {% endif %}
           </ul>
         </div>
