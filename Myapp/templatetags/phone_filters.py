@@ -18,3 +18,4 @@ def to_whatsapp(phone):
         phone = "255" + phone[1:]
     
     return phone
+

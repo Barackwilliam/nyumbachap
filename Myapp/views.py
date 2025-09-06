@@ -1120,7 +1120,7 @@ def makazi_list(request):
 def makazi_detail(request, slug_id):
     pk = slug_id.split('-')[-1]  # Extract ID from the slug
     listing = get_object_or_404(Scrape_MakaziListing, pk=pk)
-    return render(request, 'core/makazi_detail.html', {'listing': listing})
+    return render(request, 'core/makazi_data.html', {'listing': listing})
 
 
 
@@ -1157,7 +1157,7 @@ def Beforward_detail(request, slug_id):
 
     listing = get_object_or_404(Scrape_BeforwardListing, id=obj_id)
 
-    return render(request, 'core/Beforward_detail.html', {
+    return render(request, 'core/Beforward_data.html', {
         'listing': listing
     })
 
