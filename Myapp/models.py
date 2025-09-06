@@ -29,14 +29,9 @@ class Property(models.Model):
     P_STATUS_CHOICES =('Active','Active'),('Sold','Sold')
     MKOA = [('Arusha','Arusha'), ('Dar es salaam','Dar es salaam'), ('Dooma','Dodoma'), ('Ruvuma','Ruvuma'), ('Tabora','Tabora'), ('Mbeya','Mbeya'), ('Morogoro','Morogoro'), ('Lindi','Lindi'), ('Kigoma','Kigoma'),( 'Katavi','Katavi'),('Geita','Geita'), ('Manyara','Manyara'), ('Kilimanjaro','Kilimanjaro'), ('Mara','Mara'), ('Mtwara','Mtwara'), ('Mwanza','Mwanza'), ('Njombe','Njombe'), ('Songwe','Songwe'), ('Tanga','Tanga'), ('Shinyanga','Shinyanga'), ('Iringa','Iringa'), ('Kagera','Kagera'), ('Pemba Kaskazini','Pemba Kaskazini'), ('Pemba Kusini','Pemba Kusini'), ('Pwani','Pwani'),('Rukwa','Rukwa'),('Singida','Singida'),('Simiyu','Simiyu'), ('Zanzibar Kaskazini','Zanzibar Kaskazini'), ('Zanzibar Kusini','Zanzibar Kusini'),('Zanzibar Mjini Magharibi','Zanzibar Mjini Magharibi')]
     PROPERTY_TYPES = [('Apartment','Apartment'), ('House','House'),('Commercial','Commercial')]
-    # name = models.CharField(max_length=10)
-
     title = models.CharField(max_length=255)
-    #slug = models.SlugField(unique=True, blank=True)  # Add slug field
-
     description = models.TextField()
     price = models.IntegerField()
-    #bookmarks = models.ManyToManyField(User, related_name="bookmarked_properties", blank=True)
     status = models.CharField(max_length=30,choices=STATUS_CHOICES)
     p_status = models.CharField(max_length=30,choices=P_STATUS_CHOICES)
     property_type = models.CharField(max_length=10, choices=PROPERTY_TYPES)
@@ -47,19 +42,14 @@ class Property(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
     date_posted = models.DateTimeField(auto_now_add=True)
-    #rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
-
     viewers = models.ManyToManyField(User, related_name='viewed_properties', blank=True)
     view_count = models.IntegerField(default=0)
     business_phone = models.CharField(max_length=13)
     business_email = models.EmailField(max_length=60)
-    #kitchen = models.IntegerField()
-
     bedrooms = models.IntegerField()
     bathrooms = models.IntegerField()
     house_size = models.IntegerField()
     nearby = models.TextField()
-
     image_0 = models.URLField(max_length=500, blank=True, null=True)
     image_1 = models.URLField(max_length=500, blank=True, null=True)
     image_2 = models.URLField(max_length=500, blank=True, null=True)
