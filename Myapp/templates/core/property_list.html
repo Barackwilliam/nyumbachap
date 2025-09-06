@@ -825,12 +825,14 @@
                   <li class="the-icons"><i class="flaticon-bed mr-2"></i>{{property.bedrooms}} Bedrooms</li>
                   <li class="the-icons"><i class="flaticon-bathtub mr-2"></i>{{property.bathrooms}} Bathrooms</li>
                   <li class="the-icons"><i class="flaticon-square mr-2"></i>{{property.house_size}} sq m</li>
-                </ul>
-                <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
-                <div class="footer mt-3 small text-muted">
+                  <div class="footer mt-3 small text-muted">
                   <img src="{{property.property_owner_0}}" alt="" class="mr-2 rounded-circle" width="30"> {{ property.owner }}
-                  <span class="ml-2">Posted at {{property.date_posted}}</span>
+                  <p style="text-align: start;" class="ml-2">Posted at {{property.date_posted}}</p>
                 </div>
+                </ul>
+                
+                <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+                
               {% elif property.listing_type == 'beforward' %}
                 <h3><a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
                 <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.city }}</p>

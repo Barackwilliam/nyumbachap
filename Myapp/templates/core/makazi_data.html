@@ -55,7 +55,7 @@
                                         <div class="single detail-wrapper mr-2">
                                             <div class="detail-wrapper-body">
                                                 <div class="listing-title-bar">
-                                                    <h4>Tsh. {{ listing.price|default:"N/A" }}</h4>
+                                                    <h4> {{ listing.price|default:"N/A" }}</h4>
                                                     <div class="mt-0">
                                                         <a href="#" class="listing-address">
                                                             <p>{{ listing.house_size|default:"Size: Not Uploaded" }} (sq m)</p>
@@ -142,7 +142,7 @@
                                 <li><span class="font-weight-bold mr-1">Property ID:</span> <span class="det">🔒 Hidden</span></li>
                                 <li><span class="font-weight-bold mr-1">Property Type:</span> <span class="det">{{ listing.property_type|default:"House" }}</span></li>
                                 <li><span class="font-weight-bold mr-1">Property Status:</span> <span class="det">{{ listing.status|default:"Available" }}</span></li>
-                                <li><span class="font-weight-bold mr-1">Bei:</span> <span class="det">Tsh. {{ listing.price|default:"N/A" }}</span></li>
+                                <li><span class="font-weight-bold mr-1">Bei:</span> <span class="det">{{ listing.price|default:"N/A" }}</span></li>
                                 <li><span class="font-weight-bold mr-1">Rooms:</span> <span class="det">{{ listing.bedrooms|default:"N/A" }}</span></li>
                                 <li><span class="font-weight-bold mr-1">Baths:</span> <span class="det">{{ listing.bathrooms|default:"N/A" }}</span></li>
                                 <li><span class="font-weight-bold mr-1">Garage:</span> <span class="det">0</span></li>

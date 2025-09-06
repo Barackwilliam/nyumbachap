@@ -1,43 +1,14 @@
 {% load humanize %}
-
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-  <meta property="fb:app_id" content="4155630028096866" /> <!-- optional -->
-
-  <title>NyumbaChap - makazi Tanzania</title>
+  <meta property="fb:app_id" content="4155630028096866" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NyumbaChap - Makazi Tanzania</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
   <style>
-    .blurred-card {
-      filter: blur(3px);
-      pointer-events: none;
-    }
-    .blurred-image {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
-    .locked-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      z-index: 10;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 1rem;
-      font-weight: bold;
-      border-radius: 1rem;
-    }
-    .lock-icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
     body {
       margin: 0; padding: 0;
       font-family: 'Poppins', sans-serif;
@@ -47,227 +18,14 @@
       display: flex;
       flex-direction: column;
     }
-    header {
-      background: #ff0000;
-      color: #e0f7f1;
-      padding: 1.5rem 2rem;
-      font-weight: 700;
-      font-size: 2rem;
-      text-align: center;
-      letter-spacing: 2px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      user-select: none;
-    }
-    main {
-      flex-grow: 1;
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem 3rem;
-      width: 100%;
-    }
-    .search-container {
-      position: relative;
-      max-width: 500px;
-      margin: 0 auto 2rem;
-      display: flex;
-    }
-    .search-container input[type="search"] {
-      flex-grow: 1;
-      padding: 1rem 1.5rem;
-      font-size: 1.1rem;
-      border-radius: 50px 0 0 50px;
-      border: 2px solid #004d40;
-      box-shadow: 0 0 8px #004d40aa;
-      outline: none;
-      transition: box-shadow 0.4s ease;
-      border-right: none;
-    }
-    .search-container input[type="search"]:focus {
-      box-shadow: 0 0 15px #00796b;
-      border-color: #00796b;
-    }
-    .search-container button {
-      background: #00796b;
-      border: 2px solid #00796b;
-      border-radius: 0 50px 50px 0;
-      color: white;
-      font-size: 1.4rem;
-      padding: 0 1.5rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-    .search-container button:hover {
-      background: #004d40;
-      border-color: #004d40;
-    }
-    .listings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.8rem;
-    }
-    .listing-card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      overflow: hidden;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: transform;
-      position: relative;
-      text-decoration: none;
-      color: inherit;
-    }
-    .listing-card:hover {
-      transform: translateY(-12px) rotateX(5deg) rotateY(5deg);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
-      z-index: 10;
-    }
-    .listing-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-bottom: 4px solid #00796b;
-      transition: transform 0.5s ease;
-    }
-    .listing-card:hover .listing-image {
-      transform: scale(1.1);
-    }
-    .listing-content {
-      padding: 1.2rem 1.5rem 1.5rem;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .listing-title {
-      font-weight: 700;
-      font-size: 1.3rem;
-      color: #004d40;
-      margin-bottom: 0.4rem;
-      text-transform: capitalize;
-      letter-spacing: 0.5px;
-    }
-    .listing-location {
-      font-size: 1rem;
-      color: #555;
-      margin-bottom: 0.8rem;
-      font-style: italic;
-    }
-    .listing-price {
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: #00796b;
-      letter-spacing: 1px;
-      margin-top: auto;
-    }
-    .pagination {
-      margin: 3rem auto 0;
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-      user-select: none;
-      list-style: none;
-      padding: 0;
-    }
-    .page-btn {
-      background: #00796b;
-      color: white;
-      border: none;
-      padding: 0.7rem 1.2rem;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,121,107,0.6);
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 44px;
-      height: 44px;
-      text-decoration: none;
-    }
-    .page-btn:hover:not(.active) {
-      background: #004d40;
-      transform: scale(1.1);
-    }
-    .page-btn.active, .page-btn[aria-current="page"] {
-      background: #004d40;
-      cursor: default;
-      box-shadow: 0 0 15px #004d40;
-      transform: scale(1.15);
-      pointer-events: none;
-    }
-    .page-btn[aria-disabled="true"] {
-      opacity: 0.5;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-    @media (max-width: 600px) {
-      header {
-        font-size: 1.5rem;
-        padding: 1rem 1rem;
-      }
-      .listing-image {
-        height: 160px;
-      }
-      .listing-title {
-        font-size: 1.1rem;
-      }
-      .listing-price {
-        font-size: 1.1rem;
-      }
-    }
-       /* Pagination */
-    .pagination {
-      justify-content: center;
-      margin-top: 3rem;
-    }
-    .page-link {
-      background: linear-gradient(135deg, #00796b, #004d40);
-      color: white;
-      border-radius: 50px;
-      border: none;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      box-shadow: 0 6px 15px rgba(0, 121, 107, 0.7);
-    }
-    .page-link:hover:not(.active) {
-      background: linear-gradient(135deg, #004d40, #002d22);
-      transform: scale(1.15);
-      box-shadow: 0 10px 25px rgba(0, 77, 64, 0.9);
-      color: white;
-    }
-    .page-item.active .page-link {
-      background: linear-gradient(135deg, #004d40, #002d22);
-      box-shadow: 0 0 20px #004d40;
-      cursor: default;
-      transform: scale(1.3);
-      pointer-events: none;
-    }
-    .page-link:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;s
-    }
 
-    
+    /* ===== Header ===== */
     header {
       width: 100%;
       background: linear-gradient(90deg, #e63946, #f1faee);
-      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
       padding: 1rem 2rem;
-      user-select: none;
     }
-
     .header-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -275,8 +33,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      flex-wrap: wrap;
     }
-
     .btn-back {
       background: #1d3557;
       color: #f1faee;
@@ -287,187 +45,260 @@
       font-size: 1rem;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(29, 53, 87, 0.6);
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s ease;
     }
-
-    .btn-back:hover {
-      background: #a4161a;
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(164, 22, 26, 0.8);
-    }
+    .btn-back:hover { background: #a4161a; transform: scale(1.05); }
 
     .site-title {
-      font-family: 'Poppins', sans-serif;
       font-weight: 800;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       color: #1d3557;
-      text-align: center;
       flex-grow: 1;
-      user-select: text;
-      letter-spacing: 0.1em;
+      text-align: center;
       text-transform: uppercase;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      letter-spacing: 1px;
     }
-
     .header-nav {
       display: flex;
-      gap: 1rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
     }
-
     .nav-btn {
       background: #f1faee;
       color: #1d3557;
       padding: 0.6rem 1.4rem;
       border-radius: 30px;
       font-weight: 600;
-      font-size: 1rem;
       text-decoration: none;
       box-shadow: 0 4px 10px rgba(29, 53, 87, 0.2);
-      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover { background: #e63946; color: #fff; }
+
+    /* ===== Search bar ===== */
+    .search-container {
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+    .search-container input {
+      border-radius: 50px 0 0 50px;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      border: 2px solid #004d40;
+      border-right: none;
+      outline: none;
+    }
+    .search-container button {
+      border-radius: 0 50px 50px 0;
+      font-size: 1.2rem;
+      padding: 0 1.5rem;
+    }
+
+    /* ===== Listings ===== */
+    .listing-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .listing-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+    .listing-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .listing-content {
+      padding: 1rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .listing-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #004d40;
+      margin-bottom: 0.3rem;
+    }
+    .listing-location {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 0.6rem;
+    }
+    .listing-price {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #00796b;
+      margin-top: auto;
+    }
+
+    /* ===== Locked overlay ===== */
+    .blurred-card { filter: blur(3px); }
+    .locked-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 1rem;
     }
 
-    .nav-btn:hover,
-    .nav-btn:focus {
-      background: #e63946;
-      color: #f1faee;
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(230, 57, 70, 0.8);
+    /* ===== Pagination ===== */
+    .pagination { margin: 2rem auto; justify-content: center; gap: 0.5rem; }
+    .page-link {
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600;
+      color: #fff;
+      background: #00796b;
+      transition: all 0.3s ease;
     }
+    .page-link:hover { background: #004d40; }
+    .page-item.active .page-link { background: #004d40; }
 
-    /* Responsive */
     @media (max-width: 768px) {
-      .header-container {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
-
-      .site-title {
-        flex-basis: 100%;
-        order: 2;
-        font-size: 1.6rem;
-        margin: 0.5rem 0;
-      }
-
-      .btn-back {
-        order: 1;
-      }
-
-      .header-nav {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-        gap: 0.8rem;
-      }
-
-      .nav-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-      }
+      .site-title { font-size: 1.3rem; }
+      .listing-image { height: 160px; }
+      .listing-title { font-size: 1rem; }
+      .listing-price { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
- <header> <div class="header-container">
-    <button class="btn-back" aria-label="Rudi nyuma" onclick="window.history.back()">
-      ← Rudi
-    </button>
-
+<header>
+  <div class="header-container">
+    <button class="btn-back" onclick="window.history.back()">← Rudi</button>
     <h1 class="site-title">Nyumba Zote Kiganjani Kwako</h1>
-
     <nav class="header-nav">
-      <a href="/" class="nav-btn">Home</a>
-      <a href="{% url 'Beforward_list' %}" class="nav-btn">VIP</a>
-      <a href="{% url 'property_list' %}" class="nav-btn">Mixed</a>
+      <a href="/" class="nav-btn" onclick="showLoading(event)">Home</a>
+      <a href="{% url 'Beforward_list' %}" class="nav-btn" onclick="showLoading(event)">VIP</a>
+      <a href="{% url 'property_list' %}" class="nav-btn" onclick="showLoading(event)">Mixed</a>
     </nav>
   </div>
 </header>
 
-  <main class="container">
-    <form method="get" action="{% url 'makazi_list' %}" class="search-container" role="search" aria-label="Tafuta makazi">
-      <div class="input-group shadow-sm rounded-pill overflow-hidden">
-        <input type="search" name="search" id="searchInput" class="form-control border-0" placeholder="Tafuta nyumba kwa eneo, au bei..." value="{{ search_query }}" autocomplete="off" aria-label="Tafuta makazi" />
-        <button type="submit" class="btn btn-success px-4" aria-label="Tafuta">🔍</button>
-      </div>
-    </form>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4" aria-live="polite" aria-relevant="additions removals">
-      {% if page_obj.object_list %}
-        {% for listing in page_obj %}
-          <div class="col d-flex">
-            <a href="{% url 'makazi_detail' slug_id=listing.id|slugify %}" class="listing-card" tabindex="0" aria-label="Maelezo ya makazi: {{ listing.title }} katika {{ listing.location }} kwa bei ya shilingi {{ listing.price|intcomma }}">
-              <img src="{{ listing.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" alt="Picha ya {{ listing.title }}" class="listing-image" loading="lazy" />
-              <div class="listing-content">
-                <h3 class="listing-title">{{ listing.title }}</h3>
-                <p class="listing-location">{{ listing.location }}</p>
-                <div class="listing-price">{{ listing.price|intcomma }}</div>
-              </div>
-            </a>
-          </div>
-        {% endfor %}
-      {% else %}
-        {% if default_listings %}
-          {% for listing in default_listings %}
-            <div class="col d-flex position-relative">
-              <div class="listing-card blurred-card w-100">
-                <img src="{{ listing.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" alt="Makazi yaliyofichwa" class="listing-image blurred-image" loading="lazy" />
-                <div class="listing-content">
-                  <h3 class="listing-title">{{ listing.title }}</h3>
-                  <p class="listing-location">{{ listing.location }}</p>
-                  <div class="listing-price">{{ listing.price|intcomma }}</div>
-                </div>
-              </div>
-              <div class="locked-overlay rounded-3">
-                <span class="lock-icon">🔒</span>
-                <p class="locked-message">Lipia kifurushi cha Tsh.2500/= kwa mwezi Au Tsh.5999/= kwa mwaka ili kuona maelezo ya nyumba hii Na zingine nyingi Tanzania Nzima.</p>
-                <a style="color: #a4161a;" href="{% url 'final' %}" class="nav-btn">Lipa Hapa</a>
-
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          <p class="text-center text-muted fs-5">Hakuna makazi yaliyopatikana.</p>
-        {% endif %}
-      {% endif %}
+<main class="container">
+  <!-- Search -->
+  <form method="get" action="{% url 'makazi_list' %}" class="search-container" role="search">
+    <div class="input-group shadow-sm">
+      <input type="search" name="search" value="{{ search_query }}" class="form-control" placeholder="Tafuta nyumba kwa eneo, au bei..." />
+      <button type="submit" class="btn btn-success" onclick="showLoading(event)">🔍</button>
     </div>
+  </form>
 
-    <nav aria-label="Pagination" class="d-flex justify-content-center my-4">
-      <ul class="pagination pagination-lg">
-        {% if page_obj.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Kurasa ya nyuma">←</a>
-          </li>
-        {% else %}
-          <li class="page-item disabled" aria-disabled="true">
-            <span class="page-link">←</span>
-          </li>
+  <!-- Listings -->
+  <div class="row g-4">
+    {% if page_obj.object_list %}
+      {% for listing in page_obj %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <a href="{% url 'makazi_detail' slug_id=listing.id|slugify %}" class="listing-card" onclick="showLoading(event)">
+            <img src="{{ listing.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" class="listing-image" alt="Picha ya {{ listing.title }}" />
+            <div class="listing-content">
+              <h3 class="listing-title">{{ listing.title }}</h3>
+              <p class="listing-location">{{ listing.location }}</p>
+              <div class="listing-price">{{ listing.price|intcomma }}</div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-muted">Hakuna makazi yaliyopatikana.</p>
+    {% endif %}
+  </div>
+
+  <!-- Pagination -->
+  <nav>
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" onclick="showLoading(event)">←</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">←</span></li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}" onclick="showLoading(event)">{{ num }}</a></li>
         {% endif %}
+      {% endfor %}
 
-        {% for num in page_obj.paginator.page_range %}
-          {% if page_obj.number == num %}
-            <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
-          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a></li>
-          {% endif %}
-        {% endfor %}
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" onclick="showLoading(event)">→</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">→</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+</main>
 
-        {% if page_obj.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Kurasa inayofuata">→</a>
-          </li>
-        {% else %}
-          <li class="page-item disabled" aria-disabled="true">
-            <span class="page-link">→</span>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
-  </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!-- Loading overlay -->
+<div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    text-align: center;
+">
+  <div class="spinner" style="
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #e63946;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+  "></div>
+  <p>wait for sec... 🔄</p>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+function showLoading(event) {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+// ✅ Wakati page inafunguka fully, overlay iondoke
+window.addEventListener("load", function () {
+  document.getElementById('loadingOverlay').style.display = 'none';
+});
+
+// ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted) { 
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+});
+</script>
 </body>
 </html>
