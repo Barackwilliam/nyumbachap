@@ -83,7 +83,8 @@
             position: absolute;
             top: 0;
             right: 20px;
-            background: var(--secondary);
+            /* background: var(--secondary); */
+            background: var(--gray);
             color: white;
             padding: 0.5rem 1.5rem;
             border-bottom-left-radius: 5px;
@@ -227,7 +228,7 @@
                 <div class="card-body">
                     <ul class="card-features">
                         <li><i class="fas fa-check"></i> Kifurushi Cha Ofa</li>
-                        <li><i class="fas fa-check"></i> Uwezekano wa 35% wa kupata nyumba</li>
+                        <li><i class="fas fa-check"></i> Uwezekano wa kupata nyumba 35% </li>
                         <li><i class="fas fa-check"></i> Utafutaji wa nyumba bila mapendekezo</li>
                         <li><i class="fas fa-check"></i> Huduma ya mazungumzo yenye kikomo</li>
                     </ul>
@@ -237,7 +238,6 @@
 
             <!-- Gold Card (Popular) -->
             <div class="pricing-card gold-card popular">
-                <div class="popular-tag">POPULAR</div>
                 <div class="card-header">
                     <div class="card-icon">
                         <i class="fas fa-star"></i>
@@ -260,18 +260,20 @@
 
             <!-- Platinum Card -->
             <div class="pricing-card platinum-card">
+                <div class="popular-tag">POPULAR</div>
+
                 <div class="card-header">
                     <div class="card-icon">
                         <i class="fas fa-gem"></i>
                     </div>
                     <h2 class="card-title">Platinum</h2>
                     <div class="card-price">
-                        <small>Tsh</small> 5,999 <small>/mwezi</small>
+                        <small>Tsh</small> 6,999 <small>/mwezi</small>
                     </div>
                 </div>
                 <div class="card-body">
                     <ul class="card-features">
-                        <li><i class="fas fa-check"></i> Uhakika wa 100% wa kupata nyumba</li>
+                        <li><i class="fas fa-check"></i> Uhakika wa kupata nyumba bora haraka zaidi</li>
                         <li><i class="fas fa-check"></i> Taarifa za kila nyumba mpya kwenye mtaa wako</li>
                         <li><i class="fas fa-check"></i> Utafutaji wa kiwango cha juu kwa nyumba zote</li>
                         <li><i class="fas fa-check"></i> Msaada kwa wateja masaa 24</li>
@@ -279,6 +281,32 @@
                     <a href="{% url 'final' %}" class="card-button">Lipia Hapa <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
+
+
+                        <!-- Tanzanite Card -->
+            <div class="pricing-card tanzanite-card popular">
+                <div class="popular-tag">EXCLUSIVE</div>
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h2 class="card-title">Tanzanite</h2>
+                    <div class="card-price">
+                        <small>Tsh</small> 14,999 <small>/mwezi</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="card-features">
+                        <li><i class="fas fa-check"></i> Uhakika wa 100% wa kupata nyumba</li>
+                        <li><i class="fas fa-check"></i> Mapendekezo ya nyumba binafsi (AI Recommendations)</li>
+                        <li><i class="fas fa-check"></i> Msaada binafsi wa mshauri wa NyumbaChap 24/7</li>
+                        <li><i class="fas fa-check"></i> Taarifa mapema kabla hazijachapishwa</li>
+                        <li><i class="fas fa-check"></i> Ofa na punguzo maalum kwa wateja wa Tanzanite</li>
+                    </ul>
+                    <a href="{% url 'final' %}" class="card-button">Jiunge Sasa <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
         </div>
     </div>
 

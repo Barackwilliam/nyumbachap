@@ -12,18 +12,6 @@
     
     
     <style>
-
-
-
-
-
-
-
-
-
-
-
-
             .center-screen {
         position: absolute;
         top: 50%;
@@ -132,7 +120,7 @@
         }
       
         /* Floating button */
-        .floating-btn {
+ .floating-btn {
   position: fixed;
   bottom: 20px;
   left: 20px; /* Badiliko hapa */
@@ -413,8 +401,9 @@
                                     </li>
                                     <li><a href="{% url 'help_center' %}" onclick="showLoading(event)">Help Center</a>
                                     </li>
+                                    {% comment %}
                                     <li><a href="{% url 'property_map' %}" onclick="showLoading(event)">Search Via Map</a>
-
+                                   {% endcomment %}
 
                                 {% if request.user.is_authenticated and request.user.referrals.exists %}
                                     <li><a href="{% url 'referral_dashboard' %}" onclick="showLoading(event)">Get rewards</a></li>
@@ -542,7 +531,7 @@
         <!-- Search Form -->
         <div class="col-12">
             <form method="GET" action="{% url 'search_property' %}">                                       
-                <div class="tab-content">
+                <!-- <div class="tab-content"> -->
                     <div class="tab-pane fade show active" id="tabs_1">
                         <div class="rld-main-search">
                             <div class="row">
@@ -575,173 +564,175 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                <!-- </div> -->
             </form>
         </div>
 
-        <!--/ End Search Form -->
-        <section class="headings-2 pt-0">
-            <div class="pro-wrapper">
-                <div class="detail-wrapper-body">
-                    <div class="listing-title-bar">
-                        <div class="text-heading text-left">
-                            <!-- <p class="font-weight-bold mb-0 mt-3">9 Search results</p> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="cod-pad single detail-wrapper mr-2 mt-0 d-flex justify-content-md-end align-items-center">
-                    <div class="input-group border rounded input-group-lg w-auto mr-4">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- homes content -->
-        <br><br><br>
-        
+   
         {% if results %}
             <h2 style="text-align: center;">Nyumba Maeneo ya {{ query }}</h2>
-             {% comment %}
-        {% else %}
-            <h2 style="text-align: center;">Hakuna Matokeo ya Ulichotafuta hii ni kwasababu Ujajiunga kifurushi chochote</h2>
-          {% endcomment %}
+           
             {% endif %}
-
-        <div></div>  
-        <br><br><br>
-
-        <div class="row">
-         {% comment %}
-Tumia results kutoka view. 
-Kama hakuna results, tuma fallback_results na ionyeshe blur + lock overlay.
-{% endcomment %}
+<br><br>
+      
 <div class="row">
-    {% comment %}
-    Tumia results kutoka view. 
-    Kama hakuna results, tuma fallback_results na ionyeshe blur + lock overlay.
-    {% endcomment %}
-{% if results %} {% for property in results reversed %} <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale"> <div class="project-single" data-aos="fade-up"> <div class="project-inner project-head"> <div class="homes"> <!-- ================= LOCAL PROPERTY ================= --> {% if property.listing_type == "local" %} <a href="{% url 'property_detail' property.url_name %}" class="homes-img" onclick="showLoading(event)"> <div class="homes-tag button alt featured">Featured</div> <div class="homes-tag button alt sale">{{ property.status }}</div> <div class="homes-price">{{ property.price }} Tsh</div> <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" alt="{{ property.title }}" class="img-responsive"> </a> <!-- ================= BEFORWARD PROPERTY ================= --> {% elif property.listing_type == "beforward" %} <a href="{% url 'Beforward_detail' property.id %}" class="homes-img" onclick="showLoading(event)"> <div class="homes-tag button alt featured">Active</div> <div class="homes-price">{{ property.price|default:"N/A" }}</div> <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" alt="{{ property.title }}" class="img-responsive"> </a> <!-- ================= MAKAZI PROPERTY ================= --> {% elif property.listing_type == "makazi" %} <a href="{% url 'makazi_detail' property.id %}" class="homes-img" onclick="showLoading(event)"> <div class="homes-tag button alt featured">Active</div> <div class="homes-price">{{ property.price|default:"N/A" }}</div> <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" alt="{{ property.title }}" class="img-responsive"> </a> {% endif %} </div> <!-- ================= BUTTON EFFECT ================= --> <div class="button-effect"> {% if property.listing_type == "local" %} <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a> {% if property.video_link %} <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a> {% endif %} {% comment %} Multiple Images for Local {% endcomment %} {% for img in property.images %} {% if img %} <a href="{{ img }}" class="img-poppu btn"><i class="fa fa-photo"></i></a> {% endif %} {% endfor %} {% elif property.listing_type == "beforward" %} <a href="{% url 'Beforward_detail' property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a> {% elif property.listing_type == "makazi" %} <a href="{% url 'makazi_detail' property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a> {% endif %} </div> </div> <!-- ================= HOMES CONTENT ================= --> <div class="homes-content"> <h3> {% if property.listing_type == "local" %} <a href="{% url 'property_detail' property.url_name %}" onclick="showLoading(event)">{{ property.title }}</a> {% elif property.listing_type == "beforward" %} <a href="{% url 'Beforward_detail' property.id %}" onclick="showLoading(event)">{{ property.title }}</a> {% elif property.listing_type == "makazi" %} <a href="{% url 'makazi_detail' property.id %}" onclick="showLoading(event)">{{ property.title }}</a> {% endif %} </h3> <p class="homes-address mb-3"> {% if property.listing_type == "local" %} <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span> {% elif property.listing_type == "beforward" %} <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span> {% elif property.listing_type == "makazi" %} <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span> {% endif %} </p> <ul class="homes-list clearfix pb-3"> {% if property.listing_type == "local" %} <li class="the-icons"><i class="flaticon-bed mr-2"></i> <span>{{ property.bedrooms }} Bedrooms</span></li> <li class="the-icons"><i class="flaticon-bathtub mr-2"></i> <span>{{ property.bathrooms }} Bathrooms</span></li> <li class="the-icons"><i class="flaticon-square mr-2"></i> <span>{{ property.house_size }} sq m</span></li> <li class="the-icons"><i class="flaticon-car mr-2"></i> <span>0 Garages</span></li> {% endif %} </ul> <div style="margin-bottom: 10px;"> {% if property.listing_type == "local" %} <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a> {% elif property.listing_type == "beforward" %} <a href="{% url 'Beforward_detail' property.id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a> {% elif property.listing_type == "makazi" %} <a href="{% url 'makazi_detail' property.id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a> {% endif %} </div> {% if property.listing_type == "local" %} <div class="footer"> <a href="{% url 'property_detail' property.url_name %}"> <img src="{{ property.property_owner_0 }}" alt="" class="mr-2"> {{ property.owner }} </a> <span>Posted {{ property.date_posted }}</span> </div> {% endif %} </div> </div> </div> {% endfor %}
+   
+{% if results %} {% for property in results reversed %} <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="project-single shadow-sm h-100">
+            <div class="project-inner project-head">
+
+              <div class="homes position-relative">
+                {% if property.listing_type == 'local' %}
+                  <div class="homes-tag button alt featured">{{property.p_status}}</div>
+                  <div class="homes-tag button alt sale">
+                    {% if property.p_status == "Sold" %}Closed{% else %}{{property.status}}{% endif %}
+                  </div>
+                  <div class="homes-price">{{property.price}} Tsh</div>
+                  <img src="{{ property.image_0 }}" alt="{{property.title}}" class="img-fluid w-100" style="height:230px;object-fit:cover;">
+                {% elif property.listing_type == 'beforward' %}
+                  <div class="homes-tag button alt featured">Active</div>
+                  <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                  <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x230?text=Beforward' }}" 
+                       alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;" loading="lazy">
+                {% elif property.listing_type == 'makazi' %}
+                  <div class="homes-tag button alt featured">Active</div>
+                  <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                  <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x230?text=Makazi' }}" 
+                       alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;" loading="lazy">
+                {% endif %}
+              </div>
+
+              <!-- Buttons -->
+              <div class="button-effect">
+                {% if property.listing_type == 'local' %}
+                  <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                  {% if property.video_link %}
+                    <a href="{{property.video_link}}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
+                  {% endif %}
+                  <a href="{% url 'property_detail' property.url_name %}" class="img-poppu btn" onclick="showLoading(event)"><i class="fa fa-photo"></i></a>
+                {% elif property.listing_type == 'beforward' %}
+                  <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                  {% if property.video_link %}
+                    <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
+                  {% endif %}
+                {% elif property.listing_type == 'makazi' %}
+                  <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="homes-content p-3">
+              {% if property.listing_type == 'local' %}
+                <h3><a href="{% url 'property_detail' property.url_name %}" onclick="showLoading(event)">{{property.title}}</a></h3>
+                <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{property.region}}, {{property.ward}}</p>
+                <ul class="homes-list clearfix pb-3">
+                  <li class="the-icons"><i class="flaticon-bed mr-2"></i>{{property.bedrooms}} Bedrooms</li>
+                  <li class="the-icons"><i class="flaticon-bathtub mr-2"></i>{{property.bathrooms}} Bathrooms</li>
+                  <li class="the-icons"><i class="flaticon-square mr-2"></i>{{property.house_size}} sq m</li>
+                  <div class="footer mt-3 small text-muted">
+                  <img src="{{property.property_owner_0}}" alt="" class="mr-2 rounded-circle" width="30"> {{ property.owner }}
+                  <p style="text-align: start;" class="ml-2">Posted at {{property.date_posted}}</p>
+                </div>
+                </ul>
+                
+                <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+                
+              {% elif property.listing_type == 'beforward' %}
+                <h3><a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
+                <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.city }}</p>
+                <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+              {% elif property.listing_type == 'makazi' %}
+                <h3><a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
+                <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.location }}</p>
+                <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
 {% else %}
-    {% for property in fallback_results %}
-        <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
-            <div class="project-single blur-container" data-aos="fade-up">
-                <!-- Overlay ya blur + lock -->
-                <div class="blur-overlay">
-                    <div class="locked-content">
-                        <i class="fa fa-lock lock-icon"></i>
-                        <p class="locked-message">
-                            Lipia kifurushi cha Tsh.2500/= kwa mwezi <br>
-                            Au Tsh.5999/= kwa mwaka ili kuona maelezo ya nyumba hii<br>
-                            Na zingine nyingi Tanzania Nzima.
-                        </p>
-                        <a style="color: #a4161a; font-weight: bold;" 
-                           href="{% url 'final' %}" 
-                           class="nav-btn" 
-                           onclick="showLoading(event)">🔒 Lipa Hapa</a>
-                    </div>
-                </div>
+ 
+{% for property in fallback_results %}
+<div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
+    <div class="project-single blur-container" data-aos="fade-up" style="padding:8px; font-size:13px;">
 
-                <div class="project-inner project-head">
-                    <div class="homes">
-                        <!-- ================= LOCAL PROPERTY ================= -->
-                        {% if property.listing_type == "local" %}
-                            <a href="{% url 'property_detail' property.url_name %}" class="homes-img" onclick="showLoading(event)">
-                                <div class="homes-tag button alt featured">Featured</div>
-                                <div class="homes-tag button alt sale">{{ property.status }}</div>
-                                <div class="homes-price">{{ property.price }} Tsh</div>
-                                <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
-                                     alt="{{ property.title }}" class="img-responsive">
-                            </a>
-                        {% elif property.listing_type == "beforward" %}
-                            <a href="{% url 'Beforward_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
-                                <div class="homes-tag button alt featured">Active</div>
-                                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                                <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
-                                     alt="{{ property.title }}" class="img-responsive">
-                            </a>
-                        {% elif property.listing_type == "makazi" %}
-                            <a href="{% url 'makazi_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
-                                <div class="homes-tag button alt featured">Active</div>
-                                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                                <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
-                                     alt="{{ property.title }}" class="img-responsive">
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- ================= HOMES CONTENT ================= -->
-                <div class="homes-content">
-                    <h3>{{ property.title }}</h3>
-                    <p class="homes-address mb-3">
-                        {% if property.listing_type == "local" %}
-                            <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
-                        {% elif property.listing_type == "beforward" %}
-                            <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
-                        {% elif property.listing_type == "makazi" %}
-                            <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
-                        {% endif %}
-                    </p>
-                </div>
+        <!-- Overlay ya blur + lock -->
+        <div class="blur-overlay" style="position:absolute; inset:0; background:rgba(70, 66, 66, 0.329); backdrop-filter:blur(6px); z-index:30; display:flex; justify-content:center; align-items:center; text-align:center; padding:12px;">
+            <div class="locked-content" style="text-align:center;">
+                <i class="fa fa-lock" style="font-size:36px; color:#a4161a; margin-bottom:10px;"></i>
+                <p style="font-size:12px;background-color: rgba(255, 255, 255, 0.151);text-align: center; font-weight:600; line-height:1.4; color:#000000; margin-bottom:8px;">
+                    Lipia Tsh.2500/= kwa mwezi 
+                    Au Tsh.6999/= kwa mwaka ili kuona nyumba hii 
+                    Na zingine Tanzania Nzima.
+                </p>
+                <a href="{% url 'jihudumie' %}" style="display:inline-block; padding:6px 12px; border:2px solid #a4161a; border-radius:6px; text-decoration:none; background:#fff; color:#a4161a; font-size:12px;">🔒 Lipa Hapa</a>
             </div>
         </div>
-    {% endfor %}
+
+        <div class="project-inner project-head">
+            <div class="homes">
+                {% if property.listing_type == "local" %}
+                <a href="{% url 'property_detail' property.url_name %}" class="homes-img" onclick="showLoading(event)">
+                    <div style="height:140px; overflow:hidden; border-radius:6px; position:relative;">
+                        <div class="homes-tag button alt featured" style="position:absolute; top:5px; left:5px; font-size:10px;">Featured</div>
+                        <div class="homes-tag button alt sale" style="position:absolute; top:5px; right:5px; font-size:10px;">{{ property.status }}</div>
+                        <div class="homes-price" style="position:absolute; bottom:5px; left:5px; font-size:12px; background:rgba(255,255,255,0.7); padding:2px 4px; border-radius:3px;">{{ property.price }} Tsh</div>
+                        <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
+                             style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
+                    </div>
+                </a>
+                {% elif property.listing_type == "beforward" %}
+                <a href="{% url 'Beforward_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
+                    <div style="height:140px; overflow:hidden; border-radius:6px; position:relative;">
+                        <div class="homes-tag button alt featured" style="position:absolute; top:5px; left:5px; font-size:10px;">Active</div>
+                        <div class="homes-price" style="position:absolute; bottom:5px; left:5px; font-size:12px; background:rgba(255,255,255,0.7); padding:2px 4px; border-radius:3px;">{{ property.price|default:"N/A" }}</div>
+                        <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
+                             style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
+                    </div>
+                </a>
+                {% elif property.listing_type == "makazi" %}
+                <a href="{% url 'makazi_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
+                    <div style="height:140px; overflow:hidden; border-radius:6px; position:relative;">
+                        <div class="homes-tag button alt featured" style="position:absolute; top:5px; left:5px; font-size:10px;">Active</div>
+                        <div class="homes-price" style="position:absolute; bottom:5px; left:5px; font-size:12px; background:rgba(255,255,255,0.7); padding:2px 4px; border-radius:3px;">{{ property.price|default:"N/A" }}</div>
+                        <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
+                             style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
+                    </div>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="homes-content" style="padding-top:4px;">
+            <h3 style="font-size:14px; margin-bottom:2px;">{{ property.title }}</h3>
+            <p class="homes-address mb-2" style="font-size:12px; margin-bottom:2px;">
+                {% if property.listing_type == "local" %}
+                    <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
+                {% elif property.listing_type == "beforward" %}
+                    <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
+                {% elif property.listing_type == "makazi" %}
+                    <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% endif %}
 
+<script>
+    // Hover zoom effect
+    document.querySelectorAll('.homes-img div img').forEach(function(img){
+        img.parentElement.addEventListener('mouseover', function(){
+            img.style.transform = 'scale(1.05)';
+        });
+        img.parentElement.addEventListener('mouseout', function(){
+            img.style.transform = 'scale(1)';
+        });
+    });
+</script>
 
-<style>
-/* Container with blur */
-.blur-container {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Blur effect overlay */
-.blur-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(6px);
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-}
-
-/* Lock icon */
-.lock-icon {
-  font-size: 50px;
-  color: #a4161a;
-  margin-bottom: 15px;
-}
-
-/* Locked message */
-.locked-message {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #000;
-  line-height: 1.6;
-}
-
-/* Payment button */
-.blur-overlay .nav-btn {
-  display: inline-block;
-  padding: 8px 16px;
-  border: 2px solid #a4161a;
-  border-radius: 6px;
-  text-decoration: none;
-  background: #fff;
-  transition: 0.3s;
-}
-
-.blur-overlay .nav-btn:hover {
-  background: #a4161a;
-  color: #fff !important;
-}
-</style>
 
         </div>
          {% comment %}

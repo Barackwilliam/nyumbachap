@@ -527,8 +527,8 @@ def search_property(request):
     })
 
 
-
 import requests
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from .models import Profile
@@ -598,7 +598,6 @@ def Register(request):
             return redirect('Register')
 
     return render(request, 'core/Register.html')
-
 
 
 @login_required(login_url='login')
