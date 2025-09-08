@@ -2,18 +2,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8FYVV0MZV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-L8FYVV0MZV');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,37 +32,27 @@
             margin-bottom: 20px;
         }
         
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
         .file-upload {
             margin-top: 20px;
             padding: 20px;
-            background-color: #6a0dad; /* Purple background for the container */
+            background-color: #6a0dad;
             border-radius: 8px;
             text-align: center;
             color: white;
         }
 
-        .file-upload input[type="file"] {
+        .file-upload input[type="file"],
+        .file-upload input[type="submit"] {
             margin-top: 10px;
-            padding: 5px;
-            background-color: white;
-            color: black;
+            padding: 10px;
             border-radius: 5px;
             border: none;
         }
-        
+
         .file-upload input[type="submit"] {
-            margin-top: 20px;
-            padding: 10px;
-            border: none;
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            border-radius: 5px;
         }
 
         /* Popup Modal CSS */
@@ -139,36 +121,57 @@
         .modal-box button:hover {
             background-color: #265df2;
         }
-    </style>
 
+        /* Loading Overlay */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            font-size: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            text-align: center;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #e63946;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
       <h4>Hatua ya Mwisho</h4>
-        <img src="{% static 'images/nyumbachap.png' %}" alt="Logo"> <!-- Add your image source here -->
-        <p>Baada ya kufanya Malipo tuma picha ya Mesaji ya Muamala kabla ya dakika 30 Kupita</p>
+        <img src="{% static 'images/nyumbachap.png' %}" alt="Logo">
+        <p>Baada ya kufanya Malipo tuma picha ya Mesaji ya Muamala kabla ya dakika 30 kupita</p>
 
-        <!-- Sehemu ya ku-upload picha -->
-       <form class="file-upload" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <label for="upload">Upload Image:</label>
-        <!-- Uploadcare uploader -->
-       <input 
-        type="hidden"
-        role="uploadcare-uploader"
-        name="Transaction_image_1"
-        data-public-key="b554dba7565f88537168"
-       />
-        
-        <br>
-        <input type="submit" value="Submit" id="submit-btn" onclick="showLoading(event)">
-    </form>
-
-   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-<script>
-    UPLOADCARE_PUBLIC_KEY = "b554dba7565f88537168"; 
-</script>
+        <!-- Uploadcare form -->
+        <form class="file-upload" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="upload">Upload Image:</label>
+            <input 
+                id="upload"
+                type="hidden"
+                role="uploadcare-uploader"
+                name="Transaction_image_1"
+                data-public-key="b554dba7565f88537168"
+            />
+            <br>
+            <input type="submit" value="Submit" id="submit-btn">
+        </form>
     </div>
 
     <!-- Popup Modal -->
@@ -177,103 +180,72 @@
         <i class="fa-regular fa-circle-check"></i>
         <h2 id="modal-title">Completed</h2>
         <h3 id="modal-message">Your image has been successfully uploaded.</h3>
-        <button class="close-btn" onclick="showLoading(event)">Ok, Close</button>
+        <button class="close-btn">Ok, Close</button>
       </div>
-      
     </section>
-    <script>
-        // Popup functionality
-        const submitBtn = document.querySelector("#submit-btn");
-        const popup = document.querySelector("#popup");
-        const closeBtn = document.querySelector(".close-btn");
-        const uploadInput = document.querySelector("#upload");
-        const modalTitle = document.querySelector("#modal-title");
-        const modalMessage = document.querySelector("#modal-message");
 
-        // Show popup when the form is submitted
-        submitBtn.addEventListener("click", function(event) {
-            if (uploadInput.files.length === 0) {
-                // Kama hakuna picha imewekwa, zuia submission na toa ujumbe wa kosa
-                event.preventDefault(); // Zuia form isisubmit
-                modalTitle.textContent = "Error";
-                modalMessage.textContent = "Tafadhari weka picha ya Muhamala!";
-                popup.classList.add("active");
-            } else {
-                // Kama picha imewekwa, ruhusu form isubmit
-                modalTitle.textContent = "Completed";
-                modalMessage.textContent = "Your image has been successfully uploaded, wait for confirmation.";
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+      <div class="spinner"></div>
+      <p>wait for sec... 🔄</p>
+    </div>
 
-                // Ruhusu form kuendelea na submission baada ya popup kuonekana
-                popup.classList.add("active");
+    <!-- Scripts -->
+    <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+   <script>
+    UPLOADCARE_PUBLIC_KEY = "b554dba7565f88537168"; 
 
-                setTimeout(function() {
-                    // Endelea kusubmit form baada ya sekunde 2 (au bila kuchelewa)
-                    event.target.closest('form').submit();
-                }, 5000); // Popup itaonekana kwa sekunde 2 kisha form isubmit
-            }
-        });
+    const submitBtn = document.querySelector("#submit-btn");
+    const popup = document.querySelector("#popup");
+    const closeBtn = document.querySelector(".close-btn");
+    const uploadInput = document.querySelector("#upload");
+    const modalTitle = document.querySelector("#modal-title");
+    const modalMessage = document.querySelector("#modal-message");
+    const loadingOverlay = document.getElementById('loadingOverlay');
 
-        // Close the popup
-        closeBtn.addEventListener("click", function() {
-            popup.classList.remove("active");
-        });
-    </script>
+    let isError = false; // kujua kama ni error popup au success
 
+    // Show popup when form is submitted
+    submitBtn.addEventListener("click", function(event) {
+        event.preventDefault();
 
+        if (!uploadInput.value) {
+            modalTitle.textContent = "Error";
+            modalMessage.textContent = "Tafadhari weka picha ya muamala!";
+            isError = true;
+            popup.classList.add("active");
+        } else {
+            modalTitle.textContent = "Completed";
+            modalMessage.textContent = "Your image has been successfully uploaded, wait for confirmation.";
+            isError = false;
+            popup.classList.add("active");
+        }
+    });
 
+    // Close the popup
+    closeBtn.addEventListener("click", function() {
+        popup.classList.remove("active");
 
-<!-- Loading overlay -->
-<div id="loadingOverlay" style="
-    display: none;
-    position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    font-size: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    flex-direction: column;
-    text-align: center;
-">
-  <div class="spinner" style="
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #e63946;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 1rem;
-  "></div>
-  <p>wait for sec... 🔄</p>
-</div>
+        if (!isError) {
+            // success mode → onyesha overlay na submit
+            loadingOverlay.style.display = 'flex';
+            setTimeout(() => {
+                closeBtn.closest("form").submit();
+            }, 2000);
+        }
+        // kama ni error, usifanye chochote zaidi ya kufunga popup
+    });
 
-<style>
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>
-
-<script>
-function showLoading(event) {
-  document.getElementById('loadingOverlay').style.display = 'flex';
-}
-
-// ✅ Wakati page inafunguka fully, overlay iondoke
-window.addEventListener("load", function () {
-  document.getElementById('loadingOverlay').style.display = 'none';
-});
-
-// ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
-window.addEventListener("pageshow", function (event) {
-  if (event.persisted) { 
-    document.getElementById('loadingOverlay').style.display = 'none';
-  }
-});
+    // Hide overlay after page loads
+    window.addEventListener("load", function () {
+        loadingOverlay.style.display = 'none';
+    });
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted) { 
+            loadingOverlay.style.display = 'none';
+        }
+    });
 </script>
-
 
 </body>
 </html>
