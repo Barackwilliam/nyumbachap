@@ -13,17 +13,6 @@
     
     <style>
 
-
-
-
-
-
-
-
-
-
-
-
             .center-screen {
         position: absolute;
         top: 50%;
@@ -536,324 +525,224 @@
             {% endif %}
 
 
-       <section class="properties-list featured portfolio blog">
-    <div class="container">
         
-        <!-- Search Form -->
-        <div class="col-12">
-            <form method="GET" action="{% url 'search_property' %}">                                       
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="tabs_1">
-                        <div class="rld-main-search">
-                            <div class="row">
-                                <div class="rld-single-input">
+        
+        <section class="properties-list featured portfolio blog">
+            <div class="container">
+                
+        
+             <!-- Search Form -->
+             <div class="col-12">
+                <form method="GET" action="{% url 'search_property' %}">                                       
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs_1">
+                            <div class="rld-main-search">
+                                <div class="row">
+                                   <div class="rld-single-input">
                                     <input id="searchInput" type="text" name="q" value="{{request.GET.q}}">
-                                </div>
+                                  </div>
 
-                                <!-- Typed.js CDN -->
-                                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-                                <script>
+                                  <!-- Typed.js CDN -->
+                                  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+                                  <script>
                                     var typed = new Typed("#searchInput", {
-                                        strings: [
-                                            "Andika jina la sehemu...",
-                                            "Andika kiasi cha pango...",
-                                            "Andika idadi ya vyumba..."
-                                        ],
-                                        typeSpeed: 80,     // kasi ya kuandika
-                                        backSpeed: 50,     // kasi ya kufuta
-                                        backDelay: 1500,   // muda wa kusubiri kabla ya kufuta
-                                        startDelay: 500,   // muda kabla ya kuanza
-                                        attr: "placeholder", // 👈 inaandika ndani ya placeholder
-                                        bindInputFocusEvents: true,
-                                        loop: true          // irudie milele
+                                      strings: [
+                                        "Andika jina la sehemu...",
+                                        "Andika kiasi cha pango...",
+                                        "Andika idadi ya vyumba..."
+                                      ],
+                                      typeSpeed: 80,     // kasi ya kuandika
+                                      backSpeed: 50,     // kasi ya kufuta
+                                      backDelay: 1500,   // muda wa kusubiri kabla ya kufuta
+                                      startDelay: 500,   // muda kabla ya kuanza
+                                      attr: "placeholder", // 👈 inaandika ndani ya placeholder
+                                      bindInputFocusEvents: true,
+                                      loop: true          // irudie milele
                                     });
-                                </script>
+                                  </script>
 
-                                <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                                    <div style="text-align: center;"><button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button></div>
+                                   
+                                    <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
+                                        <!-- <a class="btn btn-yellow" href="#"><button type="submit"> Search Now </button> </a>  -->
+                                        
+                                      <div style="text-align: center;"><button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button></div>
+
+                     
+                                    </div>
+                                </form>
+
+
+                <!--/ End Search Form -->
+                <section class="headings-2 pt-0">
+                    <div class="pro-wrapper">
+                        <div class="detail-wrapper-body">
+                            <div class="listing-title-bar">
+                                <div class="text-heading text-left">
+                                    <!-- <p class="font-weight-bold mb-0 mt-3">9 Search results</p> -->
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <!--/ End Search Form -->
-        <section class="headings-2 pt-0">
-            <div class="pro-wrapper">
-                <div class="detail-wrapper-body">
-                    <div class="listing-title-bar">
-                        <div class="text-heading text-left">
-                            <!-- <p class="font-weight-bold mb-0 mt-3">9 Search results</p> -->
+                        <div class="cod-pad single detail-wrapper mr-2 mt-0 d-flex justify-content-md-end align-items-center">
+                            <div class="input-group border rounded input-group-lg w-auto mr-4">
+                            
+                            </div>
+                           
                         </div>
                     </div>
-                </div>
-                <div class="cod-pad single detail-wrapper mr-2 mt-0 d-flex justify-content-md-end align-items-center">
-                    <div class="input-group border rounded input-group-lg w-auto mr-4">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- homes content -->
-        <br><br><br>
-        
-        {% if results %}
-            <h2 style="text-align: center;">Matokeo ya Utafutaji</h2>
-        {% else %}
-            <h2 style="text-align: center;">Hakuna Matokeo ya Ulichotafuta hii ni kwasababu Ujajiunga kifurushi chochote</h2>
-        {% endif %}
-
-        <div></div>  
-        <br><br><br>
-
+                </section>
+            <!-- homes content -->
+            <br><br><br>
+           
+            {% if results %}
+             <h2 style="text-align: center;">Matokeo ya Utafutaji</h2>
+                 {% else %}
+             <h2 style="text-align: center;">Hakuna Matokeo ya Ulichotafuta hii ni kwasababu Ujajiunga kifurushi chochote </h2>
+                  {% endif %}
+                        <div></div>  
+                        
+                        <br><br><br>
         <div class="row">
-           {% for property in results reversed %} 
-<div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
-  <div class="project-single blur-container" data-aos="fade-up">
-    
-    <!-- Overlay ya blur + lock -->
-    <div class="blur-overlay">
-      <div class="locked-content">
-        <i class="fa fa-lock lock-icon"></i>
-        <p class="locked-message">
-          Lipia kifurushi cha Tsh.2500/= kwa mwezi <br>
-          Au Tsh.5999/= kwa mwaka ili kuona maelezo ya nyumba hii<br>
-          Na zingine nyingi Tanzania Nzima.
-        </p>
-        <a style="color: #a4161a; font-weight: bold;" 
-           href="{% url 'final' %}" 
-           class="nav-btn" 
-           onclick="showLoading(event)">🔒 Lipa Hapa</a>
-      </div>
-    </div>
+  {% for property in results reversed %} 
+    <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
+      <div class="project-single" data-aos="fade-up">
+        <div class="project-inner project-head">
+          <div class="homes">
 
-    <div class="project-inner project-head">
-      <div class="homes">
-        <!-- ================= LOCAL PROPERTY ================= -->
-        {% if property.listing_type == "local" %}
-          <a href="{% url 'property_detail' property.url_name %}" class="homes-img" onclick="showLoading(event)">
-              <div class="homes-tag button alt featured">Featured</div>
-              <div class="homes-tag button alt sale">{{ property.status }}</div>
-              <div class="homes-price">{{ property.price }} Tsh</div>
-              <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
-                   alt="{{ property.title }}" class="img-responsive">
-          </a>
-        {% elif property.listing_type == "beforward" %}
-          <a href="{% url 'Beforward_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
-            <div class="homes-tag button alt featured">Active</div>
-            <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-            <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
-                 alt="{{ property.title }}" class="img-responsive">
-          </a>
-        {% elif property.listing_type == "makazi" %}
-          <a href="{% url 'makazi_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
-            <div class="homes-tag button alt featured">Active</div>
-            <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-            <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
-                 alt="{{ property.title }}" class="img-responsive">
-          </a>
-        {% endif %}
-      </div>
-    </div>
+            <!-- ================= LOCAL PROPERTY ================= -->
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" class="homes-img"onclick="showLoading(event)">
+                  <div class="homes-tag button alt featured">Featured</div>
+                  <div class="homes-tag button alt sale">{{ property.status }}</div>
+                  <div class="homes-price">{{ property.price }} Tsh</div>
+                  <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
+                       alt="{{ property.title }}" class="img-responsive">
+              </a>
 
-    <!-- ================= HOMES CONTENT ================= -->
-    <div class="homes-content">
-      <h3>{{ property.title }}</h3>
-      <p class="homes-address mb-3">
-        {% if property.listing_type == "local" %}
-          <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
-        {% elif property.listing_type == "beforward" %}
-          <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
-        {% elif property.listing_type == "makazi" %}
-          <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
-        {% endif %}
-      </p>
-    </div>
-  </div>
-</div>
-{% endfor %}
+            <!-- ================= BEFORWARD PROPERTY ================= -->
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" class="homes-img"onclick="showLoading(event)">
+                <div class="homes-tag button alt featured">Active</div>
+                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
+                     alt="{{ property.title }}" class="img-responsive">
+              </a>
 
-<style>
-/* Container with blur */
-.blur-container {
-  position: relative;
-  overflow: hidden;
-}
+            <!-- ================= MAKAZI PROPERTY ================= -->
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" class="homes-img"onclick="showLoading(event)">
+                <div class="homes-tag button alt featured">Active</div>
+                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
+                     alt="{{ property.title }}" class="img-responsive">
+              </a>
+            {% endif %}
 
-/* Blur effect overlay */
-.blur-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(6px);
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-}
+          </div>
 
-/* Lock icon */
-.lock-icon {
-  font-size: 50px;
-  color: #a4161a;
-  margin-bottom: 15px;
-}
-
-/* Locked message */
-.locked-message {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #000;
-  line-height: 1.6;
-}
-
-/* Payment button */
-.blur-overlay .nav-btn {
-  display: inline-block;
-  padding: 8px 16px;
-  border: 2px solid #a4161a;
-  border-radius: 6px;
-  text-decoration: none;
-  background: #fff;
-  transition: 0.3s;
-}
-
-.blur-overlay .nav-btn:hover {
-  background: #a4161a;
-  color: #fff !important;
-}
-</style>
-
+          <!-- ================= BUTTON EFFECT ================= -->
+          <div class="button-effect">
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+              {% if property.video_link %}
+                <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
+              {% endif %}
+              {% comment %} Multiple Images for Local {% endcomment %}
+              {% for img in property.images %}
+                {% if img %}
+                  <a href="{{ img }}" class="img-poppu btn"><i class="fa fa-photo"></i></a>
+                {% endif %}
+              {% endfor %}
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+            {% endif %}
+          </div>
         </div>
 
-        {% if request.user.is_authenticated %}
-            {% if results %}
-                <div><p style="text-align: center;">{{user.username}} Umekua Mtu wetu wa thamani sana Kwa kulitambua hilo tumeongeza vipengere hivi muhimu ili kuhakikisha haukosi Makazi.
-                    Gusa Maandishi ya blue kwa <a href="{% url 'Beforward_list' %}">(Makazi ya kifahari)</a> au <a href="{% url 'makazi_list' %}">(Mchanganyiko)</a> ili uendelee kutafuta Makazi ya Chaguo lako
-                </p></div>
+        <!-- ================= HOMES CONTENT ================= -->
+        <div class="homes-content">
+          <h3>
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" onclick="showLoading(event)">{{ property.title }}</a>
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" onclick="showLoading(event)">{{ property.title }}</a>
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" onclick="showLoading(event)">{{ property.title }}</a>
             {% endif %}
-        {% else %} 
-            <br><br><br><br>
-            <div><p style="text-align: center;"> Ili kuona nyumba nyingi zaidi Jisajiri na ufungue akaunt Bure kabisa.<br> Gusa <a href="{% url 'Register' %}">Hapa</a> Kujisajili<br><br><br><br><br>
-            </p></div>
-        {% endif %}
-    </div>
-</section>
-<!-- END SECTION PROPERTIES LISTING -->
+          </h3>
 
-<!-- Loading overlay -->
-<div id="loadingOverlay" style="
-    display: none;
-    position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    font-size: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    flex-direction: column;
-    text-align: center;
-">
-    <div class="spinner" style="
-        border: 8px solid #f3f3f3;
-        border-top: 8px solid #e63946;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 1rem;
-    "></div>
-    <p>wait for sec... 🔄</p>
+          <p class="homes-address mb-3">
+            {% if property.listing_type == "local" %}
+              <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
+            {% elif property.listing_type == "beforward" %}
+              <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
+            {% elif property.listing_type == "makazi" %}
+              <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
+            {% endif %}
+          </p>
+
+          <ul class="homes-list clearfix pb-3">
+            {% if property.listing_type == "local" %}
+              <li class="the-icons"><i class="flaticon-bed mr-2"></i> <span>{{ property.bedrooms }} Bedrooms</span></li>
+              <li class="the-icons"><i class="flaticon-bathtub mr-2"></i> <span>{{ property.bathrooms }} Bathrooms</span></li>
+              <li class="the-icons"><i class="flaticon-square mr-2"></i> <span>{{ property.house_size }} sq m</span></li>
+              <li class="the-icons"><i class="flaticon-car mr-2"></i> <span>0 Garages</span></li>
+            {% endif %}
+          </ul>
+
+          <div style="margin-bottom: 10px;">
+            {% if property.listing_type == "local" %}
+              <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
+            {% elif property.listing_type == "beforward" %}
+              <a href="{% url 'Beforward_detail' property.id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
+            {% elif property.listing_type == "makazi" %}
+              <a href="{% url 'makazi_detail' property.id %}" class="btn btn-primary" onclick="showLoading(event)">Tazama</a>
+            {% endif %}
+          </div>
+
+          {% if property.listing_type == "local" %}
+          <div class="footer">
+            <a href="{% url 'property_detail' property.url_name %}">
+              <img src="{{ property.property_owner_0 }}" alt="" class="mr-2"> {{ property.owner }}
+            </a>
+            <span>Posted {{ property.date_posted }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div><p style="text-align: center;">{{ user.username }} Umekua mtu wetu wa thamani sana. Kwa kulitambua hilo, tumeongeza vipengele hivi muhimu ili kuhakikisha haukosi makazi.
+      Chagua vitufe hivyo viwili hapo chini (Makazi ya kifahari) au (Mchanganyiko) ili uendelee kutafuta Makazi ya chaguo lako.</p></div>
+
+    <div class="d-flex justify-content-center my-4">
+      <a href="{% url 'Beforward_list' %}" class="btn btn-success mx-2" onclick="showLoading(event)">Makazi ya kifahari (VIP)</a>
+      <a href="{% url 'makazi_list' %}" class="btn btn-success mx-2" onclick="showLoading(event)">Makazi Mchanganyiko</a>
+    </div>
+  {% endfor %}
 </div>
 
-<style>
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
 
-    .blurred-card {
-        filter: blur(3px);
-        pointer-events: none;
-    }
+     {% if request.user.is_authenticated %}
 
-    .blurred-image {
-        filter: blur(3px);
-    }
+                {% if results %}
+                <div><p style="text-align: center;">{{user.username}} Umekua Mtu wetu wa thamani sana Kwa kulitambua hilo tumeongeza vipengere hivi muhimu ili kuhakikisha haukosi Makazi.
+                   Gusa Maandishi ya blue kwa <a href="{% url 'Beforward_list' %}">(Makazi ya kifahari)</a> au <a href="{% url 'makazi_list' %}">(Mchanganyiko)</a> ili uendelee kutafuta Makazi ya Chaguo lako
+                  </p></div>
+    
 
-    .locked-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 10;
-        background: rgba(0, 0, 0, 0.6);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 1rem;
-        font-weight: bold;
-    }
+               
+                     {% endif %}
 
-    .lock-icon {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .nav-btn {
-        background: #f1faee;
-        color: #1d3557;
-        padding: 0.6rem 1.4rem;
-        border-radius: 30px;
-        font-weight: 600;
-        font-size: 1rem;
-        text-decoration: none;
-        box-shadow: 0 4px 10px rgba(29, 53, 87, 0.2);
-        transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .nav-btn:hover,
-    .nav-btn:focus {
-        background: #e63946;
-        color: #f1faee;
-        transform: scale(1.05);
-        box-shadow: 0 6px 15px rgba(230, 57, 70, 0.8);
-    }
-</style>
-
-<script>
-    function showLoading(event) {
-        document.getElementById('loadingOverlay').style.display = 'flex';
-    }
-
-    // ✅ Wakati page inafunguka fully, overlay iondoke
-    window.addEventListener("load", function () {
-        document.getElementById('loadingOverlay').style.display = 'none';
-    });
-
-    // ✅ Zuia overlay kujitokeza tena ukirudi nyuma (back button)
-    window.addEventListener("pageshow", function (event) {
-        if (event.persisted) { 
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }
-    });
-</script>
-
-
+                    {% else %} 
+<br><br><br><br>
+                     <div><p style="text-align: center;"> Ili kuona nyumba nyingi zaidi Jisajiri na ufungue akaunt Bure kabisa.<br> Gusa <a href="{% url 'Register' %}">Hapa</a> Kujisajili<br><br><br><br><br>
+                  </p></div>
+     {% endif %}
+            </div>  
+            </div>
+        </section>
         <!-- END SECTION PROPERTIES LISTING -->
 
         

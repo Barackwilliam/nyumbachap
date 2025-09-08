@@ -1,211 +1,119 @@
-
-        <section class="properties-list featured portfolio blog">
-            <div class="container">
-                
-        
-             <!-- Search Form -->
-             <div class="col-12">
-                <form method="GET" action="{% url 'search_property' %}">                                       
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs_1">
-                            <div class="rld-main-search">
-                                <div class="row">
-                                    <div class="rld-single-input">
-                                        <input type="text" placeholder="Enter Keyword..." name="q" value="{{request.GET.q}}">
-                                    </div>
-                                   
-                                    <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                                        <!-- <a class="btn btn-yellow" href="#"><button type="submit"> Search Now </button> </a>  -->
-                                        <button type="submit" class="btn btn-yellow">Search Now</button>
-
-                                    </div>
-                                </form>
-
-
-                <!--/ End Search Form -->
-                <section class="headings-2 pt-0">
-                    <div class="pro-wrapper">
-                        <div class="detail-wrapper-body">
-                            <div class="listing-title-bar">
-                                <div class="text-heading text-left">
-                                    <!-- <p class="font-weight-bold mb-0 mt-3">9 Search results</p> -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="cod-pad single detail-wrapper mr-2 mt-0 d-flex justify-content-md-end align-items-center">
-                            <div class="input-group border rounded input-group-lg w-auto mr-4">
-                            
-                            </div>
-                           
-                        </div>
-                    </div>
-                </section>
-            <!-- homes content -->
-
-                        <!-- <h2>Total houses</h2> -->
-     {% load static %}
-<div class="container">
-
- {% load static %}
-<div class="container">
-
-<h2 class="mb-4">Nyumba Zote</h2>
-<div class="row">
-{% for property in listings %}
-    <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
-        <div class="project-single" data-aos="fade-up">
-            <div class="project-inner project-head">
-                <div class="homes">
-                    {% if property.listing_type == 'local' %}
-                        <div class="homes-tag button alt featured">{{property.p_status}}</div>
-                        <div class="homes-tag button alt sale">
-                            {% if property.p_status == "Sold" %}Closed{% else %}{{property.status}}{% endif %}
-                        </div>
-                        <div class="homes-price">{{property.price}} Tsh</div>
-                        <img src="{{ property.image_0 }}" alt="{{property.title}}" class="img-responsive">
-                    {% elif property.listing_type == 'beforward' %}
-                        <div class="homes-tag button alt featured">Beforward</div>
-                        <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                        <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
-                             alt="Picha ya {{ property.title }}" class="img-fluid" loading="lazy">
-                    {% elif property.listing_type == 'makazi' %}
-                        <div class="homes-tag button alt featured">Makazi</div>
-                        <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                        <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
-                             alt="Picha ya {{ property.title }}" class="img-fluid" loading="lazy">
-                    {% endif %}
-                </div>
-
-                <div class="button-effect">
-                    {% if property.listing_type == 'local' %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="btn"><i class="fa fa-link"></i></a>
-                        {% if property.video_link %}
-                            <a href="{{property.video_link}}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                        {% endif %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="img-poppu btn"><i class="fa fa-photo"></i></a>
-                    {% elif property.listing_type == 'beforward' %}
-                        <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn"><i class="fa fa-link"></i></a>
-                        {% if property.video_link %}
-                            <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                        {% endif %}
-                    {% elif property.listing_type == 'makazi' %}
-                        <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn"><i class="fa fa-link"></i></a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="homes-content">
-                {% if property.listing_type == 'local' %}
-                    <h3><a href="{% url 'property_detail' property.url_name %}">{{property.title}}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i><span>{{property.region}}, {{property.ward}}</span></p>
-                    <ul class="homes-list clearfix pb-3">
-                        <li class="the-icons"><i class="flaticon-bed mr-2"></i><span>{{property.bedrooms}} Bedrooms</span></li>
-                        <li class="the-icons"><i class="flaticon-bathtub mr-2"></i><span>{{property.bathrooms}} Bathrooms</span></li>
-                        <li class="the-icons"><i class="flaticon-square mr-2"></i><span>{{property.house_size}} sq m</span></li>
-                    </ul>
-                    <div style="margin-top: 10px;">
-                        <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary">Tazama</a>
-                    </div>
-                    <div class="footer mt-2">
-                        <a href="{% url 'property_detail' property.url_name %}">
-                            <img src="{{property.property_owner_0}}" alt="" class="mr-2 rounded-circle"> {{ property.owner }}
-                        </a>
-                        <span class="ml-2">Posted at {{property.date_posted}}</span>
-                    </div>
-
-                {% elif property.listing_type == 'beforward' %}
-                    <h3><a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i><span>{{ property.city }}</span></p>
-                    <div style="margin-top: 10px;">
-                        <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn btn-primary">Tazama</a>
-                    </div>
-
-                {% elif property.listing_type == 'makazi' %}
-                    <h3><a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i><span>{{ property.location }}</span></p>
-                    <div style="margin-top: 10px;">
-                        <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn btn-primary">Tazama</a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+<div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
+  <div class="project-single blur-container" data-aos="fade-up">
+    
+    <!-- Overlay ya blur + lock -->
+    <div class="blur-overlay">
+      <div class="locked-content">
+        <i class="fa fa-lock lock-icon"></i>
+        <p class="locked-message">
+          Lipia kifurushi cha Tsh.2500/= kwa mwezi <br>
+          Au Tsh.5999/= kwa mwaka ili kuona maelezo ya nyumba hii<br>
+          Na zingine nyingi Tanzania Nzima.
+        </p>
+        <a style="color: #a4161a; font-weight: bold;" 
+           href="{% url 'final' %}" 
+           class="nav-btn" 
+           onclick="showLoading(event)">🔒 Lipa Hapa</a>
+      </div>
     </div>
-{% endfor %}
+
+    <div class="project-inner project-head">
+      <div class="homes">
+        <!-- ================= LOCAL PROPERTY ================= -->
+        {% if property.listing_type == "local" %}
+          <a href="{% url 'property_detail' property.url_name %}" class="homes-img" onclick="showLoading(event)">
+              <div class="homes-tag button alt featured">Featured</div>
+              <div class="homes-tag button alt sale">{{ property.status }}</div>
+              <div class="homes-price">{{ property.price }} Tsh</div>
+              <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
+                   alt="{{ property.title }}" class="img-responsive">
+          </a>
+        {% elif property.listing_type == "beforward" %}
+          <a href="{% url 'Beforward_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
+            <div class="homes-tag button alt featured">Active</div>
+            <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+            <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
+                 alt="{{ property.title }}" class="img-responsive">
+          </a>
+        {% elif property.listing_type == "makazi" %}
+          <a href="{% url 'makazi_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
+            <div class="homes-tag button alt featured">Active</div>
+            <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+            <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
+                 alt="{{ property.title }}" class="img-responsive">
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ================= HOMES CONTENT ================= -->
+    <div class="homes-content">
+      <h3>{{ property.title }}</h3>
+      <p class="homes-address mb-3">
+        {% if property.listing_type == "local" %}
+          <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
+        {% elif property.listing_type == "beforward" %}
+          <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
+        {% elif property.listing_type == "makazi" %}
+          <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
 </div>
-{% if is_paginated %}
-<nav class="pagination">
-    <ul class="pagination">
-
-        {# Previous button #}
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <span class="page-link">Previous</span>
-        </li>
-        {% endif %}
-
-        {# First page always #}
-        {% if page_obj.number != 1 %}
-        <li class="page-item">
-            <a class="page-link" href="?page=1">1</a>
-        </li>
-        {% endif %}
-
-        {# Ellipsis if gap between first and previous page #}
-        {% if page_obj.number > 3 %}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-        {% endif %}
-
-        {# Previous page #}
-        {% if page_obj.number > 1 %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.number|add:-1 }}">{{ page_obj.number|add:-1 }}</a>
-        </li>
-        {% endif %}
-
-        {# Current page #}
-        <li class="page-item active">
-            <span class="page-link">{{ page_obj.number }}</span>
-        </li>
-
-        {# Next page #}
-        {% if page_obj.number < paginator.num_pages %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.number|add:1 }}">{{ page_obj.number|add:1 }}</a>
-        </li>
-        {% endif %}
-
-        {# Ellipsis if gap between next page and last page #}
-        {% if page_obj.number < paginator.num_pages|add:-2 %}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-        {% endif %}
-
-        {# Last page always #}
-        {% if page_obj.number != paginator.num_pages %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
-        </li>
-        {% endif %}
-
-        {# Next button #}
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <span class="page-link">Next</span>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-{% endif %}
 
 
 
-            </div>
-        </section>
+<style>
+/* Container with blur */
+.blur-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Blur effect overlay */
+.blur-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(6px);
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Lock icon */
+.lock-icon {
+  font-size: 50px;
+  color: #a4161a;
+  margin-bottom: 15px;
+}
+
+/* Locked message */
+.locked-message {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #000;
+  line-height: 1.6;
+}
+
+/* Payment button */
+.blur-overlay .nav-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 2px solid #a4161a;
+  border-radius: 6px;
+  text-decoration: none;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.blur-overlay .nav-btn:hover {
+  background: #a4161a;
+  color: #fff !important;
+}
+</style>

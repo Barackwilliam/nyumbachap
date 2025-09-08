@@ -135,8 +135,10 @@ def jihudumie(request):
 
 def final(request):
     return render(request,'core/final.html')
-
 def complete(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # au page nyingine ya error
+
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
@@ -149,6 +151,7 @@ def complete(request):
     else:
         form = PaymentForm()
     return render(request, 'core/complete.html', {'form': form})
+
 
     
 def Thanks(request):
@@ -384,50 +387,82 @@ def popular_properties(request):
 
 from django.db.models import Q
 
+# def search_property(request):
+#     query = request.GET.get("q", "").strip()
+
+#     # Default: zote models
+#     local_props = list(Property.objects.all())
+#     beforward_props = list(Scrape_BeforwardListing.objects.all())
+#     makazi_props = list(Scrape_MakaziListing.objects.all())
+
+#     if query:
+#         # Search kwenye Property
+#         local_props = list(
+#             Property.objects.filter(
+#                 Q(region__icontains=query) |
+#                 Q(district__icontains=query) |
+#                 Q(title__icontains=query) |
+#                 Q(description__icontains=query) |
+#                 Q(status__icontains=query) |
+#                 Q(bedrooms__iexact=query) |
+#                 Q(ward__icontains=query) |
+#                 Q(price__iexact=query)
+#             )
+#         )
+
+#         # Search kwenye Beforward
+#         beforward_props = list(
+#             Scrape_BeforwardListing.objects.filter(
+#                 Q(title__icontains=query) |
+#                 Q(description__icontains=query) |
+#                 Q(city__icontains=query) |
+#                 Q(price__icontains=query)
+#             )
+#         )
+
+#         # Search kwenye Makazi
+#         makazi_props = list(
+#             Scrape_MakaziListing.objects.filter(
+#                 Q(title__icontains=query) |
+#                 Q(description__icontains=query) |
+#                 Q(location__icontains=query) |
+#                 Q(price__icontains=query)
+#             )
+#         )
+
+#     # Ongeza label (kujua imetoka model ipi)
+#     for p in local_props:
+#         p.listing_type = "local"
+#     for p in beforward_props:
+#         p.listing_type = "beforward"
+#     for p in makazi_props:
+#         p.listing_type = "makazi"
+
+#     # Changanya zote
+#     results = local_props + beforward_props + makazi_props
+
+#     return render(request, "core/searched.html", {
+#         "results": results,
+#         "query": query
+#     })
+
+
+
+
+from django.shortcuts import render
+from django.db.models import Q
+from random import shuffle
+from .models import Property, Scrape_BeforwardListing, Scrape_MakaziListing
+
 def search_property(request):
     query = request.GET.get("q", "").strip()
 
-    # Default: zote models
+    # --- Default: zote models ---  
     local_props = list(Property.objects.all())
     beforward_props = list(Scrape_BeforwardListing.objects.all())
     makazi_props = list(Scrape_MakaziListing.objects.all())
 
-    if query:
-        # Search kwenye Property
-        local_props = list(
-            Property.objects.filter(
-                Q(region__icontains=query) |
-                Q(district__icontains=query) |
-                Q(title__icontains=query) |
-                Q(description__icontains=query) |
-                Q(status__icontains=query) |
-                Q(bedrooms__iexact=query) |
-                Q(ward__icontains=query) |
-                Q(price__iexact=query)
-            )
-        )
-
-        # Search kwenye Beforward
-        beforward_props = list(
-            Scrape_BeforwardListing.objects.filter(
-                Q(title__icontains=query) |
-                Q(description__icontains=query) |
-                Q(city__icontains=query) |
-                Q(price__icontains=query)
-            )
-        )
-
-        # Search kwenye Makazi
-        makazi_props = list(
-            Scrape_MakaziListing.objects.filter(
-                Q(title__icontains=query) |
-                Q(description__icontains=query) |
-                Q(location__icontains=query) |
-                Q(price__icontains=query)
-            )
-        )
-
-    # Ongeza label (kujua imetoka model ipi)
+    # Ongeza listing_type
     for p in local_props:
         p.listing_type = "local"
     for p in beforward_props:
@@ -436,12 +471,62 @@ def search_property(request):
         p.listing_type = "makazi"
 
     # Changanya zote
-    results = local_props + beforward_props + makazi_props
+    all_listings = local_props + beforward_props + makazi_props
+    shuffle(all_listings)  # optional
+
+    # --- Tafuta query ikiwa ipo ---
+    results = []
+    if query:
+        results_local = Property.objects.filter(
+            Q(region__icontains=query) |
+            Q(district__icontains=query) |
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(status__icontains=query) |
+            Q(ward__icontains=query)
+        )
+
+        results_beforward = Scrape_BeforwardListing.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(city__icontains=query)
+        )
+
+        results_makazi = Scrape_MakaziListing.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(location__icontains=query)
+        )
+
+        # Ikiwa query ni namba, tafuta exact match kwenye numeric fields
+        if query.isdigit():
+            query_int = int(query)
+            results_local = results_local | Property.objects.filter(
+                Q(bedrooms=query_int) | Q(price=query_int)
+            )
+            results_beforward = results_beforward | Scrape_BeforwardListing.objects.filter(price=query_int)
+            results_makazi = results_makazi | Scrape_MakaziListing.objects.filter(price=query_int)
+
+        # Ongeza listing_type
+        for p in results_local:
+            p.listing_type = "local"
+        for p in results_beforward:
+            p.listing_type = "beforward"
+        for p in results_makazi:
+            p.listing_type = "makazi"
+
+        results = list(results_local) + list(results_beforward) + list(results_makazi)
+        shuffle(results)  # optional for randomness
+
+    # Ikiwa hakuna matokeo, tuma zote kama fallback
+    fallback_results = all_listings
 
     return render(request, "core/searched.html", {
-        "results": results,
+        "results": results if results else None,
+        "fallback_results": fallback_results,
         "query": query
     })
+
 
 
 import requests
@@ -678,10 +763,11 @@ import requests  # On top if not already
 #         return render(request, 'core/login.html')
 
 
-
+from django.contrib import auth, messages
+from django.shortcuts import render, redirect
+import requests
 
 def login(request):
-    # Chukua URL ya 'next' ili kurudisha mtu pale alipoishia
     next_url = request.GET.get('next') or request.POST.get('next') or '/'
 
     if request.method == 'POST':
@@ -699,14 +785,14 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user is not None:
                 auth.login(request, user)
-                return redirect(next_url)  # Redirect to original page
+                return redirect(next_url)  # Rudisha pale alipoishia
             else:
                 messages.error(request, 'Tafadhari ingiza Taarifa Sahihi na Ujaribu Tena au Jisajili Upya!')
         else:
             messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhari jaribu tena.')
 
     return render(request, 'core/login.html', {'next': next_url})
-    
+
 
 
 def login_view(request):
