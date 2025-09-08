@@ -261,8 +261,7 @@ X_FRAME_OPTIONS = "DENY"
 
 
 LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = '/'  # au page yoyote baada ya login
+LOGOUT_URL = 'logout' 
 LOGOUT_REDIRECT_URL = 'popular_featured'
 
 
