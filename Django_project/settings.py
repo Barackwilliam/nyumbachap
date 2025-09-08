@@ -287,7 +287,7 @@ UPLOADCARE = {
 # Session Settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # settings.py
 if DEBUG:
