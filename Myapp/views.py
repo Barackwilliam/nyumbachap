@@ -135,10 +135,9 @@ def jihudumie(request):
 
 def final(request):
     return render(request,'core/final.html')
-def complete(request):
-    if not request.user.is_authenticated:
-        return redirect('login')  # au page nyingine ya error
 
+@login_required(login_url='/login/') 
+def complete(request):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
@@ -732,67 +731,71 @@ def logout(request):
     auth.logout(request)
     return redirect('login')
 
-
-
-import requests  # On top if not already
+####33##333333#3# login without recaptcha#######
+# from django.conf import settings
+# from django.contrib import messages, auth
+# from django.shortcuts import render, redirect
+# import requests
+# from django.conf import settings
 
 # def login(request):
-#     if request.method == 'POST':
-#         recaptcha_response = request.POST.get('g-recaptcha-response')
-#         data = {
-#             'secret': '6Lfr4xUrAAAAAHJxI7wm4xFza7BTBYotysJocKbn',
-#             'response': recaptcha_response
-#         }
-#         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-#         result = r.json()
+#     # Chukua URL ya 'next' ili kurudisha mtu pale alipoishia
+#     next_url = request.GET.get('next') or request.POST.get('next') or '/'
 
-#         if result['success']:
-#             username = request.POST['username']
-#             password = request.POST['password']
-#             User = auth.authenticate(username=username, password=password)
-#             if User is not None:
-#                 auth.login(request, User)
-#                 return redirect('/')
-#             else:
-#                 messages.error(request, 'Tafadhari ingiza Taarifa Sahihi na Ujaribu Tena au Jisajili Upya!')
-#                 return redirect(login)
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+
+#         # Hapa tunapunguza reCAPTCHA kabisa kwa development
+#         # (kwa production, unaweza kuongeza verification tena)
+#         user = auth.authenticate(username=username, password=password)
+#         if user is not None:
+#             auth.login(request, user)
+#             print(f"=== LOGIN DEBUG ===\nRedirecting to: {next_url}\nUser: {user.username}\n===================")
+#             return redirect(next_url)
 #         else:
-#             messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhari jaribu tena.')
-#             return redirect(login)
-#     else:
-#         return render(request, 'core/login.html')
+#             messages.error(request, 'Taarifa za login si sahihi. Jaribu tena au jisajili upya!')
+
+#     print(f"=== LOGIN DEBUG ===\nRequest method: {request.method}\nGET params: {request.GET}\nPOST params: {request.POST}\nComputed next_url: {next_url}\n===================")
+#     return render(request, 'core/login.html', {'next': next_url})
 
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
+from django.conf import settings
 import requests
 
 def login(request):
     # Chukua next URL (GET au POST)
     next_url = request.GET.get('next') or request.POST.get('next') or '/'
 
-    if request.method == 'POST':
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': '6Lfr4xUrAAAAAHJxI7wm4xFza7BTBYotysJocKbn',  # private key
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
+    # Skip reCAPTCHA kwenye development
+    skip_recaptcha = settings.DEBUG  
 
-        if result.get('success'):
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = auth.authenticate(username=username, password=password)
-            if user:
-                auth.login(request, user)
-                return redirect(next_url)  # Rudisha pale alipoishia
-            else:
-                messages.error(request, 'Tafadhali ingiza taarifa sahihi au jisajili upya!')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not skip_recaptcha:
+            # ReCAPTCHA verification kwa production
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret': settings.RECAPTCHA_PRIVATE_KEY,  # Chukua kutoka settings.py
+                'response': recaptcha_response
+            }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+            result = r.json()
+            if not result.get('success'):
+                messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhali jaribu tena.')
+                return render(request, 'core/login.html', {'next': next_url})
+
+        user = auth.authenticate(username=username, password=password)
+        if user:
+            auth.login(request, user)
+            return redirect(next_url)  # Rudisha pale alipoishia
         else:
-            messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhali jaribu tena.')
+            messages.error(request, 'Tafadhali ingiza taarifa sahihi au jisajili upya!')
 
     return render(request, 'core/login.html', {'next': next_url})
-
 
 def login_view(request):
     if request.method =='POST':
