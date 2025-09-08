@@ -762,37 +762,36 @@ import requests  # On top if not already
 #     else:
 #         return render(request, 'core/login.html')
 
-
-from django.contrib import auth, messages
 from django.shortcuts import render, redirect
+from django.contrib import messages, auth
 import requests
 
 def login(request):
+    # Chukua next URL (GET au POST)
     next_url = request.GET.get('next') or request.POST.get('next') or '/'
 
     if request.method == 'POST':
         recaptcha_response = request.POST.get('g-recaptcha-response')
         data = {
-            'secret': '6Lfr4xUrAAAAAHJxI7wm4xFza7BTBYotysJocKbn',
+            'secret': '6Lfr4xUrAAAAAHJxI7wm4xFza7BTBYotysJocKbn',  # private key
             'response': recaptcha_response
         }
         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
         result = r.json()
 
         if result.get('success'):
-            username = request.POST['username']
-            password = request.POST['password']
+            username = request.POST.get('username')
+            password = request.POST.get('password')
             user = auth.authenticate(username=username, password=password)
-            if user is not None:
+            if user:
                 auth.login(request, user)
                 return redirect(next_url)  # Rudisha pale alipoishia
             else:
-                messages.error(request, 'Tafadhari ingiza Taarifa Sahihi na Ujaribu Tena au Jisajili Upya!')
+                messages.error(request, 'Tafadhali ingiza taarifa sahihi au jisajili upya!')
         else:
-            messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhari jaribu tena.')
+            messages.error(request, 'ReCAPTCHA verification imeshindwa. Tafadhali jaribu tena.')
 
     return render(request, 'core/login.html', {'next': next_url})
-
 
 
 def login_view(request):
