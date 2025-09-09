@@ -529,44 +529,51 @@
     <div class="container">
         
         <!-- Search Form -->
-        <div class="col-12">
-            <form method="GET" action="{% url 'search_property' %}">                                       
-                <!-- <div class="tab-content"> -->
-                    <div class="tab-pane fade show active" id="tabs_1">
-                        <div class="rld-main-search">
-                            <div class="row">
-                                <div class="rld-single-input">
-                                    <input id="searchInput" type="text" name="q" value="{{request.GET.q}}">
-                                </div>
+     <div class="col-12">
+    <form method="GET" action="{% url 'search_property' %}">                                       
+        <div class="tab-pane fade show active" id="tabs_1">
+            <div class="rld-main-search">
+                <div class="row">
+                    <!-- Search Input with Autocomplete -->
+                    <div class="rld-single-input">
+                        <input list="suggestionsList" id="searchInput" type="text" name="q" value="{{request.GET.q}}">
+                        <datalist id="suggestionsList">
+                            {% for s in suggestions %}
+                                <option value="{{ s }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
 
-                                <!-- Typed.js CDN -->
-                                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-                                <script>
-                                    var typed = new Typed("#searchInput", {
-                                        strings: [
-                                            "Andika jina la sehemu...",
-                                            "Andika kiasi cha pango...",
-                                            "Andika idadi ya vyumba..."
-                                        ],
-                                        typeSpeed: 80,     // kasi ya kuandika
-                                        backSpeed: 50,     // kasi ya kufuta
-                                        backDelay: 1500,   // muda wa kusubiri kabla ya kufuta
-                                        startDelay: 500,   // muda kabla ya kuanza
-                                        attr: "placeholder", // 👈 inaandika ndani ya placeholder
-                                        bindInputFocusEvents: true,
-                                        loop: true          // irudie milele
-                                    });
-                                </script>
+                    <!-- Typed.js placeholder -->
+                    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+                    <script>
+                        var typed = new Typed("#searchInput", {
+                            strings: [
+                                "Andika jina la sehemu...",
+                                "Andika kiasi cha pango...",
+                                "Andika idadi ya vyumba..."
+                            ],
+                            typeSpeed: 80,
+                            backSpeed: 50,
+                            backDelay: 1500,
+                            startDelay: 500,
+                            attr: "placeholder",
+                            bindInputFocusEvents: true,
+                            loop: true
+                        });
+                    </script>
 
-                                <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                                    <div style="text-align: center;"><button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button></div>
-                                </div>
-                            </div>
+                    <!-- Submit Button -->
+                    <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
+                        <div style="text-align: center;">
+                            <button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button>
                         </div>
                     </div>
-                <!-- </div> -->
-            </form>
+                </div>
+            </div>
         </div>
+    </form>
+</div>
 
    
         {% if results %}
@@ -661,12 +668,12 @@
         <div class="blur-overlay" style="position:absolute; inset:0; background:rgba(70, 66, 66, 0.329); backdrop-filter:blur(6px); z-index:30; display:flex; justify-content:center; align-items:center; text-align:center; padding:12px;">
             <div class="locked-content" style="text-align:center;">
                 <i class="fa fa-lock" style="font-size:36px; color:#a4161a; margin-bottom:10px;"></i>
-                <p style="font-size:12px;background-color: rgba(255, 255, 255, 0.151);text-align: center; font-weight:600; line-height:1.4; color:#000000; margin-bottom:8px;">
-                    Lipia Tsh.2500/= kwa mwezi 
-                    Au Tsh.6999/= kwa mwaka ili kuona nyumba hii 
+                <p style="font-size:16px;background-color: rgba(251, 255, 4, 0);text-align: center; font-weight:600; line-height:1.4; color:#000000; margin-bottom:8px;">
+                    Lipia Tsh.2500/= 
+                    Au Tsh.6999/= kwa mwezi ili kuona nyumba hii 
                     Na zingine Tanzania Nzima.
                 </p>
-                <a href="{% url 'jihudumie' %}" style="display:inline-block; padding:6px 12px; border:2px solid #a4161a; border-radius:6px; text-decoration:none; background:#fff; color:#a4161a; font-size:12px;">🔒 Lipa Hapa</a>
+                <a href="{% url 'jihudumie' %}" style="display:inline-block; padding:6px 12px; border:2px solid #a4161a; border-radius:6px; text-decoration:none; background:#fff; color:#a4161a; font-size:12px;" onclick="showLoading(event)">🔒 Lipa Hapa</a>
             </div>
         </div>
 
@@ -1178,7 +1185,7 @@ window.addEventListener("pageshow", function (event) {
       if (!localStorage.getItem("feedbackGiven")) {
         showFeedbackModal();
       }
-    }, 40000);
+    }, 60000);
   
     function showFeedbackModal() {
       feedbackModal.style.display = "flex";

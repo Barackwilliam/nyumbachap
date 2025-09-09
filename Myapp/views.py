@@ -319,15 +319,27 @@ def property_list(request):
     # Paginate combined listings
     paginated_listings, paginator = paginate_listings(request, all_listings)
 
+    # --- Suggestions for search autocomplete ---
+    suggestions = set()
+    for p in all_listings:
+        if hasattr(p, 'title') and p.title:
+            suggestions.add(p.title)
+        # Optional: add region/district for local properties
+        if getattr(p, 'region', None):
+            suggestions.add(p.region)
+        if getattr(p, 'district', None):
+            suggestions.add(p.district)
+    suggestions = list(suggestions)[:10]  # send max 10 suggestions
+
     context = {
         'listings': paginated_listings,
         'is_paginated': paginator.num_pages > 1,
         'paginator': paginator,
         'page_obj': paginated_listings,
         'page_title': 'NyumbaChap - Properties & Listings',
+        'suggestions': suggestions,  # <-- send to template
     }
     return render(request, 'core/property_list.html', context)
-
 
 # @login_required(login_url='login')
 # def property_detail(request, property_id):
@@ -364,89 +376,7 @@ def popular_properties(request):
 
 
 
-# @login_required(login_url='login')
-
-
-# def search_property(request):
-#     query = request.GET.get('q') #Fetching the user's input from the search box
-
-#     results = Property.objects.all()
-
-#     if query:
-#          results = results.filter(Q(region__icontains=query) |
-#         Q(district__icontains=query) |
-#         Q(title__icontains=query) |
-#         Q(description__icontains=query) |
-#         Q(status__icontains=query) |
-#         Q(bedrooms__iexact=query) |
-#         Q(ward__icontains=query) |
-#         Q(price__iexact=query))
-
-#     return render(request,'core/searched.html',{'results':results})
-
 from django.db.models import Q
-
-# def search_property(request):
-#     query = request.GET.get("q", "").strip()
-
-#     # Default: zote models
-#     local_props = list(Property.objects.all())
-#     beforward_props = list(Scrape_BeforwardListing.objects.all())
-#     makazi_props = list(Scrape_MakaziListing.objects.all())
-
-#     if query:
-#         # Search kwenye Property
-#         local_props = list(
-#             Property.objects.filter(
-#                 Q(region__icontains=query) |
-#                 Q(district__icontains=query) |
-#                 Q(title__icontains=query) |
-#                 Q(description__icontains=query) |
-#                 Q(status__icontains=query) |
-#                 Q(bedrooms__iexact=query) |
-#                 Q(ward__icontains=query) |
-#                 Q(price__iexact=query)
-#             )
-#         )
-
-#         # Search kwenye Beforward
-#         beforward_props = list(
-#             Scrape_BeforwardListing.objects.filter(
-#                 Q(title__icontains=query) |
-#                 Q(description__icontains=query) |
-#                 Q(city__icontains=query) |
-#                 Q(price__icontains=query)
-#             )
-#         )
-
-#         # Search kwenye Makazi
-#         makazi_props = list(
-#             Scrape_MakaziListing.objects.filter(
-#                 Q(title__icontains=query) |
-#                 Q(description__icontains=query) |
-#                 Q(location__icontains=query) |
-#                 Q(price__icontains=query)
-#             )
-#         )
-
-#     # Ongeza label (kujua imetoka model ipi)
-#     for p in local_props:
-#         p.listing_type = "local"
-#     for p in beforward_props:
-#         p.listing_type = "beforward"
-#     for p in makazi_props:
-#         p.listing_type = "makazi"
-
-#     # Changanya zote
-#     results = local_props + beforward_props + makazi_props
-
-#     return render(request, "core/searched.html", {
-#         "results": results,
-#         "query": query
-#     })
-
-
-
 
 from django.shortcuts import render
 from django.db.models import Q
@@ -473,8 +403,9 @@ def search_property(request):
     all_listings = local_props + beforward_props + makazi_props
     shuffle(all_listings)  # optional
 
-    # --- Tafuta query ikiwa ipo ---
+    # --- Tafuta query ikiwa ipo ---  
     results = []
+    suggestions = set()  # set ya suggestions
     if query:
         results_local = Property.objects.filter(
             Q(region__icontains=query) |
@@ -509,10 +440,13 @@ def search_property(request):
         # Ongeza listing_type
         for p in results_local:
             p.listing_type = "local"
+            suggestions.add(p.title)  # add suggestion
         for p in results_beforward:
             p.listing_type = "beforward"
+            suggestions.add(p.title)
         for p in results_makazi:
             p.listing_type = "makazi"
+            suggestions.add(p.title)
 
         results = list(results_local) + list(results_beforward) + list(results_makazi)
         shuffle(results)  # optional for randomness
@@ -523,7 +457,8 @@ def search_property(request):
     return render(request, "core/searched.html", {
         "results": results if results else None,
         "fallback_results": fallback_results,
-        "query": query
+        "query": query,
+        "suggestions": list(suggestions)[:10]  # tuma max 10 suggestions
     })
 
 
@@ -665,22 +600,33 @@ from .utils import *
 from django.utils import timezone
 
 
-
 def popular_featured(request):
 
-    featured = Featured.objects.filter(f_property_name__is_available=True)#filter only available featured properties
+    featured = Featured.objects.filter(f_property_name__is_available=True)  # filter only available featured properties
     popular = PopularPlace.objects.all()
     agents = Agent.objects.all()
     partners = Partner.objects.all()
     clients = Client.objects.all()
-    popular_properties = PopularProperty.objects.filter(p_property_name__is_available=True)#filter only available popular properties
+    popular_properties = PopularProperty.objects.filter(p_property_name__is_available=True)  # filter only available popular properties
+
+    # --- Suggestions for search autocomplete ---
+    suggestions = set()
+    for p in featured:
+        if p.f_property_name and hasattr(p.f_property_name, 'title'):
+            suggestions.add(p.f_property_name.title)
+    for p in popular_properties:
+        if p.p_property_name and hasattr(p.p_property_name, 'title'):
+            suggestions.add(p.p_property_name.title)
+    suggestions = list(suggestions)[:10]  # max 10 suggestions
+
     context = {
-        'popular_properties':popular_properties,
-        "popular":popular,
+        'popular_properties': popular_properties,
+        'popular': popular,
         'featured': featured,
-        'agents':agents,
-        'partners':partners,
-        'clients':clients,
+        'agents': agents,
+        'partners': partners,
+        'clients': clients,
+        'suggestions': suggestions,  # <-- add suggestions to context
     }
 
     ip = get_client_ip(request)
@@ -703,6 +649,7 @@ def popular_featured(request):
 
         visitor.last_visit = timezone.now()
         visitor.save()
+
     return render(request, 'core/home.html', context)
 
 
@@ -945,13 +892,34 @@ def email(request):
 
 
 
+# from django.http import JsonResponse
+# from .serializers import PropertySerializer
+
+# def property_list_view(request):
+#     region = request.GET.get('region')
+#     district = request.GET.get('district')
+#     ward = request.GET.get('ward')
+
+#     properties = Property.objects.all()
+
+#     if region:
+#         properties = properties.filter(region=region)
+#     if district:
+#         properties = properties.filter(district=district)
+#     if ward:
+#         properties = properties.filter(ward=ward)
+
+#     serializer = PropertySerializer(properties, many=True)
+#     return JsonResponse(serializer.data, safe=False)
+
 from django.http import JsonResponse
+from .models import Property
 from .serializers import PropertySerializer
 
 def property_list_view(request):
-    region = request.GET.get('region')
-    district = request.GET.get('district')
-    ward = request.GET.get('ward')
+    region = request.GET.get('region') or None
+    district = request.GET.get('district') or None
+    ward = request.GET.get('ward') or None
 
     properties = Property.objects.all()
 
@@ -962,9 +930,12 @@ def property_list_view(request):
     if ward:
         properties = properties.filter(ward=ward)
 
+    # Handle empty queryset safely
+    if not properties.exists():
+        return JsonResponse([], safe=False)
+
     serializer = PropertySerializer(properties, many=True)
     return JsonResponse(serializer.data, safe=False)
-
 
 
 
@@ -1031,6 +1002,11 @@ def policy(request):
 
 def custom_404(request, exception):
     return render(request, 'core/404.html', status=404)
+
+
+
+def stage(request):
+    return render(request, "core/stage.html")
 
 
 from django.http import HttpResponse

@@ -746,43 +746,52 @@
   <div class="container">
 
     <!-- Search Form -->
-    <div class="col-12">
-      <form method="GET" action="{% url 'search_property' %}">
-        <div class="tab-content">
-          <div class="tab-pane fade show active" id="tabs_1">
-            <div class="rld-main-search">
-              <div class="row">
-                 <div class="rld-single-input"><input id="searchInput" type="text" name="q" value="{{request.GET.q}}"></div>
-                                                              
-                                                                <!-- Typed.js CDN -->
-                                                                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-                                                                <script>
-                                                                var typed = new Typed("#searchInput", {
-                                                                    strings: [
-                                                                    "Andika jina la sehemu...",
-                                                                    "Andika kiasi cha pango...",
-                                                                    "Andika idadi ya vyumba..."
-                                                                    ],
-                                                                    typeSpeed: 80,     // kasi ya kuandika
-                                                                    backSpeed: 50,     // kasi ya kufuta
-                                                                    backDelay: 1500,   // muda wa kusubiri kabla ya kufuta
-                                                                    startDelay: 500,   // muda kabla ya kuanza
-                                                                    attr: "placeholder", // 👈 inaandika ndani ya placeholder
-                                                                    bindInputFocusEvents: true,
-                                                                    loop: true          // irudie milele
-                                                                });
-                                                                </script>
+   <div class="col-12">
+  <form method="GET" action="{% url 'search_property' %}">
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="tabs_1">
+        <div class="rld-main-search">
+          <div class="row">
+            <!-- Search Input with Autocomplete -->
+            <div class="rld-single-input">
+              <input list="suggestionsList" id="searchInput" type="text" name="q" value="{{request.GET.q}}">
+              <datalist id="suggestionsList">
+                {% for s in suggestions %}
+                  <option value="{{ s }}">
+                {% endfor %}
+              </datalist>
+            </div>
 
-                <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                  <button type="submit" class="btn btn-yellow" onclick="showLoading(event)">Tafuta sasa</button>
-                </div>
-              </div>
+            <!-- Typed.js placeholder -->
+            <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+            <script>
+              var typed = new Typed("#searchInput", {
+                  strings: [
+                      "Andika jina la sehemu...",
+                      "Andika kiasi cha pango...",
+                      "Andika idadi ya vyumba..."
+                  ],
+                  typeSpeed: 80,
+                  backSpeed: 50,
+                  backDelay: 1500,
+                  startDelay: 500,
+                  attr: "placeholder",
+                  bindInputFocusEvents: true,
+                  loop: true
+              });
+            </script>
+
+            <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
+              <button type="submit" class="btn btn-yellow" onclick="showLoading(event)">Tafuta sasa</button>
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
-    <!-- End Search Form -->
+  </form>
+</div>
+<!-- End Search Form -->
+
 
 
 
@@ -1236,7 +1245,7 @@ window.addEventListener("pageshow", function (event) {
       if (!localStorage.getItem("feedbackGiven")) {
         showFeedbackModal();
       }
-    }, 40000);
+    }, 60000);
   
     function showFeedbackModal() {
       feedbackModal.style.display = "flex";

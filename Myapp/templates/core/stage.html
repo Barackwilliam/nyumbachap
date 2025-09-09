@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jinsi ya Kutafuta Nyumba</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    header p {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+
+    .steps-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 1200px;
+    }
+
+    .step-card {
+      background: #fff;
+      color: #212529;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      width: 280px;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .step-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .step-number {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FF9800;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .step-icon {
+      font-size: 2.5rem;
+      color: #4CAF50;
+      margin-bottom: 1rem;
+    }
+
+    .step-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .steps-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .step-card {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JINSI YA KUTAFUTA NYUMBA</h1>
+    <p>Fuata hatua hizi kupata matokeo sahihi na haraka kwenye NyumbaChap</p>
+  </header>
+
+  <div class="steps-container">
+    <!-- Step 1 -->
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <div class="step-icon"><i class="fas fa-map-marker-alt"></i></div>
+      <h3 class="step-title">Chagua Eneo</h3>
+      <p class="step-desc">
+        Andika Mkoa, Wilaya, na Kata unayotaka kutafuta nyumba. 
+        Hakikisha unaweka taarifa sahihi.
+      </p>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <div class="step-icon"><i class="fas fa-search"></i></div>
+      <h3 class="step-title">Bonyeza “Tafuta”</h3>
+      <p class="step-desc">
+        Bofya kitufe cha "Tafuta" ili kuanza kupata matokeo kulingana na eneo ulilolichagua.
+      </p>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <div class="step-icon"><i class="fas fa-filter"></i></div>
+      <h3 class="step-title">Tumia Vichujio (keyword)</h3>
+      <p class="step-desc">
+        Chagua bei, ukubwa wa nyumba, idadi ya vyumba, au aina ya nyumba ili kupata matokeo makini zaidi.
+      </p>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <div class="step-icon"><i class="fas fa-map"></i></div>
+      <h3 class="step-title">Angalia Ramani</h3>
+      <p class="step-desc">
+        Tazama nyumba kwenye ramani kuona eneo halisi na upate mwonekano bora wa nyumba zinazopatikana.
+      </p>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-card">
+      <div class="step-number">5</div>
+      <div class="step-icon"><i class="fas fa-eye"></i></div>
+      <h3 class="step-title">Chunguza Nyumba</h3>
+      <p class="step-desc">
+        Bonyeza nyumba yoyote kuona maelezo kamili, picha, bei, na taarifa nyingine muhimu kabla ya kufanya uamuzi.
+      </p>
+    </div>
+
+    
+    <!-- Step 6 -->
+    <div class="step-card premium">
+      <div class="step-number">6</div>
+      <div class="step-icon"><i class="fas fa-gem"></i></div>
+      <h3 class="step-title">Jiunge na Kifurushi</h3>
+      <p class="step-desc">
+        Chagua Gold, Platinum au Tanzanite.<br>
+        Pata matokeo sahihi na nyumba mpya mapema.<br>
+        Kila kifurushi kinakupa ramani kamili, picha, na taarifa muhimu.<br>
+        <strong>Usikose matokeo ya uhakika!</strong>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

@@ -250,6 +250,7 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
     <script>
         var map = L.map('map').setView([-6.369028, 34.888822], 6);
 
@@ -258,7 +259,7 @@
         }).addTo(map);
 
         function loadProperties() {
-            // Show loading animation and progress bar
+           
             document.getElementById('loading').style.display = 'block';
             document.getElementById('progressBar').style.width = '100%';
 
@@ -270,8 +271,8 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('loading').style.display = 'none'; // Hide loading animation
-                    document.getElementById('progressBar').style.width = '0%'; // Reset progress bar
+                    document.getElementById('loading').style.display = 'none'; 
+                    document.getElementById('progressBar').style.width = '0%';
 
                     if (data.length === 0) {
                         showAlert("Eneo hilo Halipo kwenye kifurushi cha Bure!", 'error');
@@ -307,7 +308,7 @@
                     addFakeMarkers(100);
                 })
                 .catch(error => {
-                    document.getElementById('loading').style.display = 'none'; // Hide loading animation on error
+                    document.getElementById('loading').style.display = 'none'; 
                     console.error("Error fetching properties:", error);
                 });
         }
@@ -344,24 +345,24 @@
 
             document.body.appendChild(alertBox);
 
-            // Show the alert and automatically remove it after 4 seconds
             alertBox.style.display = 'block';
             setTimeout(() => {
                 alertBox.style.display = 'none';
                 alertBox.remove();
             }, 4000);
         }
-    </script>
-
+    </script> 
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var protectedText = 'This text is protected.';
-        var encodedText = btoa(protectedText); // Encode text to base64
-        document.getElementById('protectedContent').innerText = atob(encodedText); // Decode back to original text
+        var encodedText = btoa(protectedText); 
+        document.getElementById('protectedContent').innerText = atob(encodedText); 
     });
 </script>
+
+<div id="protectedContent"></div>
 
 </body>
 </html>

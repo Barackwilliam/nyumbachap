@@ -52,91 +52,85 @@
                                 </div>
                                 <!--/ End Welcome Text -->
                                 <!-- Search Form -->
-               
                                 <div class="col-12">
                                     <form method="GET" action="{% url 'search_property' %}"> 
-                                    <div class="banner-search-wrap">
-                                        <ul class="nav nav-tabs rld-banner-tab">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#tabs_1">For Sale</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#tabs_2">For Rent</a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div class="tab-pane fade show active" id="tabs_1">
-                                                <div class="rld-main-search">
-                                                    <div class="row">
-                                                        <div class="rld-single-input"><input id="searchInput" type="text" name="q" value="{{request.GET.q}}"></div>
-                                                              
-                                                                <!-- Typed.js CDN -->
-                                                                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-                                                                <script>
-                                                                var typed = new Typed("#searchInput", {
-                                                                    strings: [
+                                        <div class="banner-search-wrap">
+                                            <ul class="nav nav-tabs rld-banner-tab">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-toggle="tab" href="#tabs_1">For Sale</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="tab" href="#tabs_2">For Rent</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade show active" id="tabs_1">
+                                                    <div class="rld-main-search">
+                                                        <div class="row">
+
+                                                            <!-- Search Input with Datalist -->
+                                                            <div class="rld-single-input">
+                                                                <input list="suggestionsList" id="searchInput" type="text" name="q" value="{{request.GET.q}}">
+                                                                <datalist id="suggestionsList">
+                                                                    {% for s in suggestions %}
+                                                                        <option value="{{ s }}">
+                                                                    {% endfor %}
+                                                                </datalist>
+                                                            </div>
+                                                                
+                                                            <!-- Typed.js CDN -->
+                                                            <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+                                                            <script>
+                                                            var typed = new Typed("#searchInput", {
+                                                                strings: [
                                                                     "Andika jina la sehemu...",
                                                                     "Andika kiasi cha pango...",
                                                                     "Andika idadi ya vyumba..."
-                                                                    ],
-                                                                    typeSpeed: 80,     // kasi ya kuandika
-                                                                    backSpeed: 50,     // kasi ya kufuta
-                                                                    backDelay: 1500,   // muda wa kusubiri kabla ya kufuta
-                                                                    startDelay: 500,   // muda kabla ya kuanza
-                                                                    attr: "placeholder", // 👈 inaandika ndani ya placeholder
-                                                                    bindInputFocusEvents: true,
-                                                                    loop: true          // irudie milele
-                                                                });
-                                                                </script>
+                                                                ],
+                                                                typeSpeed: 80,
+                                                                backSpeed: 50,
+                                                                backDelay: 1500,
+                                                                startDelay: 500,
+                                                                attr: "placeholder",
+                                                                bindInputFocusEvents: true,
+                                                                loop: true
+                                                            });
+                                                            </script>
 
+                                                            <div class="rld-single-select ml-22"></div>
+                                                            <div class="rld-single-select"></div>
 
-                                                        <div class="rld-single-select ml-22">
-                                                           
-                                                        </div>
-                                                        <div class="rld-single-select">
-                                                           
-                                                        </div>
-
-                                                        <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                                                            <!-- <a class="btn btn-yellow" href="#"><button type="submit"> Search Now </button> </a>  -->
-                                                            <button type="submit" class="btn btn-yellow"onclick="showLoading(event)">Tafuta</button>
-
-                                                        </div>
-
-
-                                                        <div class="explore__form-checkbox-list full-filter">
-                                                            <div class="row">
-                                                                <div class="col-lg-4 col-md-6 py-1 pr-30 pl-0">
-                                                                    <!-- Form Property Status -->
-                                                                    <div class="form-group categories">
-                                                                        <div class="nice-select form-control wide" tabindex="0"><span class="current"><i class="fa fa-home"></i>Property Status</span>
-                                                                            <ul class="list">
-                                                                                <li data-value="1" class="option selected ">For Sale</li>
-                                                                                <li data-value="2" class="option">For Rent</li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!--/ End Form Property Status -->
-                                                                </div>
-                                                               
-                                                                    <!--/ End Form Bedrooms -->
-                                                                </div>
-                                                              
-                                                                </div>
-                                                                
-
-                                                                
+                                                            <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
+                                                                <button type="submit" class="btn btn-yellow" onclick="showLoading(event)">Tafuta</button>
                                                             </div>
+
+                                                            <div class="explore__form-checkbox-list full-filter">
+                                                                <div class="row">
+                                                                    <div class="col-lg-4 col-md-6 py-1 pr-30 pl-0">
+                                                                        <!-- Form Property Status -->
+                                                                        <div class="form-group categories">
+                                                                            <div class="nice-select form-control wide" tabindex="0">
+                                                                                <span class="current"><i class="fa fa-home"></i>Property Status</span>
+                                                                                <ul class="list">
+                                                                                    <li data-value="1" class="option selected">For Sale</li>
+                                                                                    <li data-value="2" class="option">For Rent</li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!--/ End Form Property Status -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                                       
-                                                      
-
-                            </form>
+                                        </div>
+                                    </form>
+                                </div>
                                 <!--/ End Search Form -->
+
                             </div>
                         </div>
                     </div>
@@ -144,6 +138,132 @@
             </div>
         </section>
         <!-- END HEADER SEARCH -->
+         <br><br>
+
+           <!-- START SECTION JINSI YA KUTAFUTA NYUMBA -->
+<section class="popular-places py-5 bg-light">
+    <div class="container">
+        <div class="sec-title text-center mb-5">
+            <h2 class="fw-bold"><span class="text-primary">Jinsi ya</span> Kutafuta Nyumba</h2>
+            <p class="text-muted fs-5">Fuata hatua hizi kupata matokeo sahihi na ya haraka kwenye <strong>NyumbaChap</strong></p>
+        </div>
+
+        <!-- Swiper Container -->
+        <div class="swiper stepsSwiper">
+            <div class="swiper-wrapper">
+
+                <!-- Step 1 -->
+                <div class="swiper-slide">
+                    <div class="card h-100 border-0 shadow-lg text-center p-4 transition hover-scale">
+                        <div class="step-number bg-gradient rounded-circle mx-auto mb-4">1</div>
+                        <h5 class="fw-bold mb-2">Chagua Eneo</h5>
+                        <p class="text-muted">Andika Mkoa, Wilaya, na Kata unayotaka kutafuta nyumba.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="swiper-slide">
+                    <div class="card h-100 border-0 shadow-lg text-center p-4 transition hover-scale">
+                        <div class="step-number bg-gradient-success rounded-circle mx-auto mb-4">2</div>
+                        <h5 class="fw-bold mb-2">Bonyeza “Tafuta”</h5>
+                        <p class="text-muted">Bofya kitufe cha "Tafuta" ili kupata matokeo ya eneo ulilochagua.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="swiper-slide">
+                    <div class="card h-100 border-0 shadow-lg text-center p-4 transition hover-scale">
+                        <div class="step-number bg-gradient-warning rounded-circle mx-auto mb-4">3</div>
+                        <h5 class="fw-bold mb-2">Tumia Vichujio (Keywords)</h5>
+                        <p class="text-muted">Chagua bei, ukubwa, au aina ya nyumba kupata matokeo makini zaidi.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="swiper-slide">
+                    <div class="card h-100 border-0 shadow-lg text-center p-4 transition hover-scale">
+                        <div class="step-number bg-gradient-danger rounded-circle mx-auto mb-4">4</div>
+                        <h5 class="fw-bold mb-2">Angalia Matokeo</h5>
+                        <p class="text-muted">Pitia orodha ya nyumba zilizopo na linganisha kwa urahisi.</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="swiper-slide">
+                    <div class="card h-100 border-0 shadow-lg text-center p-4 transition hover-scale">
+                        <div class="step-number bg-gradient-info rounded-circle mx-auto mb-4">5</div>
+                        <h5 class="fw-bold mb-2">Wasiliana na Agent</h5>
+                        <p class="text-muted">Piga simu au tuma ujumbe kwa mawakala kupata maelezo zaidi.</p>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="swiper-slide">
+                    <div class="card h-100 border-0 shadow-lg text-center p-4 transition hover-scale">
+                        <div class="step-number bg-gradient-dark rounded-circle mx-auto mb-4">6</div>
+                        <h5 class="fw-bold mb-2">Jiunge na Vifurushi</h5>
+                        <p class="text-muted">Fungua huduma zote na upate matokeo ya uhakika zaidi.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Swiper controls -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+<!-- Custom Styles -->
+<style>
+    .step-number {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+    .bg-gradient-success { background: linear-gradient(135deg, #28a745, #218838); }
+    .bg-gradient-warning { background: linear-gradient(135deg, #ffc107, #e0a800); }
+    .bg-gradient-danger { background: linear-gradient(135deg, #dc3545, #c82333); }
+    .bg-gradient-info { background: linear-gradient(135deg, #17a2b8, #117a8b); }
+    .bg-gradient-dark { background: linear-gradient(135deg, #343a40, #1d2124); }
+
+    .card.transition { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card.hover-scale:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+</style>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  var swiper = new Swiper(".stepsSwiper", {
+    slidesPerView: 1,
+    spaceBetween: 25,
+    loop: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      640: { slidesPerView: 1 },
+      768: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 },
+    }
+  });
+</script>
+<!-- END SECTION JINSI YA KUTAFUTA NYUMBA -->
+
 
         <!-- START SECTION POPULAR PLACES -->
         <section class="popular-places bg-white">
@@ -349,11 +469,6 @@
                     <h2><span>Discover </span>Popular Properties</h2>
                     <p>We provide full service at every step.</p>
                 </div>
-
-
-
-
-   
                 <div class="row">
                     {% for nyumba in popular_properties reversed %} 
                     
@@ -415,24 +530,11 @@
                     {% endfor %}
                 </div>
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
                 </div>
             </div>
         </section>
         <!-- END SECTION RECENTLY PROPERTIES -->
+
 
         <!-- START SECTION AGENTS -->
         <section class="team bg-white rec-pro">
