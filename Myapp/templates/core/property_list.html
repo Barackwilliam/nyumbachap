@@ -756,9 +756,11 @@
             <div class="rld-single-input">
               <input list="suggestionsList" id="searchInput" type="text" name="q" value="{{request.GET.q}}">
               <datalist id="suggestionsList">
+                   {% comment %}
                 {% for s in suggestions %}
                   <option value="{{ s }}">
                 {% endfor %}
+                   {% endcomment %}
               </datalist>
             </div>
 
@@ -875,32 +877,46 @@
         {% endfor %}
       </div>
 
-      <!-- Pagination -->
-      {% if is_paginated %}
-      <nav class="pagination mt-4">
+
+
+      <!-- ---------------- PAGINATION ---------------- -->
+    {% if is_paginated %}
+    <div class="d-flex justify-content-between align-items-center mt-3 mb-2 w-100">
+        <p class="small text-muted mb-0">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} | Jumla Nyumba: {{ total_results }}
+        </p>
+    </div>
+
+    <nav class="pagination mt-2 w-100">
         <ul class="pagination justify-content-center">
-          {% if page_obj.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" onclick="showLoading(event)">Previous</a></li>
-          {% else %}
-          <li class="page-item disabled"><span class="page-link">Previous</span></li>
-          {% endif %}
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" onclick="showLoading(event)">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
 
-          {% for num in page_obj.paginator.page_range %}
-          {% if page_obj.number == num %}
-            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-          {% endif %}
-          {% endfor %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
 
-          {% if page_obj.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"onclick="showLoading(event)">Next</a></li>
-          {% else %}
-          <li class="page-item disabled"><span class="page-link">Next</span></li>
-          {% endif %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" onclick="showLoading(event)">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
         </ul>
-      </nav>
-      {% endif %}
+    </nav>
+    {% endif %}
     </div>
   </div>
 </section>
@@ -1245,7 +1261,7 @@ window.addEventListener("pageshow", function (event) {
       if (!localStorage.getItem("feedbackGiven")) {
         showFeedbackModal();
       }
-    }, 60000);
+    }, 120000);
   
     function showFeedbackModal() {
       feedbackModal.style.display = "flex";

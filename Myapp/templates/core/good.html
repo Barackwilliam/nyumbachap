@@ -529,246 +529,158 @@
     <div class="container">
         
         <!-- Search Form -->
-        <div class="col-12">
-            <form method="GET" action="{% url 'search_property' %}">                                       
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="tabs_1">
-                        <div class="rld-main-search">
-                            <div class="row">
-                                <div class="rld-single-input">
-                                    <input id="searchInput" type="text" name="q" value="{{request.GET.q}}">
-                                </div>
+     <div class="col-12">
+    <form method="GET" action="{% url 'search_property' %}">                                       
+        <div class="tab-pane fade show active" id="tabs_1">
+            <div class="rld-main-search">
+                <div class="row">
+                    <!-- Search Input with Autocomplete -->
+                    <div class="rld-single-input">
+                        <input list="suggestionsList" id="searchInput" type="text" name="q" value="{{request.GET.q}}">
+                        <datalist id="suggestionsList">
+                            {% for s in suggestions %}
+                                <option value="{{ s }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
 
-                                <!-- Typed.js CDN -->
-                                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-                                <script>
-                                    var typed = new Typed("#searchInput", {
-                                        strings: [
-                                            "Andika jina la sehemu...",
-                                            "Andika kiasi cha pango...",
-                                            "Andika idadi ya vyumba..."
-                                        ],
-                                        typeSpeed: 80,     // kasi ya kuandika
-                                        backSpeed: 50,     // kasi ya kufuta
-                                        backDelay: 1500,   // muda wa kusubiri kabla ya kufuta
-                                        startDelay: 500,   // muda kabla ya kuanza
-                                        attr: "placeholder", // 👈 inaandika ndani ya placeholder
-                                        bindInputFocusEvents: true,
-                                        loop: true          // irudie milele
-                                    });
-                                </script>
+                    <!-- Typed.js placeholder -->
+                    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+                    <script>
+                        var typed = new Typed("#searchInput", {
+                            strings: [
+                                "Andika jina la sehemu...",
+                                "Andika kiasi cha pango...",
+                                "Andika idadi ya vyumba..."
+                            ],
+                            typeSpeed: 80,
+                            backSpeed: 50,
+                            backDelay: 1500,
+                            startDelay: 500,
+                            attr: "placeholder",
+                            bindInputFocusEvents: true,
+                            loop: true
+                        });
+                    </script>
 
-                                <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
-                                    <div style="text-align: center;"><button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button></div>
-                                </div>
-                            </div>
+                    <!-- Submit Button -->
+                    <div class="col-xl-2 col-lg-2 col-md-4 pl-0">
+                        <div style="text-align: center;">
+                            <button type="submit" style="background-color: #FF5B6C; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;" onclick="showLoading(event)">Tafuta Sasa</button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
+    </form>
+</div>
 
    
         {% if results %}
             <h2 style="text-align: center;">Nyumba Maeneo ya {{ query }}</h2>
            
             {% endif %}
-
-        <!-- <div class="row"> -->
-<div class="row">
-
-{% if results %}
-    {% for property in results %}
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="project-single shadow-sm h-100">
-            <div class="project-inner project-head">
-                <div class="homes position-relative">
-                    {% if property.listing_type == 'local' %}
-                        <div class="homes-tag button alt featured">{{ property.p_status }}</div>
-                        <div class="homes-tag button alt sale">
-                            {% if property.p_status == "Sold" %}Closed{% else %}{{ property.status }}{% endif %}
+<br><br>
+      <div class="row">
+    {% if results %}
+        {% for property in results %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="project-single shadow-sm h-100">
+                    <div class="project-inner project-head">
+                        <div class="homes position-relative">
+                            {% if property.listing_type == 'local' %}
+                                <div class="homes-tag button alt featured">{{ property.p_status }}</div>
+                                <div class="homes-tag button alt sale">
+                                    {% if property.p_status == "Sold" %}Closed{% else %}{{ property.status }}{% endif %}
+                                </div>
+                                <div class="homes-price">{{ property.price }} Tsh</div>
+                                <img src="{{ property.image_0 }}" alt="{{ property.title }}" class="img-fluid w-100" style="height:230px; object-fit:cover;">
+                            {% elif property.listing_type == 'beforward' %}
+                                <div class="homes-tag button alt featured">Active</div>
+                                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                                <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x230?text=Beforward' }}" class="img-fluid w-100" style="height:230px; object-fit:cover;">
+                            {% elif property.listing_type == 'makazi' %}
+                                <div class="homes-tag button alt featured">Active</div>
+                                <div class="homes-price">{{ property.price|default:"N/A" }}</div>
+                                <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x230?text=Makazi' }}" class="img-fluid w-100" style="height:230px; object-fit:cover;">
+                            {% endif %}
                         </div>
-                        <div class="homes-price">{{ property.price }} Tsh</div>
-                        <img src="{{ property.image_0 }}" alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;">
-                    {% elif property.listing_type == 'beforward' %}
-                        <div class="homes-tag button alt featured">Active</div>
-                        <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                        <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x230?text=Beforward' }}" 
-                             alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;" loading="lazy">
-                    {% elif property.listing_type == 'makazi' %}
-                        <div class="homes-tag button alt featured">Active</div>
-                        <div class="homes-price">{{ property.price|default:"N/A" }}</div>
-                        <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x230?text=Makazi' }}" 
-                             alt="{{ property.title }}" class="img-fluid w-100" style="height:230px;object-fit:cover;" loading="lazy">
-                    {% endif %}
-                </div>
 
-                <!-- Buttons -->
-                <div class="button-effect">
-                    {% if property.listing_type == 'local' %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
-                        {% if property.video_link %}
-                            <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                        {% endif %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="img-poppu btn" onclick="showLoading(event)"><i class="fa fa-photo"></i></a>
-                    {% elif property.listing_type == 'beforward' %}
-                        <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
-                        {% if property.video_link %}
-                            <a href="{{ property.video_link }}" class="btn popup-video popup-youtube"><i class="fas fa-video"></i></a>
-                        {% endif %}
-                    {% elif property.listing_type == 'makazi' %}
-                        <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="homes-content p-3">
-                {% if property.listing_type == 'local' %}
-                    <h3><a href="{% url 'property_detail' property.url_name %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.region }}, {{ property.ward }}</p>
-                    <ul class="homes-list clearfix pb-3">
-                        <li class="the-icons"><i class="flaticon-bed mr-2"></i>{{ property.bedrooms }} Bedrooms</li>
-                        <li class="the-icons"><i class="flaticon-bathtub mr-2"></i>{{ property.bathrooms }} Bathrooms</li>
-                        <li class="the-icons"><i class="flaticon-square mr-2"></i>{{ property.house_size }} sq m</li>
-                        <div class="footer mt-3 small text-muted">
-                            <img src="{{ property.property_owner_0 }}" alt="" class="mr-2 rounded-circle" width="30"> {{ property.owner }}
-                            <p style="text-align: start;" class="ml-2">Posted at {{ property.date_posted }}</p>
+                        <div class="button-effect">
+                            {% if property.listing_type == 'local' %}
+                                <a href="{% url 'property_detail' property.url_name %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                            {% elif property.listing_type == 'beforward' %}
+                                <a href="{% url 'Beforward_detail' slug_id=property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                            {% elif property.listing_type == 'makazi' %}
+                                <a href="{% url 'makazi_detail' slug_id=property.id %}" class="btn" onclick="showLoading(event)"><i class="fa fa-link"></i></a>
+                            {% endif %}
                         </div>
-                    </ul>
-                    <a href="{% url 'property_detail' property.url_name %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
-                {% elif property.listing_type == 'beforward' %}
-                    <h3><a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.city }}</p>
-                    <a href="{% url 'Beforward_detail' slug_id=property.get_slug_id %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
-                {% elif property.listing_type == 'makazi' %}
-                    <h3><a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" onclick="showLoading(event)">{{ property.title }}</a></h3>
-                    <p class="homes-address mb-3"><i class="fa fa-map-marker"></i> {{ property.location }}</p>
-                    <a href="{% url 'makazi_detail' slug_id=property.get_slug_id %}" class="btn btn-primary w-100" onclick="showLoading(event)">Tazama</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+                    </div>
 
-    <!-- ---------------- PAGINATION ---------------- -->
-    {% if is_paginated %}
-    <div class="d-flex justify-content-between align-items-center mt-3 mb-2 w-100">
-        <p class="small text-muted mb-0">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} | Jumla Nyumba: {{ total_results }}
-        </p>
-    </div>
-
-    <nav class="pagination mt-2 w-100">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" onclick="showLoading(event)">Previous</a>
-                </li>
-            {% else %}
-                <li class="page-item disabled"><span class="page-link">Previous</span></li>
-            {% endif %}
-
-            {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" onclick="showLoading(event)">Next</a>
-                </li>
-            {% else %}
-                <li class="page-item disabled"><span class="page-link">Next</span></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
-
-{% else %}
-    {% for property in fallback_results %}
-        <!-- Fallback results with blur -->
-        <div class="item col-lg-4 col-md-6 col-xs-12 landscapes sale">
-            <div class="project-single blur-container" data-aos="fade-up" style="padding:8px; font-size:13px;">
-                <div class="blur-overlay" style="position:absolute; inset:0; background:rgba(70, 66, 66, 0.329); backdrop-filter:blur(6px); z-index:30; display:flex; justify-content:center; align-items:center; text-align:center; padding:12px;">
-                    <div class="locked-content" style="text-align:center;">
-                        <i class="fa fa-lock" style="font-size:36px; color:#a4161a; margin-bottom:10px;"></i>
-                        <p style="font-size:16px;background-color: rgba(251, 255, 4, 0);text-align: center; font-weight:600; line-height:1.4; color:#000000; margin-bottom:8px;">
-                            Lipia Tsh.2500/= 
-                            Au Tsh.6999/= kwa mwezi ili kuona nyumba hii 
-                            Na zingine Tanzania Nzima.
+                    <div class="homes-content p-3">
+                        <h3><a href="#">{{ property.title }}</a></h3>
+                        <p class="homes-address mb-3">
+                            {% if property.listing_type == 'local' %}{{ property.region }}, {{ property.ward }}
+                            {% elif property.listing_type == 'beforward' %}{{ property.city }}
+                            {% elif property.listing_type == 'makazi' %}{{ property.location }}
+                            {% endif %}
                         </p>
-                        <a href="{% url 'jihudumie' %}" style="display:inline-block; padding:6px 12px; border:2px solid #a4161a; border-radius:6px; text-decoration:none; background:#fff; color:#a4161a; font-size:12px;" onclick="showLoading(event)">🔒 Lipa Hapa</a>
+                        <a href="#" class="btn btn-primary w-100">Tazama</a>
                     </div>
-                </div>
-                <!-- Property image/content -->
-                <div class="project-inner project-head">
-                    <div class="homes">
-                        {% if property.listing_type == "local" %}
-                        <a href="{% url 'property_detail' property.url_name %}" class="homes-img" onclick="showLoading(event)">
-                            <div style="height:140px; overflow:hidden; border-radius:6px; position:relative;">
-                                <div class="homes-tag button alt featured" style="position:absolute; top:5px; left:5px; font-size:10px;">Featured</div>
-                                <div class="homes-tag button alt sale" style="position:absolute; top:5px; right:5px; font-size:10px;">{{ property.status }}</div>
-                                <div class="homes-price" style="position:absolute; bottom:5px; left:5px; font-size:12px; background:rgba(255,255,255,0.7); padding:2px 4px; border-radius:3px;">{{ property.price }} Tsh</div>
-                                <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" 
-                                     style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
-                            </div>
-                        </a>
-                        {% elif property.listing_type == "beforward" %}
-                        <a href="{% url 'Beforward_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
-                            <div style="height:140px; overflow:hidden; border-radius:6px; position:relative;">
-                                <div class="homes-tag button alt featured" style="position:absolute; top:5px; left:5px; font-size:10px;">Active</div>
-                                <div class="homes-price" style="position:absolute; bottom:5px; left:5px; font-size:12px; background:rgba(255,255,255,0.7); padding:2px 4px; border-radius:3px;">{{ property.price|default:"N/A" }}</div>
-                                <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" 
-                                     style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
-                            </div>
-                        </a>
-                        {% elif property.listing_type == "makazi" %}
-                        <a href="{% url 'makazi_detail' property.id %}" class="homes-img" onclick="showLoading(event)">
-                            <div style="height:140px; overflow:hidden; border-radius:6px; position:relative;">
-                                <div class="homes-tag button alt featured" style="position:absolute; top:5px; left:5px; font-size:10px;">Active</div>
-                                <div class="homes-price" style="position:absolute; bottom:5px; left:5px; font-size:12px; background:rgba(255,255,255,0.7); padding:2px 4px; border-radius:3px;">{{ property.price|default:"N/A" }}</div>
-                                <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" 
-                                     style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
-                            </div>
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="homes-content" style="padding-top:4px;">
-                    <h3 style="font-size:14px; margin-bottom:2px;">{{ property.title }}</h3>
-                    <p class="homes-address mb-2" style="font-size:12px; margin-bottom:2px;">
-                        {% if property.listing_type == "local" %}
-                            <i class="fa fa-map-marker"></i> <span>{{ property.region }}, {{ property.ward }}</span>
-                        {% elif property.listing_type == "beforward" %}
-                            <i class="fa fa-map-marker"></i> <span>{{ property.city }}</span>
-                        {% elif property.listing_type == "makazi" %}
-                            <i class="fa fa-map-marker"></i> <span>{{ property.location }}</span>
-                        {% endif %}
-                    </p>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-{% endif %}
+        {% endfor %}
+    {% else %}
+        {% for property in fallback_results %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="project-single blur-container" style="position:relative;">
+                    <div class="blur-overlay" style="position:absolute; inset:0; background:rgba(70,66,66,0.33); backdrop-filter:blur(6px); z-index:30; display:flex; justify-content:center; align-items:center; text-align:center; padding:12px;">
+                        <div class="locked-content" style="text-align:center;">
+                            <i class="fa fa-lock" style="font-size:36px; color:#a4161a; margin-bottom:10px;"></i>
+                            <p style="font-size:16px; font-weight:600; color:#000; margin-bottom:8px;">
+                                Lipia Tsh.2500/= Au Tsh.6999/= kwa mwezi ili kuona nyumba hii na zingine Tanzania Nzima.
+                            </p>
+                            <a href="{% url 'jihudumie' %}" style="padding:6px 12px; border:2px solid #a4161a; border-radius:6px; background:#fff; color:#a4161a; text-decoration:none; font-size:12px;" onclick="showLoading(event)">🔒 Lipa Hapa</a>
+                        </div>
+                    </div>
+
+                    <div class="project-inner project-head">
+                        <div class="homes">
+                            {% if property.listing_type == "local" %}
+                                <img src="{{ property.image_0|default:'https://via.placeholder.com/400x200?text=NyumbaChap' }}" style="width:100%; height:140px; object-fit:cover; border-radius:6px;">
+                            {% elif property.listing_type == "beforward" %}
+                                <img src="{{ property.image_urls.0|default:'https://via.placeholder.com/400x200?text=Beforward' }}" style="width:100%; height:140px; object-fit:cover; border-radius:6px;">
+                            {% elif property.listing_type == "makazi" %}
+                                <img src="{{ property.main_image_url|default:'https://via.placeholder.com/400x200?text=Makazi' }}" style="width:100%; height:140px; object-fit:cover; border-radius:6px;">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="homes-content" style="padding-top:4px;">
+                        <h3 style="font-size:14px;">{{ property.title }}</h3>
+                        <p class="homes-address" style="font-size:12px;">
+                            {% if property.listing_type == "local" %}{{ property.region }}, {{ property.ward }}
+                            {% elif property.listing_type == "beforward" %}{{ property.city }}
+                            {% elif property.listing_type == "makazi" %}{{ property.location }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
 
 <script>
-    // Hover zoom effect
-    document.querySelectorAll('.homes-img div img').forEach(function(img){
-        img.parentElement.addEventListener('mouseover', function(){
-            img.style.transform = 'scale(1.05)';
-        });
-        img.parentElement.addEventListener('mouseout', function(){
-            img.style.transform = 'scale(1)';
-        });
+document.querySelectorAll('.homes img').forEach(function(img){
+    img.addEventListener('mouseover', function(){
+        img.style.transform = 'scale(1.05)';
     });
+    img.addEventListener('mouseout', function(){
+        img.style.transform = 'scale(1)';
+    });
+});
 </script>
-
 
 
         </div>
@@ -1215,7 +1127,7 @@ window.addEventListener("pageshow", function (event) {
       if (!localStorage.getItem("feedbackGiven")) {
         showFeedbackModal();
       }
-    }, 120000);
+    }, 60000);
   
     function showFeedbackModal() {
       feedbackModal.style.display = "flex";

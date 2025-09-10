@@ -162,19 +162,33 @@ class OfferAdmin(admin.ModelAdmin):
 
 
 
-
-
+from django.utils.html import mark_safe
+from django.contrib import admin
+from .models import Payment
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    form = PaymentForm
-    list_display = ['user', 'timestamp', 'image_preview']
+    list_display = ("id", "user", "timestamp", "image_preview")
 
     def image_preview(self, obj):
-        if obj.Transaction_image_1:
-            return mark_safe(f'<img src="{obj.get_image_url()}" style="max-height:100px;" />')
+        if obj.get_transaction_image_url():
+            return mark_safe(f'<img src="{obj.get_transaction_image_url()}" width="100" height="100" />')
         return "No Image"
-    image_preview.short_description = 'Preview'
+
+    image_preview.short_description = "Transaction Image"
+
+
+
+# @admin.register(Payment)
+# class PaymentAdmin(admin.ModelAdmin):
+#     form = PaymentForm
+#     list_display = ['user', 'timestamp', 'image_preview']
+
+#     def image_preview(self, obj):
+#         if obj.Transaction_image_1:
+#             return mark_safe(f'<img src="{obj.get_image_url()}" style="max-height:100px;" />')
+#         return "No Image"
+#     image_preview.short_description = 'Preview'
 
 @admin.register(Featured)
 class FeaturedAdmin(admin.ModelAdmin):

@@ -297,48 +297,64 @@ def paginate_listings(request, listings, per_page=ITEMS_PER_PAGE, page_param='pa
     except EmptyPage:
         paginated_list = paginator.page(paginator.num_pages)
     return paginated_list, paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
+from .models import Property, Scrape_BeforwardListing, Scrape_MakaziListing
+from random import shuffle
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
+from .models import Property, Scrape_BeforwardListing, Scrape_MakaziListing
+from random import shuffle
 
 def property_list(request):
-    # --- Get all listings ---
-    local_props = list(Property.objects.all())
-    beforward_props = list(Scrape_BeforwardListing.objects.all())
-    makazi_props = list(Scrape_MakaziListing.objects.all())
+    page = request.GET.get('page', 1)
+    query = request.GET.get('q', '').strip()
 
-    # Tag each property with its type for template
-    for p in local_props:
-        p.listing_type = 'local'
-    for p in beforward_props:
-        p.listing_type = 'beforward'
-    for p in makazi_props:
-        p.listing_type = 'makazi'
+    # --- Lazy QuerySets ---
+    local_props = Property.objects.all().only('id', 'title', 'price', 'region', 'district', 'ward', 'image_0')
+    beforward_props = Scrape_BeforwardListing.objects.all().only('id', 'title', 'price', 'city', 'image_urls')
+    makazi_props = Scrape_MakaziListing.objects.all().only('id', 'title', 'price', 'location', 'main_image_url')
 
-    # Combine and shuffle
-    all_listings = local_props + beforward_props + makazi_props
+    # Annotate listing_type
+    for qs, ltype in [(local_props, 'local'), (beforward_props, 'beforward'), (makazi_props, 'makazi')]:
+        for p in qs:
+            p.listing_type = ltype
+
+    # Combine all and shuffle
+    all_listings = list(local_props) + list(beforward_props) + list(makazi_props)
     shuffle(all_listings)
 
-    # Paginate combined listings
-    paginated_listings, paginator = paginate_listings(request, all_listings)
+    # --- Pagination ---
+    paginator = Paginator(all_listings, 30)  # 30 per page
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
 
-    # --- Suggestions for search autocomplete ---
+    # --- Autocomplete suggestions ---
     suggestions = set()
     for p in all_listings:
-        if hasattr(p, 'title') and p.title:
+        if getattr(p, 'title', None):
             suggestions.add(p.title)
-        # Optional: add region/district for local properties
         if getattr(p, 'region', None):
             suggestions.add(p.region)
         if getattr(p, 'district', None):
             suggestions.add(p.district)
-    suggestions = list(suggestions)[:10]  # send max 10 suggestions
+    suggestions = list(suggestions)[:10]
 
     context = {
-        'listings': paginated_listings,
-        'is_paginated': paginator.num_pages > 1,
+        'listings': page_obj,  # use page_obj in template for iteration
+        'page_obj': page_obj,
         'paginator': paginator,
-        'page_obj': paginated_listings,
+        'is_paginated': paginator.num_pages > 1,
+        'total_results': len(all_listings),
+        'query': query,
+        'suggestions': suggestions,
         'page_title': 'NyumbaChap - Properties & Listings',
-        'suggestions': suggestions,  # <-- send to template
     }
+
     return render(request, 'core/property_list.html', context)
 
 # @login_required(login_url='login')
@@ -376,8 +392,7 @@ def popular_properties(request):
 
 
 
-from django.db.models import Q
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.db.models import Q
 from random import shuffle
@@ -385,28 +400,13 @@ from .models import Property, Scrape_BeforwardListing, Scrape_MakaziListing
 
 def search_property(request):
     query = request.GET.get("q", "").strip()
+    page = request.GET.get("page", 1)
 
-    # --- Default: zote models ---  
-    local_props = list(Property.objects.all())
-    beforward_props = list(Scrape_BeforwardListing.objects.all())
-    makazi_props = list(Scrape_MakaziListing.objects.all())
-
-    # Ongeza listing_type
-    for p in local_props:
-        p.listing_type = "local"
-    for p in beforward_props:
-        p.listing_type = "beforward"
-    for p in makazi_props:
-        p.listing_type = "makazi"
-
-    # Changanya zote
-    all_listings = local_props + beforward_props + makazi_props
-    shuffle(all_listings)  # optional
-
-    # --- Tafuta query ikiwa ipo ---  
     results = []
-    suggestions = set()  # set ya suggestions
+    suggestions = set()
+
     if query:
+        # Filter kwa Property
         results_local = Property.objects.filter(
             Q(region__icontains=query) |
             Q(district__icontains=query) |
@@ -414,33 +414,33 @@ def search_property(request):
             Q(description__icontains=query) |
             Q(status__icontains=query) |
             Q(ward__icontains=query)
-        )
+        ).only("id", "title", "price", "bedrooms", "region", "district", "ward", "status", "image_0", "url_name", "property_owner_0", "owner", "date_posted")
 
+        # Filter kwa Beforward
         results_beforward = Scrape_BeforwardListing.objects.filter(
             Q(title__icontains=query) |
             Q(description__icontains=query) |
             Q(city__icontains=query)
-        )
+        ).only("id", "title", "price", "city", "image_urls")
 
+        # Filter kwa Makazi
         results_makazi = Scrape_MakaziListing.objects.filter(
             Q(title__icontains=query) |
             Q(description__icontains=query) |
             Q(location__icontains=query)
-        )
+        ).only("id", "title", "price", "location", "main_image_url")
 
-        # Ikiwa query ni namba, tafuta exact match kwenye numeric fields
+        # Ikiwa query ni namba (digits), tafuta exact match kwenye numeric fields
         if query.isdigit():
             query_int = int(query)
-            results_local = results_local | Property.objects.filter(
-                Q(bedrooms=query_int) | Q(price=query_int)
-            )
+            results_local = results_local | Property.objects.filter(Q(bedrooms=query_int) | Q(price=query_int))
             results_beforward = results_beforward | Scrape_BeforwardListing.objects.filter(price=query_int)
             results_makazi = results_makazi | Scrape_MakaziListing.objects.filter(price=query_int)
 
-        # Ongeza listing_type
+        # Ongeza listing_type na suggestions
         for p in results_local:
             p.listing_type = "local"
-            suggestions.add(p.title)  # add suggestion
+            suggestions.add(p.title)
         for p in results_beforward:
             p.listing_type = "beforward"
             suggestions.add(p.title)
@@ -449,17 +449,53 @@ def search_property(request):
             suggestions.add(p.title)
 
         results = list(results_local) + list(results_beforward) + list(results_makazi)
-        shuffle(results)  # optional for randomness
+        shuffle(results)
 
-    # Ikiwa hakuna matokeo, tuma zote kama fallback
-    fallback_results = all_listings
+    # Fallback ikiwa hakuna query au results
+    if not results:
+        fallback_local = Property.objects.all().only(
+            "id", "title", "price", "region", "ward", "image_0", "status", "url_name", "property_owner_0", "owner", "date_posted"
+        ).order_by("-id")[:500]
+        fallback_beforward = Scrape_BeforwardListing.objects.all().only(
+            "id", "title", "price", "city", "image_urls"
+        ).order_by("-id")[:500]
+        fallback_makazi = Scrape_MakaziListing.objects.all().only(
+            "id", "title", "price", "location", "main_image_url"
+        ).order_by("-id")[:500]
+
+        # Ongeza listing_type
+        for p in fallback_local:
+            p.listing_type = "local"
+        for p in fallback_beforward:
+            p.listing_type = "beforward"
+        for p in fallback_makazi:
+            p.listing_type = "makazi"
+
+        fallback_results = list(fallback_local) + list(fallback_beforward) + list(fallback_makazi)
+        shuffle(fallback_results)
+    else:
+        fallback_results = []
+
+    # Paginate results (au fallback_results)
+    paginator = Paginator(results if results else fallback_results, 80)
+    try:
+        paginated_results = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_results = paginator.page(1)
+    except EmptyPage:
+        paginated_results = paginator.page(paginator.num_pages)
 
     return render(request, "core/searched.html", {
-        "results": results if results else None,
-        "fallback_results": fallback_results,
-        "query": query,
-        "suggestions": list(suggestions)[:10]  # tuma max 10 suggestions
-    })
+    "results": paginated_results if results else [],
+    "fallback_results": paginated_results if not results else [],
+    "query": query,
+    "suggestions": list(suggestions)[:10],
+    # Pagination context
+    "is_paginated": True if paginator.num_pages > 1 else False,
+    "page_obj": paginated_results,
+    "total_results": len(results) if results else len(fallback_results),
+})
+
 
 
 import requests
@@ -1154,31 +1190,54 @@ from django.db.models import Q
 
 
 
+from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
+from .models import Scrape_MakaziListing
+
 
 def makazi_list(request):
-    search_query = request.GET.get('search', '')  # Hii inachukua maneno ya kutafuta kutoka kwa GET query string
+    search_query = request.GET.get('search', '').strip()
+    page_number = request.GET.get('page', 1)
 
-    # Tafuta nyumba kulingana na title, location, au description
-    listings = Scrape_MakaziListing.objects.all().order_by('-scraped_at')
+    # --- Queryset optimized: fetch only required fields ---
+    base_qs = Scrape_MakaziListing.objects.only(
+        "id", "title", "location", "description", "price", "main_image_url", "scraped_at"
+    ).order_by("-scraped_at")
 
+    # --- Apply search if query present ---
     if search_query:
-        listings = listings.filter(
+        listings = base_qs.filter(
             Q(title__icontains=search_query) |
             Q(location__icontains=search_query) |
             Q(description__icontains=search_query)
         )
+    else:
+        listings = base_qs
 
-    # Pagination
-    paginator = Paginator(listings, 10)  # Kuonyesha nyumba 10 kwa kila ukurasa
-    page_number = request.GET.get('page')  # Hii itachukua namba ya ukurasa kutoka kwa query string
-    page_obj = paginator.get_page(page_number)
-    default_listings = Scrape_MakaziListing.objects.all().order_by('-scraped_at')
+    # --- Pagination ---
+    paginator = Paginator(listings, 20)  # show 20 per page
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
 
+    # --- Default fallback listings (small subset, not all) ---
+    default_listings = base_qs[:5]  # only latest 5 for fallback
 
+    context = {
+        "page_obj": page_obj,
+        "is_paginated": paginator.num_pages > 1,
+        "paginator": paginator,
+        "search_query": search_query,
+        "total_results": listings.count(),
+        "default_listings": default_listings,
+    }
 
-    # Tuma data kwa template
-    return render(request, 'core/makazi_list.html', {'page_obj': page_obj, 'search_query': search_query,'default_listings': default_listings,
-})
+    return render(request, "core/makazi_list.html", context)
+
 
 def makazi_detail(request, slug_id):
     pk = slug_id.split('-')[-1]  # Extract ID from the slug

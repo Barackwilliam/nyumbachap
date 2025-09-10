@@ -72,9 +72,12 @@
                                                             <div class="rld-single-input">
                                                                 <input list="suggestionsList" id="searchInput" type="text" name="q" value="{{request.GET.q}}">
                                                                 <datalist id="suggestionsList">
+
+                                                                    {% comment %}
                                                                     {% for s in suggestions %}
                                                                         <option value="{{ s }}">
                                                                     {% endfor %}
+                                                                       {% endcomment %}
                                                                 </datalist>
                                                             </div>
                                                                 
